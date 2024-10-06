@@ -1,0 +1,6 @@
+[book]
+authors = ["Eric Fecteau"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Data Analysis with Rust"
