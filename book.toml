@@ -4,3 +4,6 @@ language = "en"
 multilingual = false
 src = "src"
 title = "Data Analysis with Rust"
+
+[output.html.playground]
+runnable = false
