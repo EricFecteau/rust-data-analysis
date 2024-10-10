@@ -8,4 +8,9 @@
 
 # Reading and writing
 
-- [Polars](./polars.md)
+- [Writing](./writing.md)
+- [Reading](./reading.md)
+
+# Other
+
+- [Useful functions](./useful_functions.md)
