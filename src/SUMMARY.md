@@ -1,16 +1,19 @@
 # Summary
 
-[Introduction](README.md)
+[Data analysis in Rust](README.md)
 
-# Data
+* [Getting started](getting_started/index.md)
+    * [Crates](getting_started/crates.md)
+    * [Data](getting_started/data.md)
 
-- [Getting data]()
+* [Reading and writing](rw/index.md)
+    * [Reading](rw/reading.md)
+    * [Writing](rw/writing.md)
 
-# Reading and writing
+<!-- * [Cleaning data]()
 
-- [Writing](./writing.md)
-- [Reading](./reading.md)
+* [Exploring data]()
 
-# Other
+* [] -->
 
-- [Useful functions](./useful_functions.md)
+* [Useful functions](useful_functions.md)

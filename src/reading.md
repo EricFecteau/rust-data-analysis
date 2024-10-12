@@ -4,7 +4,7 @@
 
 ## CSV
 
-### Greedy
+### Eager
 
 ```rust
 let df = CsvReadOptions::default()
