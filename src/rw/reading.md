@@ -26,19 +26,6 @@ println!("{}", human_bytes(df.estimated_size() as f64));
 51.1 MiB
 ```
 
-You can bring in quite large data, depending on your available memory (see [writing](writing.md) for the source of this `.csv` file).
-
-```rust
-let df = CsvReadOptions::default()
-    .try_into_reader_with_file_path(Some("./data/large/all_years.csv".into()))
-    .unwrap()
-    .finish()
-    .unwrap();
-```
-
-If you run out of RAM, you will get a `` error.
-
-
 ### Lazy evaluation
 
 ```rust
