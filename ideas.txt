@@ -4,3 +4,4 @@ https://github.com/alceal/plotlars
 https://pola.rs/
 https://rust-lang-nursery.github.io/rust-cookbook/database.html
 https://www.datawill.io/posts/apache-arrow-2022-reflection/
+https://rerun.io/blog/dataframe
