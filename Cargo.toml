@@ -1,0 +1,19 @@
+[package]
+name = "data-playground"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+# Download files from the internet (blocking)
+reqwest = { version = "0.12", features = ["blocking"] }
+
+# Extract ZIP files
+zip = "2"
+
+# Polars - open-source library for data manipulation, with `lazy` feature
+#          enabled to support lazy evaluation 
+polars = { version = "0.45", features = ["lazy", "parquet", "polars-io"] }
+
+# human_bytes - converts large byte numbers into a human-readable format
+human_bytes = "0.4"

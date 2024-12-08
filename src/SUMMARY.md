@@ -10,10 +10,4 @@
     * [Reading](rw/reading.md)
     * [Writing](rw/writing.md)
 
-<!-- * [Cleaning data]()
-
-* [Exploring data]()
-
-* [] -->
-
 * [Useful functions](useful_functions.md)

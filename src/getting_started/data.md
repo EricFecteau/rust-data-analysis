@@ -1,9 +1,9 @@
 
 # Data
 
-This section helps you get the data that is used in the examples in this book. 
+This section helps you get the data that is used in the examples in this book. You do not have to understand these code blocks to run them, but they are commented. The rest of the examples in this book assumes you have run all of these code blocks.
 
-This book uses Statistics Canada's Labour Force Survey (LFS) Public User Microdata File (PUMF) as data source. These CSVs contains non-aggregated data for a wide variety of variables collected from the LFS. The LFS collects monthly information on the labour market activities of Canada's working age population.
+This book uses Statistics Canada's Labour Force Survey (LFS) Public Use Microdata File (PUMF) as data source. These CSVs contains non-aggregated data for a wide variety of variables collected from the LFS. The LFS collects monthly information on the labour market activities of Canada's working age population.
 
 There are multiple advantages to using this file:
 * Licensed under [Statistics Canada Open License](https://www.statcan.gc.ca/en/reference/licence);
@@ -14,40 +14,80 @@ There are multiple advantages to using this file:
 
 You can download the CSVs from [Statistics Canada's website](https://www150.statcan.gc.ca/n1/en/catalogue/71M0001X).
 
-Here is a short bash script to download all data necessary for this book. It creates approximately 2.6 GB of CSV data. Run the bash script in the top-level folder of a cargo package.
+## Downloading
 
-```bash
-#!/bin/bash
+Here is a Rust script to download all data necessary for this book. It creates approximately 2.6 GB of CSV data. You can run this script using `cargo run -r --example 1_2_download_lfs` in this crate. A `bash` version of this script [can also be found here]().
 
-current_year=2024
-current_month=09 # Latest month the LFS is available
+```rust
+let current_year = 2024;
+let current_month = 9; // Latest month the LFS is available
 
-rm -r ./data
-mkdir -p ./data
-mkdir -p ./data/statcan
+// Function to download ZIP file from URL and return a Reader
+fn download_zip(url: &str) -> Cursor<Vec<u8>> {
+    let mut zip_buf: Vec<u8> = Vec::new();
 
-for m in 01 02 03 04 05 06 07 08 09 10 11 12; do
-    curl https://www150.statcan.gc.ca/n1/en/pub/71m0001x/2021001/$current_year-$m-CSV.zip --output ./data/$current_year-$m.zip
-    unzip ./data/$current_year-$m.zip -d ./data/temp
-    mv ./data/temp/pub$m${current_year: -2}.csv ./data/statcan/pub$m${current_year: -2}.csv
-    rm -r ./data/temp
-    rm ./data/$current_year-$m.zip
+    get(url).unwrap().read_to_end(&mut zip_buf).unwrap();
+    std::io::Cursor::new(zip_buf)
+}
 
-    if [[ $m == $current_month ]]
-    then
-        break
-    fi
-done
+// Function to extract a single .csv file from a ZIP archive and write it to ./data/lfs_csv
+fn write_csv(zip_file: &mut Cursor<Vec<u8>>, csv_name: &str) {
+    let mut csv_buf: Vec<u8> = Vec::new();
 
-for y in $(seq 2006 $((current_year-1))); do
-    curl https://www150.statcan.gc.ca/n1/pub/71m0001x/2021001/hist/$y-CSV.zip --output ./data/$y.zip
-    unzip ./data/$y.zip -d ./data/temp
-    for m in 01 02 03 04 05 06 07 08 09 10 11 12; do
-        mv ./data/temp/pub$m${y: -2}.csv ./data/statcan/pub$m${y: -2}.csv
-    done
-    rm -r ./data/temp
-    rm ./data/$y.zip
-done
+    // Extract csv from buffer
+    let mut archive = zip::ZipArchive::new(zip_file).unwrap();
+    let _ = archive
+        .by_name(csv_name)
+        .unwrap()
+        .read_to_end(&mut csv_buf)
+        .unwrap();
+
+    // Write CSV file
+    let mut file = File::create(format!("./data/lfs_csv/{csv_name}")).unwrap();
+    file.write_all(&csv_buf).unwrap();
+}
+
+// Create directory
+let _ = fs::remove_dir_all("./data");
+fs::create_dir("./data").unwrap();
+fs::create_dir("./data/lfs_csv").unwrap();
+
+// For the full-year files (prior to current year)
+for y in 2006..current_year {
+    let url = format!("https://www150.statcan.gc.ca/n1/pub/71m0001x/2021001/hist/{y}-CSV.zip");
+
+    let mut zip = download_zip(&url);
+
+    for m in 1..(12 + 1) {
+        let mm = format!("{:02}", m);
+        let yy = format!("{:02}", y % 2000);
+
+        write_csv(&mut zip, &format!("pub{mm}{yy}.csv"));
+    }
+}
+
+// For the monthly file in the current year
+for m in 1..(current_month + 1) {
+    let mm = format!("{:02}", m);
+    let yy = format!("{:02}", current_year % 2000);
+
+    let url = format!(
+        "https://www150.statcan.gc.ca/n1/en/pub/71m0001x/2021001/{current_year}-{mm}-CSV.zip"
+    );
+
+    let mut zip = download_zip(&url);
+    write_csv(&mut zip, &format!("pub{mm}{yy}.csv"));
+}
 ```
 
 **Source**: Statistics Canada, *Labour Force Survey: Public Use Microdata File*, January 2006 to present. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
+
+
+## Styling
+
+Since there does not seem to exist a style guide for Polars, this guide will use the [R Tidyverse style guide](https://style.tidyverse.org/), when appropriate. 
+
+This section will:
+* Rename the variables in all CSV files to lower
+
+```
