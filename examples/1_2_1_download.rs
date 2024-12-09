@@ -37,6 +37,8 @@ fn main() {
     let _ = fs::remove_dir_all("./data");
     fs::create_dir("./data").unwrap();
     fs::create_dir("./data/lfs_csv").unwrap();
+    fs::create_dir("./data/lfs_parquet").unwrap();
+    fs::create_dir("./data/lfs_large").unwrap();
 
     // For the full-year files (prior to current year)
     for y in 2006..current_year {

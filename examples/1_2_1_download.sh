@@ -6,6 +6,8 @@ current_month=09 # Latest month the LFS is available
 rm -r ./data
 mkdir -p ./data
 mkdir -p ./data/lfs_csv
+mkdir -p ./data/lfs_parquet
+mkdir -p ./data/lfs_large
 
 for m in 01 02 03 04 05 06 07 08 09 10 11 12; do
     curl https://www150.statcan.gc.ca/n1/en/pub/71m0001x/2021001/$current_year-$m-CSV.zip --output ./data/$current_year-$m.zip

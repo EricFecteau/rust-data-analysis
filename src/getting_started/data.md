@@ -14,9 +14,13 @@ There are multiple advantages to using this file:
 
 You can download the CSVs from [Statistics Canada's website](https://www150.statcan.gc.ca/n1/en/catalogue/71M0001X).
 
+**Source**: Statistics Canada, *Labour Force Survey: Public Use Microdata File*, January 2006 to present. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
+
 ## Downloading
 
-Here is a Rust script to download all data necessary for this book. It creates approximately 2.6 GB of CSV data. You can run this script using `cargo run -r --example 1_2_download_lfs` in this crate. A `bash` version of this script [can also be found here]().
+Here is a Rust script to download all data necessary for this book. It creates approximately 2.6 GB of CSV data. A `bash` version of this script [can also be found here]().
+
+You can run this script using `cargo run -r --example 1_2_1_download`.
 
 ```rust
 let current_year = 2024;
@@ -80,9 +84,6 @@ for m in 1..(current_month + 1) {
 }
 ```
 
-**Source**: Statistics Canada, *Labour Force Survey: Public Use Microdata File*, January 2006 to present. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
-
-
 ## Styling
 
 Since there does not seem to exist a style guide for Polars, this guide will use the [R Tidyverse style guide](https://style.tidyverse.org/), when appropriate. 
@@ -90,4 +91,79 @@ Since there does not seem to exist a style guide for Polars, this guide will use
 This section will:
 * Rename the variables in all CSV files to lower
 
+You can run this code with `cargo run -r --example 1_2_2_styling`.
+
+```rust
+// Function to lower the case of variable names in a CSV
+fn rename_tolower(df: &mut DataFrame) -> Result<(), Box<dyn std::error::Error>> {
+    let lower_cols: Vec<String> = df
+        .get_column_names()
+        .iter()
+        .map(|c| c.to_owned().to_lowercase())
+        .collect();
+
+    df.set_column_names(lower_cols)?;
+
+    Ok(())
+}
+
+// Get all files in path
+let paths = fs::read_dir("./data/lfs_csv").unwrap();
+
+// For each file, lower case
+for path in paths {
+    let path_buf = path.unwrap().path();
+
+    // Read CSV
+    let mut df = CsvReadOptions::default()
+        .try_into_reader_with_file_path(Some(path_buf.clone()))
+        .unwrap()
+        .finish()
+        .unwrap();
+
+    // Rename variables names to lower
+    rename_tolower(&mut df).unwrap();
+
+    // Write CSV
+    let mut file = File::create(path_buf).unwrap();
+    CsvWriter::new(&mut file)
+        .include_header(true)
+        .with_separator(b',')
+        .finish(&mut df)
+        .unwrap();
+}
 ```
+
+## Parquet
+
+This section will convert each CSV into individual Parquet files.
+
+You can run this code with `cargo run -r --example 1_2_3_parquet`.
+
+```rust
+// Get all files in path
+let paths = fs::read_dir("./data/lfs_csv").unwrap();
+
+// For each file, save as Parquet
+for path in paths {
+    let path_csv = path.unwrap().path();
+    let file_name = Path::new(&path_csv).file_stem().unwrap().to_str().unwrap();
+    let path_parquet = format!("./data/lfs_parquet/{file_name}.parquet");
+
+    // Read CSV
+    let mut df = CsvReadOptions::default()
+        .try_into_reader_with_file_path(Some(path_csv.clone()))
+        .unwrap()
+        .finish()
+        .unwrap();
+
+    // Write Parquet
+    let mut file = File::create(path_parquet).unwrap();
+    ParquetWriter::new(&mut file).finish(&mut df).unwrap();
+}
+```
+
+## Large file
+
+This section will create a large CSV and a large Parquet file. If you have the LFS files from 2006 to 2024, you will need at least 16 GB of RAM (or pagefile / swap memory).
+
