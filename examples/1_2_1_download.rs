@@ -5,6 +5,7 @@ use std::io::prelude::*;
 use std::io::Cursor;
 
 fn main() {
+    let start_year = 2006;
     let current_year = 2024;
     let current_month = 9; // Latest month the LFS is available
 
@@ -41,7 +42,7 @@ fn main() {
     fs::create_dir("./data/lfs_large").unwrap();
 
     // For the full-year files (prior to current year)
-    for y in 2006..current_year {
+    for y in start_year..current_year {
         let url = format!("https://www150.statcan.gc.ca/n1/pub/71m0001x/2021001/hist/{y}-CSV.zip");
 
         let mut zip = download_zip(&url);

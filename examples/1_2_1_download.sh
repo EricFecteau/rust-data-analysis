@@ -1,5 +1,6 @@
 #!/bin/bash
 
+start_year=2006
 current_year=2024
 current_month=09 # Latest month the LFS is available
 
@@ -22,7 +23,7 @@ for m in 01 02 03 04 05 06 07 08 09 10 11 12; do
     fi
 done
 
-for y in $(seq 2006 $((current_year-1))); do
+for y in $(seq $start_year $((current_year-1))); do
     curl https://www150.statcan.gc.ca/n1/pub/71m0001x/2021001/hist/$y-CSV.zip --output ./data/$y.zip
     unzip ./data/$y.zip -d ./data/temp
     for m in 01 02 03 04 05 06 07 08 09 10 11 12; do

@@ -9,9 +9,9 @@ fn main() {
         .finish()
         .unwrap();
 
-    // Print df to log
-    println!("{}", &df);
-
     // Print size of df (in MiB)
     println!("{}", human_bytes(df.estimated_size() as f64));
+
+    // Print df to log
+    println!("{}", &df);
 }
