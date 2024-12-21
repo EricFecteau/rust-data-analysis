@@ -25,5 +25,7 @@
 
 * [Publication](pub/index.md)
     * [Plotting](pub/plotting.md)
+    * [Reports](pub/reports.md)
+    * [Visualization](pub/visualization.md)
 
 * [Useful functions](useful_functions.md)
