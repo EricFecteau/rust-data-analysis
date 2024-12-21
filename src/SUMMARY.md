@@ -15,7 +15,7 @@
 
 * [Manipulating data](manipulate/index.md)
     * [New variables](manipulate/variables.md)
-    * [Subsetting & Filtering](manipulate/subsetting.md)
+    * [Select & Filtering](manipulate/select.md)
     * [Joins](manipulate/joins.md)
 
 * [Statistics](stats/index.md)
