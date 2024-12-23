@@ -27,5 +27,6 @@
     * [Plotting](pub/plotting.md)
     * [Reports](pub/reports.md)
     * [Visualization](pub/visualization.md)
+    * [Excel](pub/excel.md)
 
 * [Useful functions](useful_functions.md)
