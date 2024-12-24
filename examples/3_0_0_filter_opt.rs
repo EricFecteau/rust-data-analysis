@@ -1,4 +1,5 @@
 use polars::prelude::*;
+use std::time::Instant;
 
 fn main() {
     // Connect to LazyFrame (one large parquet file)
@@ -31,13 +32,21 @@ fn main() {
         lf_part.explain(false).unwrap()
     );
 
-    // // Optimized
-    // println!(
-    //     "\nOptimized single-parquet file:\n\n{}",
-    //     lf_one.explain(true).unwrap()
-    // );
-    // println!(
-    //     "\nOptimized multi-parquet file:\n\n{}",
-    //     lf_part.explain(true).unwrap()
-    // );
+    // Optimized
+    println!(
+        "\nOptimized single-parquet file:\n\n{}",
+        lf_one.explain(true).unwrap()
+    );
+    println!(
+        "\nOptimized multi-parquet file:\n\n{}",
+        lf_part.explain(true).unwrap()
+    );
+
+    let before = Instant::now();
+    let _ = lf_one.select([col("hrlyearn")]).mean().collect().unwrap();
+    println!("Elapsed time: {:.2?}", before.elapsed());
+
+    let before = Instant::now();
+    let _ = lf_part.select([col("hrlyearn")]).mean().collect().unwrap();
+    println!("Elapsed time: {:.2?}", before.elapsed());
 }

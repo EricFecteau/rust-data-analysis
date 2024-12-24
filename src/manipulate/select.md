@@ -143,22 +143,50 @@ FILTER col("hrlyearn").is_not_null() FROM
       PROJECT 58/60 COLUMNS
 ```
 
-In both cases, the filter is the same, and the SCAN in both cases touches all files (the large one or all 225 parquet file for the partitioned parquet file). The single file collects all 60 variables and the partitioned one selects 58 of the 60 variables, likely because `survyear` and `survmnth` are known by it's folder structure.
+In both cases, the filters are the same, and the SCAN in both cases touches all files (the large one or all 225 parquet file for the partitioned parquet file). The single file collects all 60 variables and the partitioned one selects 58 of the 60 variables, likely because `survyear` and `survmnth` are known by it's folder structure.
 
-On the other hand, the optimized 
+On the other hand, the optimized query is quite different:
+
+```Rust
+println!(lf_one.explain(true).unwrap());
+```
+
+```
+Parquet SCAN [./data/lfs_large/lfs.parquet]
+PROJECT */60 COLUMNS
+SELECTION: [([([(col("survmnth")) > (6)]) & ([(col("survyear")) == (2010)])]) & (col("hrlyearn").is_not_null())]
+```
 
 
+```Rust
+println!(lf_part.explain(true).unwrap());
+```
 
+```
+Parquet SCAN [./data/lfs_large/part/survyear=2010/survmnth=10/00000000.parquet, ... 5 other sources]
+PROJECT 58/60 COLUMNS
+SELECTION: [([(col("hrlyearn").is_not_null()) & ([(col("survmnth")) > (6)])]) & ([(col("survyear")) == (2010)])]
+```
 
+As you can see, the "selection" (filter) is essentially the same in both, but for the large file, the entirety of the file has to be scanned (e.g. each row has to be verified for all filters) but for the partitioned parquet file, only 6 files are scanned, and the filter is applied only to the rows in those 6 files. The partitioned parquet file allows for filters that are in the partitioned columns (e.g. `survyear` and `survmnth`) to skip entire files.
 
+This gives really great time improvements for queries that contain filters for those variables. For example, 
 
+```Rust
+let before = Instant::now();
+let _ = lf_one.select([col("hrlyearn")]).mean().collect().unwrap();
+println!("One parquet file elapsed time: {:.2?}", before.elapsed());
 
+let before = Instant::now();
+let _ = lf_part.select([col("hrlyearn")]).mean().collect().unwrap();
+println!("Partitioned parquet file elapsed time: {:.2?}", before.elapsed());
+```
 
-
+While the time differs, the one parquet file (between `25 ms` and `50 ms`) is about an order of magnitude slower than the partitioned parquet file (between `2 ms` and `4 ms`).
 
 ## Select columns
 
-With Polars, you can select a few variables using `select()`.
+With Polars, you can select a few columns using `select()`.
 
 ```Rust
 // Connect to LazyFrame (no data is brought into memory)
