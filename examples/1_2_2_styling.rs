@@ -4,16 +4,17 @@ use std::fs::File;
 
 fn main() {
     // Function to lower the case of variable names in a CSV
-    fn rename_tolower(df: &mut DataFrame) -> Result<(), Box<dyn std::error::Error>> {
-        let lower_cols: Vec<String> = df
-            .get_column_names()
-            .iter()
-            .map(|c| c.to_owned().to_lowercase())
+    fn rename_tolower(mut lf: LazyFrame) -> LazyFrame {
+        let cols: Vec<String> = lf
+            .collect_schema()
+            .unwrap()
+            .iter_names()
+            .map(|c| c.to_owned().to_string())
             .collect();
 
-        df.set_column_names(lower_cols)?;
+        let lower_cols: Vec<String> = cols.iter().map(|c| c.to_owned().to_lowercase()).collect();
 
-        Ok(())
+        lf.rename(cols.iter(), lower_cols.iter(), true)
     }
 
     // Get all files in path
@@ -21,20 +22,22 @@ fn main() {
 
     // For each file, lower case
     for path in paths {
-        let path_buf = path.unwrap().path();
+        let path_csv = path.unwrap().path();
 
-        // Read CSV
-        let mut df = CsvReadOptions::default()
-            .try_into_reader_with_file_path(Some(path_buf.clone()))
-            .unwrap()
+        // Connect to CSV
+        let mut lf = LazyCsvReader::new(path_csv.clone())
+            .with_has_header(true)
             .finish()
             .unwrap();
 
         // Rename variables names to lower
-        rename_tolower(&mut df).unwrap();
+        lf = rename_tolower(lf);
+
+        // Can't collect in `finish` for some reason
+        let mut df = lf.collect().unwrap();
 
         // Write CSV
-        let mut file = File::create(path_buf).unwrap();
+        let mut file = File::create(path_csv).unwrap();
         CsvWriter::new(&mut file)
             .include_header(true)
             .with_separator(b',')

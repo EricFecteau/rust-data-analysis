@@ -14,11 +14,12 @@ fn main() {
         let path_parquet = format!("./data/lfs_parquet/{file_name}.parquet");
 
         // Read CSV
-        let mut df = CsvReadOptions::default()
+        let mut df = LazyCsvReader::new(path_csv.clone())
             .with_infer_schema_length(Some(10_000)) // Default 100, missing = String
-            .try_into_reader_with_file_path(Some(path_csv.clone()))
-            .unwrap()
+            .with_has_header(true)
             .finish()
+            .unwrap()
+            .collect() // Can't collect in finish
             .unwrap();
 
         // Write Parquet
