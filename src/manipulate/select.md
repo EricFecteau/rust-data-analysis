@@ -1,10 +1,10 @@
 # Select & Filtering
 
-This section will explore how to select some columns and filter some rows. 
+This section will explore how to filter rows and select columns. 
 
 ## Filter rows
 
-You can filter the rows in the data using `filter()`. This example will also explore the advantages of the `lazy evaluation` offered by Polars when using partitioned parquet files, as created in the [Writing](../rw/writing.md) section. You can run this code with `cargo r -r --example 3_`.
+You can filter the rows in the data using `filter()`. You can run this code with `cargo r -r --example 3_`.
 
 First, lets load the partitioned parquet file:
 
@@ -23,7 +23,7 @@ let lf_filtered = lf
     .filter(col("hrlyearn").is_not_null());
 ```
 
-As you can see, to reference a column, you have to use `col()` and to reference a literal, you have to use `lit()`. You can compare these using equality comparison such as:
+As you can see, to reference a column you have to use `col()` and to reference a literal you have to use `lit()`. You can compare these using equality comparison such as:
 
 | Equality        | Definition                                               |
 |-----------------|----------------------------------------------------------|
@@ -39,7 +39,7 @@ As you can see, to reference a column, you have to use `col()` and to reference 
 | `is_null()`     | `== None`                                                |
 | `is_not_null()` | `!= None`                                                |
 
-Instead of the multiple `.filter()` you can use one `.filter()` and chain the commands with `.and()`, `.or()` and `xor()`. The above example can be created using this filter:
+Instead of the multiple `.filter()` you can use one `.filter()` and chain the commands with `.and()`, `.or()` and `.xor()`. The above example can be created using this filter:
 
 ```Rust
 // Filtering the data in one step
@@ -61,70 +61,100 @@ let expr = (col("survyear")
 .or(col("survyear")
     .eq(lit(2011))
     .and(col("survmnth").lt_eq(lit(6))));
+```
 
+You can print the expression to see how it's evaluated. This is especially useful when you use an IDE that can highlight bracket and parenthesis pairs.
+
+```
+[([([(col("survyear")) == (dyn int: 2010)]) & ([(col("survmnth")) > (dyn int: 6)])]) | ([([(col("survyear")) == (dyn int: 2011)]) & ([(col("survmnth")) <= (dyn int: 6)])])]
+```
+
+You can then apply the expression with `.filter()`:
+
+```Rust
+// Apply the expression to a LazyFrame
 let lf_filt = lf.clone().filter(expr);
 ```
-
-[([([(col("survyear")) == (dyn int: 2010)]) & ([(col("survmnth")) > (dyn int: 6)])]) | ([([(col("survyear")) == (dyn int: 2011)]) & ([(col("survmnth")) <= (dyn int: 6)])])]
-
-
-
-https://docs.rs/polars/latest/polars/prelude/enum.Expr.html#method.is_in
-
-
-
-First, lets connect to the `./data/lfs_large/lfs.parquet` file that contains nearly 20 years of monthly LFS data, XX rows, in one parquet file (>400 MB).
+With the `is_in` crate feature, you can see if a `col()` is within a list of `lit()`. The right side of the expression takes a `Polars::Series`, that can be built using `Series::from_iter(vec![<vals>])`. In this example, we see if `survyear` is equal to 2009, 2010 or 2011.
 
 ```Rust
-// Connect to LazyFrame (no data is brought into memory)
-let args = ScanArgsParquet::default();
-let lf = LazyFrame::scan_parquet("./data/lfs_large/lfs.parquet", args).unwrap();
-```
-
-
-If on the other hand, we connect to the `./data/lfs_large/part` partitioned parquet data, that was partitioned using the `survyear` and the `survmnth` variables: 
-
-
-```Rust
-// Connect to LazyFrame (no data is brought into memory)
-let args = ScanArgsParquet::default();
-let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
-```
-
-The unoptimized logical plan gives similar results as the optimized plan from the `lfs.parquet` unified file as it will look at every file in the `./data/lfs_large/part` structure:
-
-```
-
-
-
-
-```Rust
-
-// Filtering the data in one step
-let lf_filt = lf.clone().filter(
-    col("survyear")
-        .eq(lit(2010))
-        .and(col("survmnth").gt(lit(6)))
-        .and(col("hrlyearn").is_not_null()),
-);
-
-println!("{}", lf_filt.explain(false).unwrap());
-println!("{}", lf_filt.explain(true).unwrap());
-println!("{}", lf_filt.limit(5).collect().unwrap());
-
-//Filtering the data in multiple steps
+// Using `is_in` crate feature with literals
 let lf_filt = lf
     .clone()
+    .filter(col("survyear").is_in(lit(Series::from_iter(vec![2009, 2010, 2011]))));
+```
+
+### Lazy evaluation optimization
+
+Filtering is a perfect example to show how `LazyFrame` use optimized queries, especially when using partitioned parquet files, as created in the [Writing](../rw/writing.md) section.
+
+First, lets connect to the `./data/lfs_large/lfs.parquet` file that contains nearly 20 years of monthly LFS data, 23 million rows, in one parquet file (approximately 400 MB), and filter it to the records in the second half of 2010, and non-null values for `hrlyearn` (hourly wages). Remember, this code creates and execution plan, but does not yet execute it.
+
+```Rust
+// Connect to LazyFrame (one large parquet file)
+let args = ScanArgsParquet::default();
+let lf_one = LazyFrame::scan_parquet("./data/lfs_large/lfs.parquet", args).unwrap();
+
+// Filter it
+let lf_one = lf_one
     .filter(col("survyear").eq(lit(2010)))
     .filter(col("survmnth").gt(lit(6)))
     .filter(col("hrlyearn").is_not_null());
-
-println!("{}", lf_filt.explain(false).unwrap());
-println!("{}", lf_filt.explain(true).unwrap());
-println!("{}", lf_filt.limit(5).collect().unwrap());
 ```
 
-You can also build some complex filters like `(((a > b) & (b < c)) | d > 10)`
+Second, lets connect to the `./data/lfs_large/part` partitioned dataset, that was partitioned by `survyear` and by `survmnth`. All the files in this partitioned dataset folder will contain nearly 20 years of monthly LFS data, 23 million rows, and over 200 parquet files, equalling a totally of approximately 400 MB. Similar to the large parquet file, we will filter it to the records in the second half of 2010, and non-null values for `hrlyearn`. Again, nothing is executed at this point. 
+
+```Rust
+// Connect to LazyFrame (partitioned parquet file)
+let args = ScanArgsParquet::default();
+let lf_part = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+
+// Filter it
+let lf_part = lf_part
+    .filter(col("survyear").eq(lit(2010)))
+    .filter(col("survmnth").gt(lit(6)))
+    .filter(col("hrlyearn").is_not_null());
+```
+
+With `LazyFrame`, you can see the execution plan with `.explain()`. Passing `false` gives the unoptimized plan and passing `true` gives the optimized plan. When the plan is executed, it always uses the optimized plan. We can see that the unoptimized execution plan for the single parquet file and partitioned parquet file are similar:
+
+```Rust
+println!(lf_one.explain(false).unwrap());
+```
+
+```
+FILTER col("hrlyearn").is_not_null() FROM
+  FILTER [(col("survmnth")) > (6)] FROM
+    FILTER [(col("survyear")) == (2010)] FROM
+      Parquet SCAN [./data/lfs_large/lfs.parquet]
+      PROJECT */60 COLUMNS
+```
+
+
+```Rust
+println!(lf_part.explain(false).unwrap());
+```
+
+```
+FILTER col("hrlyearn").is_not_null() FROM
+  FILTER [(col("survmnth")) > (6)] FROM
+    FILTER [(col("survyear")) == (2010)] FROM
+      Parquet SCAN [./data/lfs_large/part/survyear=2006/survmnth=1/00000000.parquet, ... 224 other sources]
+      PROJECT 58/60 COLUMNS
+```
+
+In both cases, the filter is the same, and the SCAN in both cases touches all files (the large one or all 225 parquet file for the partitioned parquet file). The single file collects all 60 variables and the partitioned one selects 58 of the 60 variables, likely because `survyear` and `survmnth` are known by it's folder structure.
+
+On the other hand, the optimized 
+
+
+
+
+
+
+
+
+
 
 ## Select columns
 

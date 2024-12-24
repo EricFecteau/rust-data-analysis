@@ -32,16 +32,17 @@ fn main() {
         .eq(lit(2011))
         .and(col("survmnth").lt_eq(lit(6))));
 
-    println!("Expression: {}", expr);
+    println!("Expression: {}", expr); // You can print it
 
+    // Apply the expression to a LazyFrame
     let lf_filt = lf.clone().filter(expr);
 
     println!("{}", lf_filt.limit(5).collect().unwrap());
 
-    // Connect to LazyFrame (no data is brought into memory)
-    let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet("./data/lfs_large/lfs.parquet", args).unwrap();
+    // Using `is_in` crate feature with literals
+    let lf_filt = lf
+        .clone()
+        .filter(col("survyear").is_in(lit(Series::from_iter(vec![2009, 2010, 2011]))));
 
-    println!("{}", lf_filt.explain(false).unwrap());
-    println!("{}", lf_filt.explain(true).unwrap());
+    println!("{}", lf_filt.limit(5).collect().unwrap());
 }

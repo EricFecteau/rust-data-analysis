@@ -15,8 +15,8 @@
     * [Reproducible examples](rw/reprex.md)
 
 * [Manipulating data](manipulate/index.md)
-    * [New variables](manipulate/variables.md)
     * [Select & Filtering](manipulate/select.md)
+    * [New variables](manipulate/variables.md)
     * [Joins](manipulate/joins.md)
 
 * [Statistics](stats/index.md)
