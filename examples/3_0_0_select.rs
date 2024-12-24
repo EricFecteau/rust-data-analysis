@@ -5,12 +5,6 @@ fn main() {
     let args = ScanArgsParquet::default();
     let mut lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 
-    // Select all columns (short for `col("*")`)
-    let lf_no_limit = lf.clone().select([all()]);
-
-    // Print selected column (top 5 values)
-    println!("{}", lf_no_limit.limit(5).collect().unwrap());
-
     // Get names of columns
     let cols: Vec<String> = lf
         .collect_schema()
@@ -19,10 +13,14 @@ fn main() {
         .map(|c| c.to_owned().to_string())
         .collect();
 
-    println!("{:?}", cols);
+    println!(
+        "Vector of the {} variables in the LazyFrame: {:?}",
+        cols.len(),
+        cols
+    );
 
     // Select some columns by name & with regex & with rename
-    let lf_limit = lf.clone().select([
+    let lf_limit = lf.select([
         col("^surv.*$"), // survyear, survmnth
         col("prov"),
         col("hrlyearn").alias("hourly_wages"),
@@ -30,6 +28,5 @@ fn main() {
     ]);
 
     // Print selected column (top 5 values)
-    println!("{}", lf_limit.explain(true).unwrap());
     println!("{}", lf_limit.limit(5).collect().unwrap());
 }

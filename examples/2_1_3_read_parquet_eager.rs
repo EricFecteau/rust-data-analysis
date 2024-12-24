@@ -3,7 +3,7 @@ use polars::prelude::*;
 use std::fs::File;
 
 fn main() {
-    // Read CSV into memory
+    // Read Parquet into memory
     let mut file = File::open("./data/lfs_parquet/pub0124.parquet").unwrap();
     let df = ParquetReader::new(&mut file).finish().unwrap();
 

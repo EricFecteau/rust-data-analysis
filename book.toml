@@ -5,5 +5,7 @@ language = "en"
 multilingual = false
 src = "src"
 
+[preprocessor.alerts]
+
 [output.html.playground]
 runnable = false

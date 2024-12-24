@@ -6,6 +6,7 @@
     * [Crates](getting_started/crates.md)
     * [Data](getting_started/data.md)
     * [Environment](getting_started/env.md)
+    * [Concepts](getting_started/concepts.md)
 
 * [Reading and writing](rw/index.md)
     * [Reading](rw/reading.md)

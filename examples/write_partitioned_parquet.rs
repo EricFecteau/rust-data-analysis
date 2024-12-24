@@ -27,7 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     write_partitioned_dataset(
         &mut df,
         Path::new("./data/part/"),
-        vec!["PROV", "SEX"],
+        vec!["survyear", "survmnth"],
         &write_options,
         4294967296,
     )?;
