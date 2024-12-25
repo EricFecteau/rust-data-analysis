@@ -220,7 +220,7 @@ Using `select()` you can select various columns using the `col()` function. With
 
 ```Rust
 // Select some columns by name & with regex & with rename
-let lf_col = lf.select([
+let lf = lf.select([
     col("^surv.*$"), // survyear, survmnth
     col("prov"),
     col("hrlyearn").alias("hourly_wages"),
@@ -228,7 +228,7 @@ let lf_col = lf.select([
 ]);
 
 // Print selected column (top 5 values)
-println!("{}", lf_col.limit(5).collect().unwrap());
+println!("{}", lf.clone().limit(5).collect().unwrap());
 ```
 
 ```
@@ -245,3 +245,30 @@ shape: (5, 5)
 │ 2006     ┆ 1        ┆ 48   ┆ 1300         ┆ 489     │
 └──────────┴──────────┴──────┴──────────────┴─────────┘
 ```
+
+You can also drop variables with `drop()`:
+
+```Rust
+// Drop variables
+let lf = lf.drop([col("prov"), col("hourly_wages")]);
+
+// Print selected column (top 5 values)
+println!("{}", lf.clone().limit(5).collect().unwrap());
+```
+
+```
+shape: (5, 3)
+┌──────────┬──────────┬─────────┐
+│ survyear ┆ survmnth ┆ finalwt │
+│ ---      ┆ ---      ┆ ---     │
+│ i64      ┆ i64      ┆ i64     │
+╞══════════╪══════════╪═════════╡
+│ 2006     ┆ 1        ┆ 119     │
+│ 2006     ┆ 1        ┆ 94      │
+│ 2006     ┆ 1        ┆ 121     │
+│ 2006     ┆ 1        ┆ 154     │
+│ 2006     ┆ 1        ┆ 489     │
+└──────────┴──────────┴─────────┘
+```
+
+/// MIGHT NOT BE NECESSARY TO SELECT AND DROP -- let optimization figure it out for you according to your last table

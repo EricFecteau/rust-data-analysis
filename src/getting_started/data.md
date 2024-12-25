@@ -1,8 +1,6 @@
 
 # Data
 
-TODO: CHANGE THIS TO LAZY EVERYWHERE
-
 This section helps you get the data that is used in the examples in this book. You do not have to understand these code blocks to run them, but they are commented. The rest of the examples in this book assumes you have run all of these code blocks.
 
 This book uses Statistics Canada's Labour Force Survey (LFS) Public Use Microdata File (PUMF) as data source. These CSVs contains non-aggregated data for a wide variety of variables collected from the LFS. The LFS collects monthly information on the labour market activities of Canada's working age population.

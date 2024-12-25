@@ -20,7 +20,7 @@ fn main() {
     );
 
     // Select some columns by name & with regex & with rename
-    let lf_limit = lf.select([
+    let lf = lf.select([
         col("^surv.*$"), // survyear, survmnth
         col("prov"),
         col("hrlyearn").alias("hourly_wages"),
@@ -28,5 +28,11 @@ fn main() {
     ]);
 
     // Print selected column (top 5 values)
-    println!("{}", lf_limit.limit(5).collect().unwrap());
+    println!("{}", lf.clone().limit(5).collect().unwrap());
+
+    // Drop variables
+    let lf = lf.drop([col("prov"), col("hourly_wages")]);
+
+    // Print selected column (top 5 values)
+    println!("{}", lf.clone().limit(5).collect().unwrap());
 }
