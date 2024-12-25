@@ -25,6 +25,7 @@ Here is a Rust script to download all data necessary for this book. It creates a
 You can run this script using `cargo run -r --example 1_2_1_download`.
 
 ```rust
+let start_year = 2006;
 let current_year = 2024;
 let current_month = 9; // Latest month the LFS is available
 
@@ -57,9 +58,11 @@ fn write_csv(zip_file: &mut Cursor<Vec<u8>>, csv_name: &str) {
 let _ = fs::remove_dir_all("./data");
 fs::create_dir("./data").unwrap();
 fs::create_dir("./data/lfs_csv").unwrap();
+fs::create_dir("./data/lfs_parquet").unwrap();
+fs::create_dir("./data/lfs_large").unwrap();
 
 // For the full-year files (prior to current year)
-for y in 2006..current_year {
+for y in start_year..current_year {
     let url = format!("https://www150.statcan.gc.ca/n1/pub/71m0001x/2021001/hist/{y}-CSV.zip");
 
     let mut zip = download_zip(&url);
@@ -97,16 +100,17 @@ You can run this code with `cargo run -r --example 1_2_2_styling`.
 
 ```rust
 // Function to lower the case of variable names in a CSV
-fn rename_tolower(df: &mut DataFrame) -> Result<(), Box<dyn std::error::Error>> {
-    let lower_cols: Vec<String> = df
-        .get_column_names()
-        .iter()
-        .map(|c| c.to_owned().to_lowercase())
+fn rename_tolower(mut lf: LazyFrame) -> LazyFrame {
+    let cols: Vec<String> = lf
+        .collect_schema()
+        .unwrap()
+        .iter_names()
+        .map(|c| c.to_owned().to_string())
         .collect();
 
-    df.set_column_names(lower_cols)?;
+    let lower_cols: Vec<String> = cols.iter().map(|c| c.to_owned().to_lowercase()).collect();
 
-    Ok(())
+    lf.rename(cols.iter(), lower_cols.iter(), true)
 }
 
 // Get all files in path
@@ -114,20 +118,22 @@ let paths = fs::read_dir("./data/lfs_csv").unwrap();
 
 // For each file, lower case
 for path in paths {
-    let path_buf = path.unwrap().path();
+    let path_csv = path.unwrap().path();
 
-    // Read CSV
-    let mut df = CsvReadOptions::default()
-        .try_into_reader_with_file_path(Some(path_buf.clone()))
-        .unwrap()
+    // Connect to CSV
+    let mut lf = LazyCsvReader::new(path_csv.clone())
+        .with_has_header(true)
         .finish()
         .unwrap();
 
     // Rename variables names to lower
-    rename_tolower(&mut df).unwrap();
+    lf = rename_tolower(lf);
+
+    // Can't collect in `finish` for some reason
+    let mut df = lf.collect().unwrap();
 
     // Write CSV
-    let mut file = File::create(path_buf).unwrap();
+    let mut file = File::create(path_csv).unwrap();
     CsvWriter::new(&mut file)
         .include_header(true)
         .with_separator(b',')
@@ -153,10 +159,12 @@ for path in paths {
     let path_parquet = format!("./data/lfs_parquet/{file_name}.parquet");
 
     // Read CSV
-    let mut df = CsvReadOptions::default()
-        .try_into_reader_with_file_path(Some(path_csv.clone()))
-        .unwrap()
+    let mut df = LazyCsvReader::new(path_csv.clone())
+        .with_infer_schema_length(Some(10_000)) // Default 100, missing = String
+        .with_has_header(true)
         .finish()
+        .unwrap()
+        .collect() // Can't collect in finish
         .unwrap();
 
     // Write Parquet
@@ -173,59 +181,40 @@ You can run this script using `cargo run -r --example 1_2_4_large`.
 
 ```rust
 // Get all files in path
-    let mut paths = fs::read_dir("./data/lfs_parquet").unwrap();
+let paths = fs::read_dir("./data/lfs_parquet").unwrap();
 
-    let parquet = paths.next().unwrap().unwrap().path();
-    let mut df = ParquetReader::new(File::open(parquet).unwrap())
-        .finish()
-        .unwrap();
+let mut lf_vec = vec![];
 
-    // For all Parquet files
-    for path in paths {
-        let parquet = path.unwrap().path();
+for path in paths {
+    let parquet = path.unwrap().path();
 
-        // Read-in and stack new parquet file
-        df.vstack_mut(
-            &ParquetReader::new(File::open(parquet).unwrap())
-                .finish()
-                .unwrap(),
-        )
-        .unwrap();
+    let args = ScanArgsParquet::default();
+    let lf = LazyFrame::scan_parquet(parquet, args.clone()).unwrap();
 
-        // Recommended in the docs
-        df.align_chunks_par();
-    }
+    lf_vec.push(lf);
+}
 
-    // Write large file as `lfs_large.csv`
-    let mut file = std::fs::File::create("./data/lfs_large/lfs.csv").unwrap();
-    CsvWriter::new(&mut file).finish(&mut df).unwrap();
+let union_args = UnionArgs::default();
+let lf = concat(lf_vec, union_args).unwrap();
 
-    // Write Single Parquet
-    let mut file = File::create("./data/lfs_large/lfs.parquet").unwrap();
-    ParquetWriter::new(&mut file).finish(&mut df).unwrap();
+// Bring to memory (large)
+let mut df = lf.collect().unwrap();
 
-    // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
-    let stats = StatisticsOptions {
-        min_value: true,
-        max_value: true,
-        distinct_count: true,
-        null_count: true,
-    };
+// Write large file as `lfs_large.csv`
+let mut file = std::fs::File::create("./data/lfs_large/lfs.csv").unwrap();
+CsvWriter::new(&mut file).finish(&mut df).unwrap();
 
-    let write_options = ParquetWriteOptions {
-        compression: ParquetCompression::Zstd(Some(ZstdLevel::try_new(10).unwrap())),
-        statistics: stats,
-        row_group_size: Some(512_usize.pow(2)),
-        data_page_size: Some(1024_usize.pow(2)),
-        maintain_order: true,
-    };
+// Write Single Parquet
+let mut file = File::create("./data/lfs_large/lfs.parquet").unwrap();
+ParquetWriter::new(&mut file).finish(&mut df).unwrap();
 
-    write_partitioned_dataset(
-        &mut df,
-        Path::new("./data/lfs_large/part/"),
-        vec!["survyear", "survmnth"],
-        &write_options,
-        4294967296,
-    )
-    .unwrap();
+// Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
+write_partitioned_dataset(
+    &mut df,
+    Path::new("./data/lfs_large/part/"),
+    vec!["survyear", "survmnth"],
+    &ParquetWriteOptions::default(),
+    4294967296,
+)
+.unwrap();
 ```
