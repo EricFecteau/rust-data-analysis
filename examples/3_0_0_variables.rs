@@ -49,6 +49,4 @@ fn main() {
     ]);
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
-
-    // Add conditional columns
 }

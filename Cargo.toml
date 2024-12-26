@@ -17,3 +17,5 @@ polars = { version = "0.45", features = ["lazy", "parquet", "polars-io", "regex"
 
 # human_bytes - converts large byte numbers into a human-readable format
 human_bytes = "0.4"
+
+hypors = "0.2.4"

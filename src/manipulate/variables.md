@@ -9,6 +9,7 @@ First, lets connect to the partitioned parquet file:
 let args = ScanArgsParquet::default();
 let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 ```
+
 You can create new variables right inside a `select()`, the same way you would select existing variables, with the same syntax. Using `col()` for existing variables and `lit()` values, you can create new values by adding new lines in the select, and giving them a name with `alias()`. As you can see in this example, you can create a new column from a literal with `lit(5).alias("five")` or a new variable from a formula of a mix of literals and columns (e.g. `(lit(5) + lit(7) - lit(2)).alias("ten")`). You can use any of the arithmetic expressions (`-`, `+`, `*`, `/`, `%`).
 
 
@@ -129,18 +130,3 @@ shape: (5, 5)
 │ 2006     ┆ 1        ┆ 1827         ┆ 18.27         ┆ Medium   │
 └──────────┴──────────┴──────────────┴───────────────┴──────────┘
 ```
-
-
-
-
-
-https://docs.rs/polars/latest/polars/prelude/enum.Expr.html#method.replace
-
-
-
-
-As an example, lets say you have a table of CPI (for inflation) and want to 
-
-
-This is also where you can modify the values of some columns to account for the survey weights of the LFS, in the `finalwt` variable.
-
