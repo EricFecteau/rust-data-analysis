@@ -33,3 +33,10 @@ fn main() {
     let result = independence(&cols, 0.01).unwrap();
     println!("{:?}", result);
 }
+
+// file_path <- "https://www.sthda.com/sthda/RDoc/data/housetasks.txt"
+// housetasks <- read.delim(file_path, row.names = 1)
+
+// write.csv(housetasks, "/home/eric/R/large_csv/housetask.csv")
+
+// chisq <- chisq.test(housetasks)

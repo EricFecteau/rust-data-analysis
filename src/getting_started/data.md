@@ -16,6 +16,9 @@ You can download the CSVs from [Statistics Canada's website](https://www150.stat
 
 **Source**: Statistics Canada, *Labour Force Survey: Public Use Microdata File*, January 2006 to present. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
 
+> [!CAUTION]
+> The goal of this book is to show the power of data analysis using Rust, not analyze the LFS data. Some examples will use this data in a way that does not produce valid results (e.g. incorrect population, unweighted statistics, longitudinal analysis). **No results in this book should be interpreted as being valid.**
+
 ## Downloading
 
 Here is a Rust script to download all data necessary for this book. It creates approximately 2.6 GB of CSV data. A `bash` version of this script [can also be found here]().

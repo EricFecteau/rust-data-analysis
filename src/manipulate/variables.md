@@ -1,4 +1,4 @@
-# New variables
+# Variables
 
 This section will explore how to create new variables, derived from other variables and literals.
 
@@ -10,7 +10,7 @@ let args = ScanArgsParquet::default();
 let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 ```
 
-You can create new variables right inside a `select()`, the same way you would select existing variables, with the same syntax. Using `col()` for existing variables and `lit()` values, you can create new values by adding new lines in the select, and giving them a name with `alias()`. As you can see in this example, you can create a new column from a literal with `lit(5).alias("five")` or a new variable from a formula of a mix of literals and columns (e.g. `(lit(5) + lit(7) - lit(2)).alias("ten")`). You can use any of the arithmetic expressions (`-`, `+`, `*`, `/`, `%`).
+You can create new variables right inside a `select()`, the same way you would select existing variables, with the same syntax. Using `col()` for existing variables and `lit()` for literal values, you can create new values by adding new lines in the select, and giving them a name with `alias()`. As you can see in this example, you can create a new column from a literal with `lit(5).alias("five")` or a new variable from a formula of a mix of literals and columns (e.g. `(lit(5) + lit(7) - lit(2)).alias("ten")`). You can use any of the arithmetic expressions (`-`, `+`, `*`, `/`, `%`).
 
 
 ```Rust
@@ -40,13 +40,12 @@ shape: (5, 5)
 └──────────┴──────────┴──────────────┴──────┴─────┘
 ```
 
-You can not use a newly created variable (or a renamed variable) in the same select. For example, you would not be able to run `(col("five") + col("ten")).alias("fifteen")` in the same `select()` as you created the `five` and `ten` columns. Instead, you can chain multiple `filter()`, or add a new step like below:
+You can not use a newly created variable (or a renamed variable) in the same select. For example, you would not be able to run `(col("five") + col("ten")).alias("fifteen")` in the same `select()` as you created the `five` and `ten` columns. Instead, you can add more `select()` (with the `all()` keyword to keep previous variables, or simpler, you can use `with_column()` or `with_columns()` in the same way as you would a `select()` to add new columns. You can chain it or create a new step. Creating a column with an already existing name in a `with_column()` will replace the existing column:
 
 ```Rust
-let lf = lf.select([
-    all(), // keep all previously kept variables (same as col("*"))
+let lf = lf.with_column(
     (col("five") + col("ten")).alias("fifteen"), // add two columns
-]);
+);
 
 println!("{}", lf.clone().limit(5).collect().unwrap());
 ```
@@ -73,10 +72,9 @@ As we can see, `hourly_wages` is an `i64` in cents. We might want to convert it 
 let lf = lf
     .drop([col("five"), col("ten"), col("fifteen")]) // Remove unneeded variables (could also exclude them from the select)
     .filter(col("hourly_wages").is_not_null()) // Filter those with null wages
-    .select([
-        all(), // keep all previously kept variables (same as col("*"))
+    .with_column(
         (col("hourly_wages").cast(DataType::Float64) / lit(100)).alias("wages_dollars"),
-    ]);
+    );
 
 println!("{}", lf.clone().limit(5).collect().unwrap());
 ```
@@ -99,8 +97,7 @@ shape: (5, 4)
 You can also create conditional values for a column, using the `when()`, `then()` and `otherwise()` chain. This example below creates the `wage_cat` column if `<= 10` = `Low`, `> 10 & <= 30` = `Medium` and `> 30` = `High`.
 
 ```Rust
-let lf = lf.select([
-    all(),
+let lf = lf.with_column(
     when(col("wages_dollars").lt_eq(lit(10.00)))
         .then(lit("Low"))
         .when(
@@ -111,7 +108,7 @@ let lf = lf.select([
         .then(lit("Medium"))
         .otherwise(lit("High"))
         .alias("wage_cat"),
-]);
+);
 
 println!("{}", lf.clone().limit(5).collect().unwrap());
 ```

@@ -1,4 +1,4 @@
-# Select & Filtering
+# Select & Filter
 
 This section will explore how to filter rows and select columns. 
 

@@ -15,11 +15,10 @@ fn main() {
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
-    // Can't use created columns in the same `select()`
-    let lf = lf.select([
-        all(), // keep all previously kept variables (same as col("*"))
+    // Can't use created columns in the same `select()`, but you can add new colum(s) with `with_column()`
+    let lf = lf.with_column(
         (col("five") + col("ten")).alias("fifteen"), // add two columns
-    ]);
+    );
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
@@ -27,26 +26,24 @@ fn main() {
     let lf = lf
         .drop([col("five"), col("ten"), col("fifteen")])
         .filter(col("hourly_wages").is_not_null())
-        .select([
-            all(), // keep all previously kept variables (same as col("*"))
-            (col("hourly_wages").cast(DataType::Float64) / lit(100)).alias("wages_dollars"),
-        ]);
+        .with_column(
+            (col("hourly_wages").cast(DataType::Float64) / lit(100)).alias("hourly_wages"),
+        );
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
-    let lf = lf.select([
-        all(),
-        when(col("wages_dollars").lt_eq(lit(10.00)))
+    let lf = lf.with_column(
+        when(col("hourly_wages").lt_eq(lit(10.00)))
             .then(lit("Low"))
             .when(
-                col("wages_dollars")
+                col("hourly_wages")
                     .gt(lit(10.00))
-                    .and(col("wages_dollars").lt_eq(lit(30.00))),
+                    .and(col("hourly_wages").lt_eq(lit(30.00))),
             )
             .then(lit("Medium"))
             .otherwise(lit("High"))
             .alias("wage_cat"),
-    ]);
+    );
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 }
