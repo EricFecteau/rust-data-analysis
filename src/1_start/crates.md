@@ -2,7 +2,7 @@
 
 Throughout this book, various crates are going to be used in the examples. Here are the creates, their versions at the time of writing and and the features that will be used.
 
-You will need to add these to your `Cargo.toml` file, when relevant. You can find the 
+You will need to add these to your `Cargo.toml` file, when relevant. [X](https://github.com/EricFecteau/rust-data-analysis/blob/main/Cargo.toml).
 
 
 ```toml
