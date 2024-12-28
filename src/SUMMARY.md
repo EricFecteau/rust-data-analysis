@@ -8,11 +8,11 @@
     * [Environment](1_start/env.md)
     * [Concepts](1_start/concepts.md)
 
-* [Reading and writing](2_rw/index.md)
-    * [Reading](2_rw/reading.md)
-    * [Writing](2_rw/writing.md)
-    * [Database](2_rw/database.md)
-    * [Reproducible examples](2_rw/reprex.md)
+* [Reading and writing](2_data/index.md)
+    * [Reading](2_data/reading.md)
+    * [Writing](2_data/writing.md)
+    * [Databases](2_data/databases.md)
+    * [Reproducible examples](2_data/reprex.md)
 
 * [Manipulating data](3_manipulate/index.md)
     * [Select & Filter](3_manipulate/select.md)

@@ -17,6 +17,7 @@ zip = "2"
 # Polars - open-source library for data manipulation, with `lazy` feature
 #          enabled to support lazy evaluation 
 polars = { version = "0.45", features = ["lazy"] }
+polars_arrow = "0.45"
 
 # human_bytes - converts large byte numbers into a human-readable format
 human_bytes = "0.4"

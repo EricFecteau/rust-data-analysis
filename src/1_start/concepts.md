@@ -12,7 +12,7 @@ Like with [arrow](), [duckdb]() or other data analysis tools, Polars has the abi
 
 Polars uses the `DataFrame` API when using `eager evaluation` (e.g. bringing the data into memory) and uses the `LazyFrame` API when using `lazy evaluation` (e.g. connecting to the data, but not bringing it into memory). The available functions for both APIs are similar, but sufficiently different that code written for one will likely not work on the other. Generally, as is recommended by [Polar's DataFrame], because of the advantages of lazy evaluation, this book will be giving examples of `lazy evaluation`. In examples, this book will use `lf` for the name of the object or the `lf_` prefix when the object is a `LazyFrame` and `df` (or the `df_` prefix) for `DataFrame`.
 
-To convert between a `DataFrame` to a `LazyFrame` you can use `let lf = df.lazy();`. Note that nothing will be evaluated yet. It will be evaluation once you convert the LazyFrame to a `DataFrame` with `collect()`: `let df = lf.collect().unwrap();`.
+To convert a `DataFrame` to a `LazyFrame` you can use `let lf = df.lazy();`. Note that nothing will be evaluated yet. It will only be evaluation once you convert the LazyFrame to a `DataFrame` with `collect()`: `let df = lf.collect().unwrap();`.
 
 > [!CAUTION]
 > Use caution when using `collect()`, as it will bring the results in memory. Make sure that the data being collected is memory-sized (e.g. small data frame, summary data, few columns, etc.).
