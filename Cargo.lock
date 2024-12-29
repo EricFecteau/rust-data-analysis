@@ -2664,6 +2664,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "polars-ffi"
+version = "0.45.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "259c66ea221679c6421c9c2f4db99cb3138b6c1130414e44d0e22ede7a92e0ed"
+dependencies = [
+ "polars-arrow",
+ "polars-core",
+]
+
+[[package]]
 name = "polars-io"
 version = "0.45.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3410,12 +3420,14 @@ dependencies = [
 name = "rust-data-analysis"
 version = "0.1.0"
 dependencies = [
+ "arrow 46.0.0",
  "connector_arrow",
  "connectorx",
  "human_bytes",
  "hypors",
  "polars",
  "polars-arrow",
+ "polars-ffi",
  "postgres",
  "reqwest",
  "url",

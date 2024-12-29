@@ -15,7 +15,7 @@ zip = "2"
 #          enabled to support lazy evaluation 
 polars = { version = "0.45", features = ["lazy", "parquet", "polars-io", "regex", "is_in", "pivot", "cum_agg", "abs", "dtype-array", "rows"] }
 polars-arrow = { version = "0.45" }
-
+polars-ffi = "0.45"
 
 
 # human_bytes - converts large byte numbers into a human-readable format
@@ -30,3 +30,6 @@ connectorx = { version = "0.3.3", features = ["src_postgres", "dst_arrow"] }
 url = "2.5"
 
 connector_arrow = { version = "0.6", features = ["src_postgres"] }
+
+arrow = { version = "46", features = ["ffi"] }
+

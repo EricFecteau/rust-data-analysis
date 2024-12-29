@@ -1,4 +1,3 @@
-// use polars::frame::row;
 use polars::{datatypes, prelude::*};
 use polars_arrow::array;
 use postgres::{types::Type, Client, NoTls};
@@ -6,16 +5,9 @@ use postgres::{types::Type, Client, NoTls};
 fn main() {
     let mut client = Client::connect("host=localhost user=postgres", NoTls).unwrap();
 
-    let rows = client
-        .query(
-            "select * from lfs where survyear = 2010 and survmnth = 6",
-            &[],
-        )
-        .unwrap();
+    let rows = client.query("select * from lfs", &[]).unwrap();
 
     // Create series from the vectors
-    // https://stackoverflow.com/questions/75990372/create-a-polars-dataframe-from-postgres-sql-in-a-generic-way
-
     let mut fields: Vec<(String, datatypes::DataType)> = Vec::new();
     let first_row = &rows[0];
     let column_count = first_row.len();
