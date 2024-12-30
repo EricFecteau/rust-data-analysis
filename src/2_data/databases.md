@@ -4,15 +4,29 @@ This section will explore how to work with SQL databases in Rust. In the [Data](
 
 ## Direct queries
 
-You can direct query the data using the appropriate crate: [PostgreSQL](https://docs.rs/postgres/latest/postgres/), [MySql](https://docs.rs/mysql_common/latest/mysql_common/), [Sqlite](https://docs.rs/rusqlite/0.32.1/rusqlite/), [MSSQL](https://crates.io/crates/tiberius), [Oracle](https://docs.rs/tiberius/0.12.3/tiberius/). Other databases should also be available through these crates, such as Mariadb (MySql), ClickHouse (MySql), Redshift (PostgreSQL), Azure SQL Database (MSSql). 
+You can direct query the data using the appropriate crate: [PostgreSQL](https://docs.rs/postgres/latest/postgres/), [MySql](https://docs.rs/mysql_common/latest/mysql_common/), [Sqlite](https://docs.rs/rusqlite/0.32.1/rusqlite/), [MSSQL](https://crates.io/crates/tiberius), [Oracle](https://docs.rs/tiberius/0.12.3/tiberius/). Other databases should also be available through these crates, such as Mariadb (MySql), ClickHouse (MySql), Redshift (PostgreSQL), Azure SQL Database (MSSql). You can run this section using `cargo run -r --example 2_3_1_postgresql`. 
 
+```Rust
+// Connect to postgresql
+let mut client = Client::connect("host=localhost user=postgres", NoTls).unwrap();
 
+// Query the database, returns a vector of rows
+let data = client
+    .query("select count(*) as count from lfs", &[])
+    .unwrap();
 
-Using this method, each type of databases will return their own specific data format and their own special connection code. It's useful for queries with simple outputs, but hard to work with large outputs. This is where the `ConnectorX` library comes in.
+// Get the first data point from the first row
+let data_point: i64 = data[0].get(0);
+```
+
+> [!NOTE]
+> Note that these SQL libraries generally return row-oriented data, when Polars (using the Arrow memory model) uses column-oriented data. This makes moving data between SQL and Arrow complex.
+
+Using this method, each type of databases will have their own special connection code and return their own specific data. It's useful for queries with simple outputs, but hard to work with large outputs. This is where the `ConnectorX` library comes in.
 
 ## SQL to Polars
 
-Moving data from SQL to Polars is an area that is a bit in flux in Rust, since there are multiple (mostly) non-compatible crates implementing the Arrow standard: [arrow-rs](https://docs.rs/arrow/latest/arrow/) (the official Apache Arrow crate), [polars_arrow](https://docs.rs/polars-arrow/0.45.1/polars_arrow/) (the arrow crates used by Polars) and [Arrow2](https://github.com/jorgecarleitao/arrow2?tab=readme-ov-file#this-crate-is-unmaintained) (a deprecated arrow crate). Thankfully, using the Arrow’s C Data Interface, we can zero-copy data between these crates!
+Moving data from SQL to Polars is an area that is a bit in flux in Rust, since there are multiple (mostly) non-compatible crates implementing the Arrow standard: [arrow-rs](https://docs.rs/arrow/latest/arrow/) (the official Apache Arrow crate), [polars_arrow](https://docs.rs/polars-arrow/0.45.1/polars_arrow/) (the arrow crates used by Polars) and [Arrow2](https://github.com/jorgecarleitao/arrow2?tab=readme-ov-file#this-crate-is-unmaintained) (a deprecated arrow crate). Thankfully, using the Arrow’s C Data Interface, we can zero-copy data between these crates! You can run this section using `cargo run -r --example 2_3_2_sql_to_polars`. 
 
 To collect the data from PostgreSQL (or various other database), we can use the [ConnectorX](https://github.com/sfu-db/connector-x) crate. Using `.arrow()` the data gets converted to the arrow format (using `arrow-rs`):
 
@@ -97,9 +111,7 @@ fn arrow_to_df(arrow_obj: Vec<arrow::record_batch::RecordBatch>) -> DataFrame {
 
     // Concat the chunks
     let union_args = UnionArgs::default();
-    let df = concat(lf_vec, union_args).unwrap().collect().unwrap();
-
-    df
+    concat(lf_vec, union_args).unwrap().collect().unwrap()
 }
 ```
 </details>

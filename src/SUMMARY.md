@@ -9,10 +9,10 @@
     * [Concepts](1_start/concepts.md)
 
 * [Reading and writing](2_data/index.md)
-    * [Reading](2_data/reading.md)
-    * [Writing](2_data/writing.md)
+    * [DataFrame](2_data/df.md)
+    * [CSV](2_data/csv.md)
+    * [Parquet](2_data/parquet.md)
     * [Databases](2_data/databases.md)
-    * [Reproducible examples](2_data/reprex.md)
 
 * [Manipulating data](3_manipulate/index.md)
     * [Select & Filter](3_manipulate/select.md)

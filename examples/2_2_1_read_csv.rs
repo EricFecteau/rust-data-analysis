@@ -7,9 +7,6 @@ fn main() {
         .finish()
         .unwrap();
 
-    // Count the number of rows
-    let count = lf.select([len().alias("count")]).collect().unwrap();
-
-    // Print the count df
-    println!("{}", &count)
+    // Print first 5 rows
+    println!("{}", lf.limit(5).collect().unwrap());
 }

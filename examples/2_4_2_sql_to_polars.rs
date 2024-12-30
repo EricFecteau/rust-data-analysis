@@ -99,7 +99,5 @@ fn arrow_to_df(arrow_obj: Vec<arrow::record_batch::RecordBatch>) -> DataFrame {
 
     // Concat the chunks
     let union_args = UnionArgs::default();
-    let df = concat(lf_vec, union_args).unwrap().collect().unwrap();
-
-    df
+    concat(lf_vec, union_args).unwrap().collect().unwrap()
 }
