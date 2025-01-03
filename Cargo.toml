@@ -14,22 +14,12 @@ zip = "2"
 # Polars - open-source library for data manipulation, with `lazy` feature
 #          enabled to support lazy evaluation 
 polars = { version = "0.45", features = ["lazy", "parquet", "polars-io", "regex", "is_in", "pivot", "cum_agg", "abs", "dtype-array", "rows"] }
-polars-arrow = { version = "0.45" }
-polars-ffi = "0.45"
 
+# Move data from SQL to Polars (through Arrow)
+connectorx = { git = "https://github.com/EricFecteau/connector-x.git", branch = "arrow_rs_polars", features = ["src_postgres", "dst_polars"] }
 
-# human_bytes - converts large byte numbers into a human-readable format
-human_bytes = "0.4"
-
-hypors = "0.2.4"
-
+# Move data in and out of PostgreSQL
 postgres = "0.19"
 
-connectorx = { version = "0.3.3", features = ["src_postgres", "dst_arrow"] }
-
-url = "2.5"
-
-connector_arrow = { version = "0.6", features = ["src_postgres"] }
-
-arrow = { version = "46", features = ["ffi"] }
-
+# Hypothesis testing
+hypors = "0.2.4"
