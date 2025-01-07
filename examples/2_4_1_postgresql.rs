@@ -1,3 +1,5 @@
+// :dep postgres = "0.19"
+
 use postgres::{Client, NoTls};
 
 fn main() {

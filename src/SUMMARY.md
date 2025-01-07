@@ -3,9 +3,9 @@
 [Data analysis in Rust](README.md)
 
 * [Getting started](1_start/index.md)
+    * [Environment](1_start/env.md)
     * [Crates](1_start/crates.md)
     * [Data](1_start/data.md)
-    * [Environment](1_start/env.md)
     * [Concepts](1_start/concepts.md)
 
 * [Reading and writing](2_data/index.md)
@@ -30,5 +30,3 @@
     * [Reports](5_pub/reports.md)
     * [Visualization](5_pub/visualization.md)
     * [Excel](5_pub/excel.md)
-
-* [Useful functions](useful_functions.md)
