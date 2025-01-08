@@ -1,8 +1,7 @@
-use reqwest::blocking::get;
-use std::fs;
-use std::fs::File;
-use std::io::prelude::*;
-use std::io::Cursor;
+// :dep reqwest = { version = "0.12", features = ["blocking"] }
+// :dep zip = "2"
+
+use std::io::{Read, Write};
 
 fn main() {
     let start_year = 2006;
@@ -10,15 +9,18 @@ fn main() {
     let current_month = 9; // Latest month the LFS is available
 
     // Function to download ZIP file from URL and return a Reader
-    fn download_zip(url: &str) -> Cursor<Vec<u8>> {
+    fn download_zip(url: &str) -> std::io::Cursor<Vec<u8>> {
         let mut zip_buf: Vec<u8> = Vec::new();
 
-        get(url).unwrap().read_to_end(&mut zip_buf).unwrap();
+        reqwest::blocking::get(url)
+            .unwrap()
+            .read_to_end(&mut zip_buf)
+            .unwrap();
         std::io::Cursor::new(zip_buf)
     }
 
     // Function to extract a single .csv file from a ZIP archive and write it to ./data/lfs_csv
-    fn write_csv(zip_file: &mut Cursor<Vec<u8>>, csv_name: &str) {
+    fn write_csv(zip_file: &mut std::io::Cursor<Vec<u8>>, csv_name: &str) {
         let mut csv_buf: Vec<u8> = Vec::new();
 
         // Extract csv from buffer
@@ -30,16 +32,16 @@ fn main() {
             .unwrap();
 
         // Write CSV file
-        let mut file = File::create(format!("./data/lfs_csv/{csv_name}")).unwrap();
+        let mut file = std::fs::File::create(format!("./data/lfs_csv/{csv_name}")).unwrap();
         file.write_all(&csv_buf).unwrap();
     }
 
     // Create directory
-    let _ = fs::remove_dir_all("./data");
-    fs::create_dir("./data").unwrap();
-    fs::create_dir("./data/lfs_csv").unwrap();
-    fs::create_dir("./data/lfs_parquet").unwrap();
-    fs::create_dir("./data/lfs_large").unwrap();
+    let _ = std::fs::remove_dir_all("./data");
+    std::fs::create_dir("./data").unwrap();
+    std::fs::create_dir("./data/lfs_csv").unwrap();
+    std::fs::create_dir("./data/lfs_parquet").unwrap();
+    std::fs::create_dir("./data/lfs_large").unwrap();
 
     // For the full-year files (prior to current year)
     for y in start_year..current_year {

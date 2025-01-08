@@ -1,6 +1,6 @@
+// :dep polars = { version = "0.45", features = ["lazy"] }
+
 use polars::prelude::*;
-use std::fs;
-use std::fs::File;
 
 fn main() {
     // Function to lower the case of variable names in a CSV
@@ -18,7 +18,7 @@ fn main() {
     }
 
     // Get all files in path
-    let paths = fs::read_dir("./data/lfs_csv").unwrap();
+    let paths = std::fs::read_dir("./data/lfs_csv").unwrap();
 
     // For each file, lower case
     for path in paths {
@@ -37,7 +37,7 @@ fn main() {
         let mut df = lf.collect().unwrap();
 
         // Write CSV
-        let mut file = File::create(path_csv).unwrap();
+        let mut file = std::fs::File::create(path_csv).unwrap();
         CsvWriter::new(&mut file)
             .include_header(true)
             .with_separator(b',')

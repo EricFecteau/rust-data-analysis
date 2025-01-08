@@ -21,25 +21,33 @@ You can download the CSVs from [Statistics Canada's website](https://www150.stat
 
 ## Downloading
 
-Here is a Rust script to download all data necessary for this book. It creates approximately 2.6 GB of CSV data. A `bash` version of this script [can also be found here]().
+Here is a Rust script to download all data necessary for this book. It creates approximately 2.6 GB of CSV data. A `bash` version of this script [can also be found here](https://github.com/EricFecteau/rust-data-analysis/blob/main/examples/1_2_1_download.sh).
 
 You can run this script using `cargo run -r --example 1_2_1_download`.
 
 ```rust
+:dep reqwest = { version = "0.12", features = ["blocking"] }
+:dep zip = "2"
+
+use std::io::{Read, Write};
+
 let start_year = 2006;
 let current_year = 2024;
 let current_month = 9; // Latest month the LFS is available
 
 // Function to download ZIP file from URL and return a Reader
-fn download_zip(url: &str) -> Cursor<Vec<u8>> {
+fn download_zip(url: &str) -> std::io::Cursor<Vec<u8>> {
     let mut zip_buf: Vec<u8> = Vec::new();
 
-    get(url).unwrap().read_to_end(&mut zip_buf).unwrap();
+    reqwest::blocking::get(url)
+        .unwrap()
+        .read_to_end(&mut zip_buf)
+        .unwrap();
     std::io::Cursor::new(zip_buf)
 }
 
 // Function to extract a single .csv file from a ZIP archive and write it to ./data/lfs_csv
-fn write_csv(zip_file: &mut Cursor<Vec<u8>>, csv_name: &str) {
+fn write_csv(zip_file: &mut std::io::Cursor<Vec<u8>>, csv_name: &str) {
     let mut csv_buf: Vec<u8> = Vec::new();
 
     // Extract csv from buffer
@@ -51,16 +59,16 @@ fn write_csv(zip_file: &mut Cursor<Vec<u8>>, csv_name: &str) {
         .unwrap();
 
     // Write CSV file
-    let mut file = File::create(format!("./data/lfs_csv/{csv_name}")).unwrap();
+    let mut file = std::fs::File::create(format!("./data/lfs_csv/{csv_name}")).unwrap();
     file.write_all(&csv_buf).unwrap();
 }
 
 // Create directory
-let _ = fs::remove_dir_all("./data");
-fs::create_dir("./data").unwrap();
-fs::create_dir("./data/lfs_csv").unwrap();
-fs::create_dir("./data/lfs_parquet").unwrap();
-fs::create_dir("./data/lfs_large").unwrap();
+let _ = std::fs::remove_dir_all("./data");
+std::fs::create_dir("./data").unwrap();
+std::fs::create_dir("./data/lfs_csv").unwrap();
+std::fs::create_dir("./data/lfs_parquet").unwrap();
+std::fs::create_dir("./data/lfs_large").unwrap();
 
 // For the full-year files (prior to current year)
 for y in start_year..current_year {
@@ -92,14 +100,13 @@ for m in 1..(current_month + 1) {
 
 ## Styling
 
-Since there does not seem to exist a style guide for Polars, this guide will use the [R Tidyverse style guide](https://style.tidyverse.org/), when appropriate. 
-
-This section will:
-* Rename the variables in all CSV files to lower
-
-You can run this code with `cargo run -r --example 1_2_2_styling`.
+Since there does not seem to exist a style guide for Polars, this guide will use the [R Tidyverse style guide](https://style.tidyverse.org/), when appropriate. Since all variables on the LFS CSV files are uppercase, this script will modify the variables to be lowercase. You can run this code with `cargo run -r --example 1_2_2_styling`.
 
 ```rust
+:dep polars = { version = "0.45", features = ["lazy"] }
+
+use polars::prelude::*;
+
 // Function to lower the case of variable names in a CSV
 fn rename_tolower(mut lf: LazyFrame) -> LazyFrame {
     let cols: Vec<String> = lf
@@ -115,7 +122,7 @@ fn rename_tolower(mut lf: LazyFrame) -> LazyFrame {
 }
 
 // Get all files in path
-let paths = fs::read_dir("./data/lfs_csv").unwrap();
+let paths = std::fs::read_dir("./data/lfs_csv").unwrap();
 
 // For each file, lower case
 for path in paths {
@@ -134,7 +141,7 @@ for path in paths {
     let mut df = lf.collect().unwrap();
 
     // Write CSV
-    let mut file = File::create(path_csv).unwrap();
+    let mut file = std::fs::File::create(path_csv).unwrap();
     CsvWriter::new(&mut file)
         .include_header(true)
         .with_separator(b',')
@@ -145,18 +152,24 @@ for path in paths {
 
 ## Parquet
 
-This section will convert each CSV into individual Parquet files.
-
-You can run this code with `cargo run -r --example 1_2_3_parquet`.
+This section will convert each CSV into individual Parquet files. You can run this code with `cargo run -r --example 1_2_3_parquet`.
 
 ```rust
+:dep polars = { version = "0.45", features = ["lazy", "parquet"] }
+
+use polars::prelude::*;
+
 // Get all files in path
-let paths = fs::read_dir("./data/lfs_csv").unwrap();
+let paths = std::fs::read_dir("./data/lfs_csv").unwrap();
 
 // For each file, save as Parquet
 for path in paths {
     let path_csv = path.unwrap().path();
-    let file_name = Path::new(&path_csv).file_stem().unwrap().to_str().unwrap();
+    let file_name = std::path::Path::new(&path_csv)
+        .file_stem()
+        .unwrap()
+        .to_str()
+        .unwrap();
     let path_parquet = format!("./data/lfs_parquet/{file_name}.parquet");
 
     // Read CSV
@@ -165,24 +178,26 @@ for path in paths {
         .with_has_header(true)
         .finish()
         .unwrap()
-        .collect() // Can't collect in finish
+        .collect() // Can't collect in finish below
         .unwrap();
 
     // Write Parquet
-    let mut file = File::create(path_parquet).unwrap();
+    let mut file = std::fs::File::create(path_parquet).unwrap();
     ParquetWriter::new(&mut file).finish(&mut df).unwrap();
 }
 ```
 
 ## Large file
 
-This section will create a large CSV and a large Parquet file. If you have the LFS files from 2006 to 2024, you will need at least 16 GB of RAM (or pagefile / swap memory).
-
-You can run this script using `cargo run -r --example 1_2_4_large`.
+This section will create a large CSV and a large Parquet file. If you have the LFS files from 2006 to 2024, you will need at least 16 GB of RAM (or pagefile / swap memory). You can run this script using `cargo run -r --example 1_2_4_large`.
 
 ```rust
+:dep polars = { version = "0.45", features = ["lazy", "parquet"] }
+
+use polars::prelude::*;
+
 // Get all files in path
-let paths = fs::read_dir("./data/lfs_parquet").unwrap();
+let paths = std::fs::read_dir("./data/lfs_parquet").unwrap();
 
 let mut lf_vec = vec![];
 
@@ -206,13 +221,13 @@ let mut file = std::fs::File::create("./data/lfs_large/lfs.csv").unwrap();
 CsvWriter::new(&mut file).finish(&mut df).unwrap();
 
 // Write Single Parquet
-let mut file = File::create("./data/lfs_large/lfs.parquet").unwrap();
+let mut file = std::fs::File::create("./data/lfs_large/lfs.parquet").unwrap();
 ParquetWriter::new(&mut file).finish(&mut df).unwrap();
 
 // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
 write_partitioned_dataset(
     &mut df,
-    Path::new("./data/lfs_large/part/"),
+    std::path::Path::new("./data/lfs_large/part/"),
     vec!["survyear", "survmnth"],
     &ParquetWriteOptions::default(),
     4294967296,
@@ -222,7 +237,7 @@ write_partitioned_dataset(
 
 # SQL
 
-This example will create a PostgreSQL server, in which the LFS data will be loaded. Since this is just a test server, we will keep keep all the default configurations. To set it up, follow one of these guides: [Windows](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql), Linux ([Ubuntu](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql-linux), [Archlinux](https://wiki.archlinux.org/title/PostgreSQL#Require_password_for_login)) and [macOS](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql-macos).
+This example will create a PostgreSQL server, in which the LFS data will be loaded. Since this is just a test server, we will keep keep all the default configurations. To set it up, follow one of these guides: [Windows](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql), Linux ([Ubuntu](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql-linux), [Arch Linux](https://wiki.archlinux.org/title/PostgreSQL#Require_password_for_login)) and [macOS](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql-macos).
 
 The following example, using Arch Linux, will show how simple it is to set up:
 
@@ -233,8 +248,15 @@ The following example, using Arch Linux, will show how simple it is to set up:
 Once set up, you can use Rust to load he data into the database. You can run this script using `cargo run -r --example 1_2_5_sql`.
 
 ```Rust
+:dep polars = { version = "0.45", features = ["lazy"] }
+:dep postgres = "0.19"
+
+use polars::prelude::*;
+use std::io::{Read, Write};
+
 // Connect to postgresql
-let mut client = Client::connect("host=localhost user=postgres", NoTls).unwrap();
+let mut client =
+    postgres::Client::connect("host=localhost user=postgres", postgres::NoTls).unwrap();
 
 // Uncomment if something goes wrong (delete lfs table)
 // client.batch_execute("drop TABLE lfs;").unwrap();
@@ -267,14 +289,14 @@ ct_string.push_str(");");
 client.batch_execute(&ct_string).unwrap();
 
 // Get all files in path
-let paths = fs::read_dir("./data/lfs_csv").unwrap();
+let paths = std::fs::read_dir("./data/lfs_csv").unwrap();
 
 // For each file, send it to postgresql
 for path in paths {
     let csv = path.unwrap().path();
 
-    let mut f = File::open(csv.clone()).unwrap();
-    let metadata = fs::metadata(csv).unwrap();
+    let mut f = std::fs::File::open(csv.clone()).unwrap();
+    let metadata = std::fs::metadata(csv).unwrap();
     let mut buffer = vec![0; metadata.len() as usize];
     f.read_exact(&mut buffer).unwrap();
 

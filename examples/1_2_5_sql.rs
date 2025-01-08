@@ -1,12 +1,13 @@
+// :dep polars = { version = "0.45", features = ["lazy"] }
+// :dep postgres = "0.19"
+
 use polars::prelude::*;
-use postgres::{Client, NoTls};
-use std::fs;
-use std::fs::File;
 use std::io::{Read, Write};
 
 fn main() {
     // Connect to postgresql
-    let mut client = Client::connect("host=localhost user=postgres", NoTls).unwrap();
+    let mut client =
+        postgres::Client::connect("host=localhost user=postgres", postgres::NoTls).unwrap();
 
     // Uncomment if something goes wrong (delete lfs table)
     // client.batch_execute("drop TABLE lfs;").unwrap();
@@ -39,14 +40,14 @@ fn main() {
     client.batch_execute(&ct_string).unwrap();
 
     // Get all files in path
-    let paths = fs::read_dir("./data/lfs_csv").unwrap();
+    let paths = std::fs::read_dir("./data/lfs_csv").unwrap();
 
     // For each file, send it to postgresql
     for path in paths {
         let csv = path.unwrap().path();
 
-        let mut f = File::open(csv.clone()).unwrap();
-        let metadata = fs::metadata(csv).unwrap();
+        let mut f = std::fs::File::open(csv.clone()).unwrap();
+        let metadata = std::fs::metadata(csv).unwrap();
         let mut buffer = vec![0; metadata.len() as usize];
         f.read_exact(&mut buffer).unwrap();
 

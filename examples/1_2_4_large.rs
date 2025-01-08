@@ -1,11 +1,10 @@
+// :dep polars = { version = "0.45", features = ["lazy", "parquet"] }
+
 use polars::prelude::*;
-use std::fs;
-use std::fs::File;
-use std::path::Path;
 
 fn main() {
     // Get all files in path
-    let paths = fs::read_dir("./data/lfs_parquet").unwrap();
+    let paths = std::fs::read_dir("./data/lfs_parquet").unwrap();
 
     let mut lf_vec = vec![];
 
@@ -29,13 +28,13 @@ fn main() {
     CsvWriter::new(&mut file).finish(&mut df).unwrap();
 
     // Write Single Parquet
-    let mut file = File::create("./data/lfs_large/lfs.parquet").unwrap();
+    let mut file = std::fs::File::create("./data/lfs_large/lfs.parquet").unwrap();
     ParquetWriter::new(&mut file).finish(&mut df).unwrap();
 
     // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
     write_partitioned_dataset(
         &mut df,
-        Path::new("./data/lfs_large/part/"),
+        std::path::Path::new("./data/lfs_large/part/"),
         vec!["survyear", "survmnth"],
         &ParquetWriteOptions::default(),
         4294967296,

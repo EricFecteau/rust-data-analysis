@@ -1,16 +1,19 @@
+// :dep polars = { version = "0.45", features = ["lazy", "parquet"] }
+
 use polars::prelude::*;
-use std::fs;
-use std::fs::File;
-use std::path::Path;
 
 fn main() {
     // Get all files in path
-    let paths = fs::read_dir("./data/lfs_csv").unwrap();
+    let paths = std::fs::read_dir("./data/lfs_csv").unwrap();
 
     // For each file, save as Parquet
     for path in paths {
         let path_csv = path.unwrap().path();
-        let file_name = Path::new(&path_csv).file_stem().unwrap().to_str().unwrap();
+        let file_name = std::path::Path::new(&path_csv)
+            .file_stem()
+            .unwrap()
+            .to_str()
+            .unwrap();
         let path_parquet = format!("./data/lfs_parquet/{file_name}.parquet");
 
         // Read CSV
@@ -19,11 +22,11 @@ fn main() {
             .with_has_header(true)
             .finish()
             .unwrap()
-            .collect() // Can't collect in finish
+            .collect() // Can't collect in finish below
             .unwrap();
 
         // Write Parquet
-        let mut file = File::create(path_parquet).unwrap();
+        let mut file = std::fs::File::create(path_parquet).unwrap();
         ParquetWriter::new(&mut file).finish(&mut df).unwrap();
     }
 }
