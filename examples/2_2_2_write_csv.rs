@@ -1,14 +1,18 @@
+// :dep polars = { version = "0.45", features = ["lazy"] }
+
 use polars::prelude::*;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut df = CsvReadOptions::default()
-        .try_into_reader_with_file_path(Some("./data/lfs_csv/pub0824.csv".into()))
-        .unwrap()
+fn main() {
+    // Read `pub0824.csv` as LazyFrame
+    let lf = LazyCsvReader::new("./data/lfs_csv/pub0824.csv")
+        .with_has_header(true)
         .finish()
         .unwrap();
 
-    let mut file = std::fs::File::create("./data/df.csv").unwrap();
-    CsvWriter::new(&mut file).finish(&mut df).unwrap();
+    // Bring it into memory (by converting it to DataFrame)
+    let mut df = lf.collect().unwrap();
 
-    Ok(())
+    // Write `pub0824.csv`
+    let mut file = std::fs::File::create("./data/lfs_csv/pub0824.csv").unwrap();
+    CsvWriter::new(&mut file).finish(&mut df).unwrap();
 }

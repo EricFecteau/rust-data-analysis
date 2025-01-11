@@ -1,3 +1,5 @@
+// :dep polars = { version = "0.45", features = ["lazy", "parquet"] }
+
 use polars::prelude::*;
 
 fn main() {

@@ -1,36 +1,27 @@
-use polars::prelude::*;
-use std::path::Path;
+// :dep polars = { version = "0.45", features = ["lazy", "parquet"] }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut df = CsvReadOptions::default()
-        .try_into_reader_with_file_path(Some("./data/lfs_csv/pub0824.csv".into()))
-        .unwrap()
+use polars::prelude::*;
+
+fn main() {
+    // Read `pub0824.csv` as LazyFrame
+    let lf = LazyCsvReader::new("./data/lfs_csv/pub0824.csv")
+        .with_has_header(true)
         .finish()
         .unwrap();
 
-    let stats = StatisticsOptions {
-        min_value: true,
-        max_value: true,
-        distinct_count: true,
-        null_count: true,
-    };
-
-    let write_options = ParquetWriteOptions {
-        compression: ParquetCompression::Zstd(Some(ZstdLevel::try_new(10)?)),
-        statistics: stats,
-        row_group_size: Some(512_usize.pow(2)),
-        data_page_size: Some(1024_usize.pow(2)),
-        maintain_order: true,
-    };
+    // Bring it into memory (by converting it to DataFrame)
+    let mut df = lf.collect().unwrap();
 
     // This functionality is unstable according to the docs
     write_partitioned_dataset(
         &mut df,
-        Path::new("./data/part/"),
-        vec!["survyear", "survmnth"],
-        &write_options,
+        std::path::Path::new("./data/_temp/"),
+        vec!["prov", "sex"],
+        &ParquetWriteOptions::default(),
         4294967296,
-    )?;
+    )
+    .unwrap();
 
-    Ok(())
+    // Delete the files to clean up
+    let _ = std::fs::remove_dir_all("./data/_temp");
 }
