@@ -86,7 +86,10 @@ let lf_filt = lf
 
 ### Lazy evaluation optimization
 
-Filtering is a perfect example to show how `LazyFrame` use optimized queries, especially when using partitioned parquet files, as created in the [Writing](../rw/writing.md) section.
+Filtering is a perfect example to show how `LazyFrame` use optimized queries, especially when using partitioned parquet files, as created in the [Writing](../rw/writing.md) section. 
+
+> ![NOTE]
+> This also works when connecting to data on the Cloud.
 
 First, lets connect to the `./data/lfs_large/lfs.parquet` file that contains nearly 20 years of monthly LFS data, 23 million rows, in one parquet file (approximately 400 MB), and filter it to the records in the second half of 2010, and non-null values for `hrlyearn` (hourly wages). Remember, this code creates and execution plan, but does not yet execute it.
 
@@ -102,7 +105,7 @@ let lf_one = lf_one
     .filter(col("hrlyearn").is_not_null());
 ```
 
-Second, lets connect to the `./data/lfs_large/part` partitioned dataset, that was partitioned by `survyear` and by `survmnth`. All the files in this partitioned dataset folder will contain nearly 20 years of monthly LFS data, 23 million rows, and over 200 parquet files, equalling a totally of approximately 400 MB. Similar to the large parquet file, we will filter it to the records in the second half of 2010, and non-null values for `hrlyearn`. Again, nothing is executed at this point. 
+Second, lets connect to the `./data/lfs_large/part` partitioned dataset, that was partitioned by `survyear` and by `survmnth`. All the files in this partitioned dataset folder will contain nearly 20 years of monthly LFS data, 23 million rows, and over 200 parquet files, equalling a total of approximately 400 MB. Similar to the large parquet file, we will filter it to the records in the second half of 2010, and non-null values for `hrlyearn`. Again, nothing is executed at this point. 
 
 ```Rust
 // Connect to LazyFrame (partitioned parquet file)

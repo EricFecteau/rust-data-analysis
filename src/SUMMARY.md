@@ -13,6 +13,7 @@
     * [CSV](2_data/csv.md)
     * [Parquet](2_data/parquet.md)
     * [Databases](2_data/databases.md)
+    * [Cloud](2_data/cloud.md)
 
 * [Manipulating data](3_manipulate/index.md)
     * [Select & Filter](3_manipulate/select.md)

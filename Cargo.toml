@@ -13,7 +13,7 @@ zip = "2"
 
 # Polars - open-source library for data manipulation, with `lazy` feature
 #          enabled to support lazy evaluation 
-polars = { version = "0.45", features = ["lazy", "parquet", "polars-io", "regex", "is_in", "pivot", "cum_agg", "abs", "dtype-array", "rows"] }
+polars = { version = "0.45", features = ["lazy", "parquet", "polars-io", "regex", "is_in", "pivot", "cum_agg", "abs", "dtype-array", "rows", "cloud", "aws"] }
 
 # Move data from SQL to Polars (through Arrow)
 connectorx = { git = "https://github.com/EricFecteau/connector-x.git", branch = "arrow_rs_polars", features = ["src_postgres", "dst_polars"] }
@@ -23,3 +23,9 @@ postgres = "0.19"
 
 # Hypothesis testing
 hypors = "0.2.4"
+
+aws-sdk-s3 =  { version = "1", features = ["behavior-version-latest"] }
+aws-config = { version = "1", features = ["behavior-version-latest"] }
+tokio = { version = "1.43", features = ["full"] }
+
+object_store = "0.11"
