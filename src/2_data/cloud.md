@@ -2,7 +2,7 @@
 
 Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage and Google Cloud Storage. This methods allows for lazy evaluation. In this example, we will show how to connect to AWS S3, set up in the [Data]() chapter with minio. 
 
-> > [!IMPORTANT]  
+> [!IMPORTANT]  
 > Reminder: make sure tha the minio server is running (`minio server ./data/minio`) before running these examples.
 
 
@@ -86,3 +86,31 @@ shape: (5, 60)
 
 ## Writing
 
+
+
+```Rust
+// Read file form local
+let lf = LazyCsvReader::new("./data/lfs_csv/pub0824.csv")
+    .with_has_header(true)
+    .finish()
+    .unwrap();
+
+// Bring it into memory (by converting it to DataFrame)
+let mut df = lf.collect().unwrap();
+```
+
+```Rust
+// Write `pub0824.csv`
+let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0824.csv", Some(&cloud_options))
+    .await
+    .unwrap();
+CsvWriter::new(&mut cloudfile).finish(&mut df).unwrap();
+```
+
+```Rust
+// Write `pub0824.parquet`
+let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0824.parquet", Some(&cloud_options))
+    .await
+    .unwrap();
+ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
+```

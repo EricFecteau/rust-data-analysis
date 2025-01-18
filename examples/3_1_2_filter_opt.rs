@@ -1,5 +1,6 @@
+// :dep polars = { version = "0.45", features = ["lazy", "parquet"] }
+
 use polars::prelude::*;
-use std::time::Instant;
 
 fn main() {
     // Connect to LazyFrame (one large parquet file)
@@ -42,11 +43,11 @@ fn main() {
         lf_part.explain(true).unwrap()
     );
 
-    let before = Instant::now();
+    let before = std::time::Instant::now();
     let _ = lf_one.select([col("hrlyearn")]).mean().collect().unwrap();
     println!("Elapsed time: {:.2?}", before.elapsed());
 
-    let before = Instant::now();
+    let before = std::time::Instant::now();
     let _ = lf_part.select([col("hrlyearn")]).mean().collect().unwrap();
     println!("Elapsed time: {:.2?}", before.elapsed());
 }

@@ -15,11 +15,11 @@
     * [Databases](2_data/databases.md)
     * [Cloud](2_data/cloud.md)
 
-* [Manipulating data](3_manipulate/index.md)
-    * [Select & Filter](3_manipulate/select.md)
-    * [Variables](3_manipulate/variables.md)
-    * [Joins](3_manipulate/joins.md)
-    * [Pivots](3_manipulate/pivots.md)
+* [Transforming data](3_transformation/index.md)
+    * [Select & Filter](3_transformation/select.md)
+    * [Variables](3_transformation/variables.md)
+    * [Joins](3_transformation/joins.md)
+    * [Pivots](3_transformation/pivots.md)
 
 * [Statistics](4_stats/index.md)
     * [Summary statistics](4_stats/summary.md)

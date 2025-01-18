@@ -9,6 +9,10 @@ You can filter the rows in the data using `filter()`. You can run this code with
 First, lets load the partitioned parquet file:
 
 ```Rust
+:dep polars = { version = "0.45", features = ["lazy", "parquet", "is_in"] }
+
+use polars::prelude::*;
+
 // Connect to LazyFrame (no data is brought into memory)
 let args = ScanArgsParquet::default();
 let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
