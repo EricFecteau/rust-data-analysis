@@ -34,14 +34,13 @@ async fn main() {
     ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
 
     // Write partitioned `pub0824.parquet` on "prov" and "sex"
-    // == Only available on the git trunk == //
-    // write_partitioned_dataset(
-    //     &mut df,
-    //     std::path::Path::new("s3://lfs/pub0824/"),
-    //     vec!["prov", "sex"],
-    //     &ParquetWriteOptions::default(),
-    //     Some(&cloud_options),
-    //     4294967296,
-    // )
-    // .unwrap();
+    write_partitioned_dataset(
+        &mut df,
+        std::path::Path::new("s3://lfs/pub0824/"),
+        vec!["prov".into(), "sex".into()],
+        &ParquetWriteOptions::default(),
+        Some(&cloud_options),
+        4294967296,
+    )
+    .unwrap();
 }

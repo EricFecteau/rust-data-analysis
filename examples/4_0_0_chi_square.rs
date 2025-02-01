@@ -3,6 +3,10 @@ use polars::prelude::*;
 use hypors::chi_square::independence;
 
 fn main() {
+    // // Connect to LazyFrame (no data is brought into memory)
+    // let args = ScanArgsParquet::default();
+    // let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+
     let df = LazyCsvReader::new("/home/eric/R/large_csv/housetask.csv")
         .with_has_header(true)
         .finish()
@@ -16,22 +20,24 @@ fn main() {
         .collect()
         .unwrap();
 
-    let cols = df
-        .get_columns()
-        .iter()
-        .map(|c| {
-            c.as_materialized_series()
-                .f64()
-                .unwrap()
-                .to_vec_null_aware()
-                .left()
-                .unwrap()
-        })
-        .collect::<Vec<Vec<f64>>>();
+    print!("{:?}", df);
 
-    // Perform Chi-Square Test for Independence
-    let result = independence(&cols, 0.01).unwrap();
-    println!("{:?}", result);
+    // let cols = df
+    //     .get_columns()
+    //     .iter()
+    //     .map(|c| {
+    //         c.as_materialized_series()
+    //             .f64()
+    //             .unwrap()
+    //             .to_vec_null_aware()
+    //             .left()
+    //             .unwrap()
+    //     })
+    //     .collect::<Vec<Vec<f64>>>();
+
+    // // Perform Chi-Square Test for Independence
+    // let result = independence(&cols, 0.01).unwrap();
+    // println!("{:?}", result);
 }
 
 // file_path <- "https://www.sthda.com/sthda/RDoc/data/housetasks.txt"

@@ -16,8 +16,9 @@ fn main() {
     write_partitioned_dataset(
         &mut df,
         std::path::Path::new("./data/_temp/"),
-        vec!["prov", "sex"],
+        vec!["prov".into(), "sex".into()],
         &ParquetWriteOptions::default(),
+        None,
         4294967296,
     )
     .unwrap();

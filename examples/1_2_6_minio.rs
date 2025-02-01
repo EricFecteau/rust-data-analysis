@@ -85,20 +85,9 @@ async fn main() {
         .await
         .unwrap();
 
-    // Copy ./data/lfs_large/lfs.csv to `lfs` bucket
-    let body = aws_sdk_s3::primitives::ByteStream::from_path(std::path::Path::new(
-        "./data/lfs_large/lfs.csv",
-    ))
-    .await;
+    // Copy ./data/lfs_large/lfs.csv to `lfs` bucket using multi-part upload (otherwise too big)
 
-    let _ = client
-        .put_object()
-        .bucket(bucket)
-        .key("lfs.csv")
-        .body(body.unwrap())
-        .send()
-        .await
-        .unwrap();
+    upload_multipart(&client, "./data/lfs_large/lfs.csv", "lfs.csv", bucket).await;
 
     // Get all the path of files in a folder (recursive)
     fn get_file_path(path: std::path::PathBuf) -> Vec<String> {
@@ -119,17 +108,83 @@ async fn main() {
 
     // Upload files to bucket
     for path in get_file_path(std::path::PathBuf::from("./data/lfs_large/part")) {
-        let body = aws_sdk_s3::primitives::ByteStream::from_path(std::path::Path::new(&path)).await;
-
         let key = path.strip_prefix("./data/lfs_large/").unwrap().to_string();
 
-        let _ = client
-            .put_object()
-            .bucket(bucket)
+        upload_multipart(&client, &path, &key, bucket).await;
+    }
+}
+
+async fn upload_multipart(client: &aws_sdk_s3::Client, file: &str, key: &str, bucket: &str) {
+    let multipart_upload: aws_sdk_s3::operation::create_multipart_upload::CreateMultipartUploadOutput = client
+        .create_multipart_upload()
+        .bucket(bucket)
+        .key(key)
+        .send()
+        .await
+        .unwrap();
+
+    let upload_id = multipart_upload.upload_id().unwrap();
+
+    let path = std::path::Path::new(file);
+    let file_size = tokio::fs::metadata(path).await.unwrap().len();
+
+    let chunk_size = 1024 * 1024 * 10; // 10 MB
+    let mut chunk_count = (file_size / chunk_size) + 1;
+    let mut size_of_last_chunk = file_size % chunk_size;
+    if size_of_last_chunk == 0 {
+        size_of_last_chunk = chunk_size;
+        chunk_count -= 1;
+    }
+
+    let mut upload_parts: Vec<aws_sdk_s3::types::CompletedPart> = Vec::new();
+
+    for chunk_index in 0..chunk_count {
+        let this_chunk = if chunk_count - 1 == chunk_index {
+            size_of_last_chunk
+        } else {
+            chunk_size
+        };
+        let stream = aws_sdk_s3::primitives::ByteStream::read_from()
+            .path(path)
+            .offset(chunk_index * chunk_size)
+            .length(aws_sdk_s3::primitives::Length::Exact(this_chunk))
+            .build()
+            .await
+            .unwrap();
+
+        // Chunk index needs to start at 0, but part numbers start at 1.
+        let part_number = (chunk_index as i32) + 1;
+        let upload_part_res = client
+            .upload_part()
             .key(key)
-            .body(body.unwrap())
+            .bucket(bucket)
+            .upload_id(upload_id)
+            .body(stream)
+            .part_number(part_number)
             .send()
             .await
             .unwrap();
+
+        upload_parts.push(
+            aws_sdk_s3::types::CompletedPart::builder()
+                .e_tag(upload_part_res.e_tag.unwrap_or_default())
+                .part_number(part_number)
+                .build(),
+        );
     }
+
+    let completed_multipart_upload: aws_sdk_s3::types::CompletedMultipartUpload =
+        aws_sdk_s3::types::CompletedMultipartUpload::builder()
+            .set_parts(Some(upload_parts))
+            .build();
+
+    let _ = client
+        .complete_multipart_upload()
+        .bucket(bucket)
+        .key(key)
+        .multipart_upload(completed_multipart_upload)
+        .upload_id(upload_id)
+        .send()
+        .await
+        .unwrap();
 }

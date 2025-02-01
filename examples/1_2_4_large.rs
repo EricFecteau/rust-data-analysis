@@ -35,8 +35,9 @@ fn main() {
     write_partitioned_dataset(
         &mut df,
         std::path::Path::new("./data/lfs_large/part/"),
-        vec!["survyear", "survmnth"],
+        vec!["survyear".into(), "survmnth".into()],
         &ParquetWriteOptions::default(),
+        None,
         4294967296,
     )
     .unwrap();

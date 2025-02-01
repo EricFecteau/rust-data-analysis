@@ -1,3 +1,5 @@
+// :dep polars = { version = "0.45", features = ["lazy", "parquet", "regex"] }
+
 use polars::prelude::*;
 
 fn main() {
@@ -32,6 +34,7 @@ fn main() {
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
+    //car
     let lf = lf.with_column(
         when(col("hourly_wages").lt_eq(lit(10.00)))
             .then(lit("Low"))
