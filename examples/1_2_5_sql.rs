@@ -9,8 +9,8 @@ fn main() {
     let mut client =
         postgres::Client::connect("host=localhost user=postgres", postgres::NoTls).unwrap();
 
-    // Uncomment if something goes wrong (delete lfs table)
-    // client.batch_execute("drop TABLE lfs;").unwrap();
+    // Drop table if exists
+    let _ = client.batch_execute("drop TABLE lfs;");
 
     // Get all variable names using Polars;
     let mut lf = LazyCsvReader::new("./data/lfs_large/lfs.csv")
