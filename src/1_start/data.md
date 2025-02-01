@@ -103,7 +103,7 @@ for m in 1..(current_month + 1) {
 Since there does not seem to exist a style guide for Polars, this guide will use the [R Tidyverse style guide](https://style.tidyverse.org/), when appropriate. Since all variables on the LFS CSV files are uppercase, this script will modify the variables to be lowercase. You can run this code with `cargo run -r --example 1_2_2_styling`.
 
 ```rust
-:dep polars = { version = "0.45", features = ["lazy"] }
+:dep polars = { version = "0.46", features = ["lazy"] }
 
 use polars::prelude::*;
 
@@ -155,7 +155,7 @@ for path in paths {
 This section will convert each CSV into individual Parquet files. You can run this code with `cargo run -r --example 1_2_3_parquet`.
 
 ```rust
-:dep polars = { version = "0.45", features = ["lazy", "parquet"] }
+:dep polars = { version = "0.46", features = ["lazy", "parquet"] }
 
 use polars::prelude::*;
 
@@ -192,7 +192,7 @@ for path in paths {
 This section will create a large CSV and a large Parquet file. If you have the LFS files from 2006 to 2024, you will need at least 16 GB of RAM (or pagefile / swap memory). You can run this script using `cargo run -r --example 1_2_4_large`.
 
 ```rust
-:dep polars = { version = "0.45", features = ["lazy", "parquet"] }
+:dep polars = { version = "0.46", features = ["lazy", "parquet"] }
 
 use polars::prelude::*;
 
@@ -248,7 +248,7 @@ The following example, using Arch Linux, will show how simple it is to set up:
 Once set up, you can use Rust to load he data into the database. You can run this script using `cargo run -r --example 1_2_5_sql`.
 
 ```Rust
-:dep polars = { version = "0.45", features = ["lazy"] }
+:dep polars = { version = "0.46", features = ["lazy"] }
 :dep postgres = "0.19"
 
 use polars::prelude::*;

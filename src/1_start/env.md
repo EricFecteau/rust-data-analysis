@@ -19,7 +19,7 @@ Rust is a compiled programming language, which has significant advantages, at th
 
 
 > [!NOTE]
-> To import a dependency in either the REPL or the Jupyter Notebook, you submit a `Cargo.toml` dependency line starting with `:dep` (e.g. `:dep polars = { version = "0.45", features = ["lazy"] }` for Polars 0.45 with the `lazy` feature). 
+> To import a dependency in either the REPL or the Jupyter Notebook, you submit a `Cargo.toml` dependency line starting with `:dep` (e.g. `:dep polars = { version = "0.46", features = ["lazy"] }` for Polars 0.45 with the `lazy` feature). 
 >
 > All [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples) in this book start with a commented out `:dep` block that can be uncommented to run the script in the Rust REPL. 
 

@@ -9,7 +9,7 @@ You can filter the rows in the data using `filter()`. You can run this code with
 First, lets load the partitioned parquet file:
 
 ```Rust
-:dep polars = { version = "0.45", features = ["lazy", "parquet", "is_in"] }
+:dep polars = { version = "0.46", features = ["lazy", "parquet", "is_in"] }
 
 use polars::prelude::*;
 

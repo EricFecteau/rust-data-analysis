@@ -16,6 +16,6 @@ zip = "2"
 
 # Polars - open-source library for data manipulation, with `lazy` feature
 #          enabled to support lazy evaluation 
-polars = { version = "0.45", features = ["lazy"] }
+polars = { version = "0.46", features = ["lazy"] }
 polars_arrow = "0.45"
 ```

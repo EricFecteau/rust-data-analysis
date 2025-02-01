@@ -1,4 +1,4 @@
-// :dep polars = { version = "0.45", features = ["lazy"] }
+// :dep polars = { version = "0.46", features = ["lazy"] }
 // :dep postgres = "0.19"
 
 use polars::prelude::*;
