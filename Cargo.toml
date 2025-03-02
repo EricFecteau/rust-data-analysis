@@ -22,7 +22,7 @@ connectorx = { version = "0.4", features = ["src_postgres", "dst_polars"] }
 postgres = "0.19"
 
 # Hypothesis testing
-hypors = {git = "https://github.com/EricFecteau/hypors.git", branch = "Update-Polars" }
+hypors = "0.2"
 
 aws-sdk-s3 =  { version = "1.68", features = ["behavior-version-latest"] }
 aws-config = { version = "1.5.13", features = ["behavior-version-latest"] }

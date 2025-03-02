@@ -2,10 +2,12 @@
 
 Creating a DataFrame from data stored in code is generally not very useful. Data is more frequently stored in csv files, parquet files or databases. It is still very useful to know how to create these small DataFrames for sharing reproducible examples, showcasing a feature or identifying a bug. 
 
-To create a DataFrame, you first have to create Columns. You can create columns with `Column::new()` and passing a name and an vector of values. Here we create the "year" (i32), "month" (str) and value (f64) variables.
+To create a DataFrame, you first have to create `Columns`. You can create columns with `Column::new()` and passing a name and an vector of values. Here we create the "year" (i32), "month" (str) and value (f64) variables.
+
+Run this script using `cargo run -r --example 2_1_1_dataframe`.
 
 ```Rust
-:dep polars = "0.45"
+:dep polars = "0.46"
 
 use polars::prelude::*;
 
@@ -27,7 +29,7 @@ Once you have created columns of the same length, you can create a DataFrame usi
 let df = DataFrame::new(vec![year, month, value]).unwrap();
 ```
 
-This creates a DataFrame with 3 columns and 6 rows:
+This creates a `DataFrame` with 3 columns and 6 rows:
 
 ```
 shape: (6, 3)
@@ -45,7 +47,7 @@ shape: (6, 3)
 └──────┴──────────┴───────┘
 ```
 
-The `df!()` macro can simplify this! Instead of creating a DataFrame from Columns, you can do it all in one step. Here we create the "year" (i32), "month" (str) and value (f64) variables.
+The `df!()` macro can simplify this! Instead of creating a DataFrame from `Columns`, you can do it all in one step. Here we create the "year" (i32), "month" (str) and value (f64) variables.
 
 ```Rust
 // Use the df! macro to create DataFrame
@@ -55,7 +57,7 @@ let df = df!("year" => [2008, 2008, 2008, 2008, 2009, 2009],
 .unwrap();
 ```
 
-Similar to above, this creates a DataFrame with 3 columns and 6 rows:
+Similar to above, this creates a `DataFrame` with 3 columns and 6 rows:
 
 ```
 shape: (6, 3)

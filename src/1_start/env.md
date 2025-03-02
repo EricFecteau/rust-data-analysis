@@ -6,22 +6,21 @@ This chapter will set you up with Rust for data analysis. It will focus on VSCod
 
 Install [Rust](https://www.rust-lang.org/tools/install) for your environment (rustc, cargo, rustup). 
 
-Install [VSCode](https://code.visualstudio.com/download) for your environment and [set it up](https://code.visualstudio.com/docs/languages/rust) to work with Rust. Make sure that in this process you install and configure [clippy](https://github.com/rust-lang/rust-clippy) for lints to catch common mistakes. I also recommend `Editor: Format on Save` with [rustfmt](https://github.com/rust-lang/rustfmt). It is also useful to install and configure the rust debugging. 
+Install [VSCode](https://code.visualstudio.com/download) for your environment and [set it up](https://code.visualstudio.com/docs/languages/rust) to work with Rust. Make sure that in this process you install and configure [clippy](https://github.com/rust-lang/rust-clippy) for lints to catch common mistakes. I also recommend `Editor: Format on Save` with [rustfmt](https://github.com/rust-lang/rustfmt). Lastly, it is useful to install and configure the rust debugger. 
 
 > [!IMPORTANT]
 > This book assumes some familiarity with Rust and it's toolkit. The [Rust Book](https://doc.rust-lang.org/stable/book/) (free) and [Programming Rust, 2nd Edition](https://www.oreilly.com/library/view/programming-rust-2nd/9781492052586/) (paid) are really great resources to learn Rust.
 
-All examples in this book are accompanied with [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). These scripts can be run with `cargo run -r --example name_of_script`.
+All examples in this book are accompanied with [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). These scripts can be run with `cargo run -r --example 0_0_0_name_of_script`.
 
-## Data Analysis Environment
+## Data analysis environment
 
 Rust is a compiled programming language, which has significant advantages, at the disadvantage of quick data exploration (e.g. quickly querying the data multiple times to build the final query for your analysis). Thankfully, the [evcxr](https://github.com/evcxr/evcxr/blob/main/evcxr/README.md) evaluation context crate has created a [Rust REPL](https://github.com/evcxr/evcxr/blob/main/evcxr_repl/README.md) (Read-Eval-Print loop) and a [Kernel for Jupyter Notebooks]((https://github.com/evcxr/evcxr/blob/main/evcxr_jupyter/README.md)). This removes the need for the `main` function.
 
-
 > [!NOTE]
-> To import a dependency in either the REPL or the Jupyter Notebook, you submit a `Cargo.toml` dependency line starting with `:dep` (e.g. `:dep polars = { version = "0.46", features = ["lazy"] }` for Polars 0.45 with the `lazy` feature). 
+> To import a dependency in either the REPL or the Jupyter Notebook, you submit a `Cargo.toml` dependency line starting with `:dep` (e.g. `:dep polars = { version = "0.46", features = ["lazy"] }` for `Polars 0.46` with the `lazy` feature). 
 >
-> All [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples) in this book start with a commented out `:dep` block that can be uncommented to run the script in the Rust REPL. 
+> All [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples) in this book start with a commented out `:dep` block that can be uncommented to run the script in the Rust REPL. A few scripts can not be run in the Rust REPL, and the `:dep` block has been omitted.
 
 ### REPL
 

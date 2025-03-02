@@ -4,9 +4,7 @@
 use std::io::{Read, Write};
 
 fn main() {
-    let start_year = 2006;
-    let current_year = 2024;
-    let current_month = 9; // Latest month the LFS is available
+    let years = 2011..2024 + 1;
 
     // Function to download ZIP file from URL and return a Reader
     fn download_zip(url: &str) -> std::io::Cursor<Vec<u8>> {
@@ -44,7 +42,7 @@ fn main() {
     std::fs::create_dir("./data/lfs_large").unwrap();
 
     // For the full-year files (prior to current year)
-    for y in start_year..current_year {
+    for y in years {
         let url = format!("https://www150.statcan.gc.ca/n1/pub/71m0001x/2021001/hist/{y}-CSV.zip");
 
         let mut zip = download_zip(&url);
@@ -55,18 +53,5 @@ fn main() {
 
             write_csv(&mut zip, &format!("pub{mm}{yy}.csv"));
         }
-    }
-
-    // For the monthly file in the current year
-    for m in 1..(current_month + 1) {
-        let mm = format!("{:02}", m);
-        let yy = format!("{:02}", current_year % 2000);
-
-        let url = format!(
-            "https://www150.statcan.gc.ca/n1/en/pub/71m0001x/2021001/{current_year}-{mm}-CSV.zip"
-        );
-
-        let mut zip = download_zip(&url);
-        write_csv(&mut zip, &format!("pub{mm}{yy}.csv"));
     }
 }
