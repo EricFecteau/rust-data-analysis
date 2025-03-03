@@ -10,7 +10,7 @@ fn main() {
     //Filtering the data in multiple steps
     let lf_filt = lf
         .clone()
-        .filter(col("survyear").eq(lit(2010)))
+        .filter(col("survyear").eq(lit(2023)))
         .filter(col("survmnth").gt(lit(6)))
         .filter(col("hrlyearn").is_not_null());
 
@@ -19,7 +19,7 @@ fn main() {
     // Filtering the data in one step
     let lf_filt = lf.clone().filter(
         col("survyear")
-            .eq(lit(2010))
+            .eq(lit(2023))
             .and(col("survmnth").gt(lit(6)))
             .and(col("hrlyearn").is_not_null()),
     );
@@ -28,10 +28,10 @@ fn main() {
 
     // Complex expression
     let expr = (col("survyear")
-        .eq(lit(2010))
+        .eq(lit(2023))
         .and(col("survmnth").gt(lit(6))))
     .or(col("survyear")
-        .eq(lit(2011))
+        .eq(lit(2024))
         .and(col("survmnth").lt_eq(lit(6))));
 
     println!("Expression: {}", expr); // You can print it
@@ -44,7 +44,7 @@ fn main() {
     // Using `is_in` crate feature with literals
     let lf_filt = lf
         .clone()
-        .filter(col("survyear").is_in(lit(Series::from_iter(vec![2009, 2010, 2011]))));
+        .filter(col("survyear").is_in(lit(Series::from_iter(vec![2022, 2023, 2024]))));
 
     println!("{}", lf_filt.limit(5).collect().unwrap());
 }

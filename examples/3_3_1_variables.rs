@@ -22,26 +22,26 @@ fn main() {
         (col("five") + col("ten")).alias("fifteen"), // add two columns
     );
 
-    println!("{}", lf.clone().limit(5).collect().unwrap());
+    println!("Explained query: \n {}", lf.explain(true).unwrap());
 
     // Cast the value from an `i64` to a `f64` and modify it (divide by 100)
     let lf = lf
         .drop([col("five"), col("ten"), col("fifteen")])
         .filter(col("hourly_wages").is_not_null())
         .with_column(
-            (col("hourly_wages").cast(DataType::Float64) / lit(100)).alias("hourly_wages"),
+            (col("hourly_wages").cast(DataType::Float64) / lit(100)).alias("wages_dollars"),
         );
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
     //car
     let lf = lf.with_column(
-        when(col("hourly_wages").lt_eq(lit(10.00)))
+        when(col("wages_dollars").lt_eq(lit(20.00)))
             .then(lit("Low"))
             .when(
-                col("hourly_wages")
-                    .gt(lit(10.00))
-                    .and(col("hourly_wages").lt_eq(lit(30.00))),
+                col("wages_dollars")
+                    .gt(lit(20.00))
+                    .and(col("wages_dollars").lt_eq(lit(50.00))),
             )
             .then(lit("Medium"))
             .otherwise(lit("High"))

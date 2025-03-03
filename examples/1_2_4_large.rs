@@ -27,6 +27,10 @@ fn main() {
     let mut file = std::fs::File::create("./data/lfs_large/lfs.csv").unwrap();
     CsvWriter::new(&mut file).finish(&mut df).unwrap();
 
+    // Write Single Parquet
+    let mut file = std::fs::File::create("./data/lfs_large/lfs.parquet").unwrap();
+    ParquetWriter::new(&mut file).finish(&mut df).unwrap();
+
     // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
     write_partitioned_dataset(
         &mut df,

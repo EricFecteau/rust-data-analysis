@@ -13,7 +13,7 @@ async fn main() {
     ]);
 
     // Read file form local
-    let lf = LazyCsvReader::new("./data/lfs_csv/pub0824.csv")
+    let lf = LazyCsvReader::new("./data/lfs_csv/pub0124.csv")
         .with_has_header(true)
         .finish()
         .unwrap();
@@ -21,23 +21,24 @@ async fn main() {
     // Bring it into memory (by converting it to DataFrame)
     let mut df = lf.collect().unwrap();
 
-    // Write `pub0824.csv`
-    let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0824.csv", Some(&cloud_options))
+    // Write `pub0124.csv`
+    let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0124.csv", Some(&cloud_options))
         .await
         .unwrap();
     CsvWriter::new(&mut cloudfile).finish(&mut df).unwrap();
 
-    // Write `pub0824.parquet`
-    let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0824.parquet", Some(&cloud_options))
+    // Write `pub0124.parquet`
+    let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0124.parquet", Some(&cloud_options))
         .await
         .unwrap();
     ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
 
-    // Write partitioned `pub0824.parquet` on "prov" and "sex"
+    // Write partitioned `pub0124.parquet` on "prov" and "gender"
+    // `write_partitioned_dataset` is considered unstable
     write_partitioned_dataset(
         &mut df,
-        std::path::Path::new("s3://lfs/pub0824/"),
-        vec!["prov".into(), "sex".into()],
+        std::path::Path::new("s3://lfs/pub0124/"),
+        vec!["prov".into(), "gender".into()],
         &ParquetWriteOptions::default(),
         Some(&cloud_options),
         4294967296,

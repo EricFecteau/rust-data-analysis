@@ -174,7 +174,7 @@ for path in paths {
 
 ## Large file
 
-This section will create a large Parquet file. If you have the LFS files from 2011 to 2024, you will need at least 16 GB of RAM (or pagefile / swap memory). You can reduce the number of years you download if you have less RAM, and most of the examples will focus on 2023 and 2024. You can run this script using `cargo run -r --example 1_2_4_large`. 
+This section will create a large CSV file and a large Parquet file. If you have the LFS files from 2011 to 2024, you will need at least 16 GB of RAM (or pagefile / swap memory). You can reduce the number of years you download if you have less RAM, and most of the examples will focus on 2023 and 2024. You can run this script using `cargo run -r --example 1_2_4_large`. 
 
 ```rust
 :dep polars = { version = "0.46", features = ["lazy", "parquet"] }
@@ -201,6 +201,10 @@ let lf = concat(lf_vec, union_args).unwrap();
 // Bring to memory (large)
 let mut df = lf.collect().unwrap();
 
+// Write large file as `lfs_large.csv`
+let mut file = std::fs::File::create("./data/lfs_large/lfs.csv").unwrap();
+CsvWriter::new(&mut file).finish(&mut df).unwrap();
+
 // Write Single Parquet
 let mut file = std::fs::File::create("./data/lfs_large/lfs.parquet").unwrap();
 ParquetWriter::new(&mut file).finish(&mut df).unwrap();
@@ -209,8 +213,9 @@ ParquetWriter::new(&mut file).finish(&mut df).unwrap();
 write_partitioned_dataset(
     &mut df,
     std::path::Path::new("./data/lfs_large/part/"),
-    vec!["survyear", "survmnth"],
+    vec!["survyear".into(), "survmnth".into()],
     &ParquetWriteOptions::default(),
+    None,
     4294967296,
 )
 .unwrap();

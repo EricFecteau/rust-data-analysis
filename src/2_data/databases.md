@@ -1,6 +1,6 @@
 # Database
 
-This section will explore how to work with SQL databases in Rust. In the [Data]() section of the setup, a PostgreSQL server was set up and the lfs data was loaded.
+This section will explore how to work with SQL databases in Rust. This section relies on the optional `SQL` section in the [Data](../1_start/data.md#sql-optional) section of the setup, where a PostgreSQL server was set up and the lfs data was loaded.
 
 ## Direct queries
 
@@ -26,7 +26,7 @@ Using this method, each type of databases will have their own special connection
 
 ## SQL to Polars
 
-Using [ConnectorX](https://github.com/sfu-db/connector-x), you can move data from SQL servers to Polars with `.polars()`. It will return a `DataFrame`. You can run this section using `cargo run -r --example 2_3_2_sql_to_polars`.
+Using [ConnectorX](https://github.com/sfu-db/connector-x), you can move data from SQL servers to Polars with `.polars()`. It will return a `DataFrame` (currently `Polars 0.45`, but can be converted to the latest version of Polars with `df-interchange` as explained in the [concepts](../1_start/concepts.md#polars-versions) section of the setup). You can run this section using `cargo run -r --example 2_3_2_sql_to_polars`.
 
 ```Rust
 // Connect to PostgreSQL through the ConnectorX
@@ -43,7 +43,7 @@ let arrow_obj = get_arrow(&source_conn, None, query)
     .unwrap();
 ```
 
-This example will move the entirety of the SQL server into memory as a `DataFrame`. Further manipulations or analysis can be done on this data using Polars. This may or not be desirable, since the SQL server may contain too much data. It may be preferable to pre-filter or to summarize the data using a SQL query. For example, you can collect the unweighted mean hourly wages in 2010, by month (using the following query: `"SELECT survmnth, avg(hrlyearn / 100) as avg_hourly FROM lfs where survyear = 2010 group by survmnth"`). This can then be converted into a `DataFrame` with `.polars()`.
+This example will move the entirety of the SQL server into memory as a `DataFrame`. Further manipulations or analysis can be done on this data using Polars. This may or not be desirable, since the SQL server may contain too much data and will be slow. It may be preferable to pre-filter or to summarize the data using an SQL query. For example, you can collect the unweighted mean hourly wages in 2024, by month (using the following query: `"SELECT survmnth, avg(hrlyearn / 100) as avg_hourly FROM lfs where survyear = 2024 group by survmnth"`). This can then be converted into a `DataFrame` with `.polars()`.
 
 ```Rust
 // Connect to PostgreSQL through the ConnectorX
@@ -52,7 +52,7 @@ let source_conn =
 
 // Prepare query
 let query = &[CXQuery::from(
-    "SELECT survmnth, avg(hrlyearn / 100) as avg_hourly FROM lfs where survyear = 2010 group by survmnth",
+    "SELECT survmnth, avg(hrlyearn / 100) as avg_hourly FROM lfs where survyear = 2024 group by survmnth",
 )];
 
 // ConnectorX query PostgreSQL and return Polars object
@@ -71,16 +71,16 @@ shape: (12, 2)
 │ ---      ┆ ---        │
 │ i64      ┆ f64        │
 ╞══════════╪════════════╡
-│ 1        ┆ 22.215189  │
-│ 2        ┆ 22.190046  │
-│ 3        ┆ 22.209012  │
-│ 4        ┆ 22.149379  │
-│ 5        ┆ 21.986003  │
+│ 1        ┆ 33.932579  │
+│ 2        ┆ 34.013028  │
+│ 3        ┆ 34.049152  │
+│ 4        ┆ 34.193399  │
+│ 5        ┆ 34.085427  │
 │ …        ┆ …          │
-│ 8        ┆ 21.900589  │
-│ 9        ┆ 22.341671  │
-│ 10       ┆ 22.44213   │
-│ 11       ┆ 22.524596  │
-│ 12       ┆ 22.523934  │
+│ 8        ┆ 34.23867   │
+│ 9        ┆ 34.738232  │
+│ 10       ┆ 34.846987  │
+│ 11       ┆ 34.791847  │
+│ 12       ┆ 34.872347  │
 └──────────┴────────────┘
 ```

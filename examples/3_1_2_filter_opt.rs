@@ -9,7 +9,7 @@ fn main() {
 
     // Filter it
     let lf_one = lf_one
-        .filter(col("survyear").eq(lit(2010)))
+        .filter(col("survyear").eq(lit(2023)))
         .filter(col("survmnth").gt(lit(6)))
         .filter(col("hrlyearn").is_not_null());
 
@@ -19,7 +19,7 @@ fn main() {
 
     // Filter it
     let lf_part = lf_part
-        .filter(col("survyear").eq(lit(2010)))
+        .filter(col("survyear").eq(lit(2023)))
         .filter(col("survmnth").gt(lit(6)))
         .filter(col("hrlyearn").is_not_null());
 

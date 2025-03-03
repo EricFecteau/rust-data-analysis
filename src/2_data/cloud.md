@@ -1,10 +1,9 @@
 # Cloud
 
-Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage and Google Cloud Storage. This methods allows for lazy evaluation. In this example, we will show how to connect to AWS S3, set up in the [Data]() chapter with minio. 
+Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage and Google Cloud Storage. This methods allows for lazy evaluation. In this example, we will show how to connect to AWS S3, set up in the optional `s3 bucket` section of the [data](../1_start/data.md#s3-bucket-optional) chapter. 
 
 > [!IMPORTANT]  
-> Reminder: make sure tha the minio server is running (`minio server ./data/minio`) before running these examples.
-
+> Reminder: make sure that the minio server is running (`minio server ./data/minio`) before running these examples.
 
 ## Cloud options
 
@@ -44,15 +43,15 @@ shape: (5, 60)
 │ ---     ┆ ---      ┆ ---      ┆ ---     ┆   ┆ ---     ┆ ---      ┆ ---     ┆ ---     │
 │ i64     ┆ i64      ┆ i64      ┆ i64     ┆   ┆ i64     ┆ i64      ┆ i64     ┆ i64     │
 ╞═════════╪══════════╪══════════╪═════════╪═══╪═════════╪══════════╪═════════╪═════════╡
-│ 1       ┆ 2010     ┆ 2        ┆ 4       ┆ … ┆ 3       ┆ 6        ┆ null    ┆ 204     │
-│ 2       ┆ 2010     ┆ 2        ┆ 1       ┆ … ┆ 1       ┆ 18       ┆ null    ┆ 858     │
-│ 3       ┆ 2010     ┆ 2        ┆ 1       ┆ … ┆ 1       ┆ 1        ┆ null    ┆ 102     │
-│ 4       ┆ 2010     ┆ 2        ┆ 1       ┆ … ┆ 1       ┆ 2        ┆ null    ┆ 71      │
-│ 5       ┆ 2010     ┆ 2        ┆ 1       ┆ … ┆ 1       ┆ 10       ┆ 4       ┆ 184     │
+│ 1       ┆ 2021     ┆ 4        ┆ 1       ┆ … ┆ 1       ┆ 5        ┆ null    ┆ 73      │
+│ 2       ┆ 2021     ┆ 4        ┆ 1       ┆ … ┆ 1       ┆ 3        ┆ 1       ┆ 194     │
+│ 3       ┆ 2021     ┆ 4        ┆ 1       ┆ … ┆ 1       ┆ 8        ┆ null    ┆ 208     │
+│ 4       ┆ 2021     ┆ 4        ┆ 1       ┆ … ┆ null    ┆ 2        ┆ null    ┆ 112     │
+│ 5       ┆ 2021     ┆ 4        ┆ 4       ┆ … ┆ 1       ┆ 1        ┆ null    ┆ 1029    │
 └─────────┴──────────┴──────────┴─────────┴───┴─────────┴──────────┴─────────┴─────────┘
 ```
 
-For `.parquet` files, in the same way as was shown for the [Parquet](parquet.md) data stored locally, you can get a LazyFrame from `scan_parquet` with data on the cloud, by add `cloud_options` to the `ScanArgsParquet`. This works for both individual parquet files, or as shown below, for partitioned parquet files. 
+For `.parquet` files, in the same way as was shown for the [Parquet](parquet.md) data stored locally, you can get a `LazyFrame` from `scan_parquet` with data on the cloud, by adding `cloud_options` to the `ScanArgsParquet`. This works for both individual parquet files, or as shown below, for partitioned parquet files. 
 
 > [!NOTE]
 > For partitioned parquet files on the cloud, the `/` at the end of `s3://lfs/part/` is required (unlike on local data).
@@ -76,21 +75,21 @@ shape: (5, 60)
 │ ---     ┆ ---      ┆ ---      ┆ ---     ┆   ┆ ---     ┆ ---      ┆ ---     ┆ ---     │
 │ i64     ┆ i64      ┆ i64      ┆ i64     ┆   ┆ i64     ┆ i64      ┆ i64     ┆ i64     │
 ╞═════════╪══════════╪══════════╪═════════╪═══╪═════════╪══════════╪═════════╪═════════╡
-│ 1       ┆ 2006     ┆ 1        ┆ 4       ┆ … ┆ null    ┆ 1        ┆ null    ┆ 119     │
-│ 2       ┆ 2006     ┆ 1        ┆ 4       ┆ … ┆ 1       ┆ 11       ┆ null    ┆ 94      │
-│ 3       ┆ 2006     ┆ 1        ┆ 4       ┆ … ┆ null    ┆ 11       ┆ null    ┆ 121     │
-│ 4       ┆ 2006     ┆ 1        ┆ 4       ┆ … ┆ 1       ┆ 11       ┆ null    ┆ 154     │
-│ 5       ┆ 2006     ┆ 1        ┆ 1       ┆ … ┆ 2       ┆ 2        ┆ null    ┆ 489     │
+│ 1       ┆ 2011     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 14       ┆ 3       ┆ 109     │
+│ 2       ┆ 2011     ┆ 1        ┆ 1       ┆ … ┆ null    ┆ 18       ┆ null    ┆ 62      │
+│ 3       ┆ 2011     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 3        ┆ 2       ┆ 71      │
+│ 4       ┆ 2011     ┆ 1        ┆ 4       ┆ … ┆ null    ┆ 14       ┆ null    ┆ 345     │
+│ 5       ┆ 2011     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 3        ┆ 2       ┆ 105     │
 └─────────┴──────────┴──────────┴─────────┴───┴─────────┴──────────┴─────────┴─────────┘
 ```
 
 ## Writing
 
-
+Writing to the cloud is similar to writing to local data. Instead of providing a `std::fs::File` writer, you provide a `CloudWriter` from polars. To write, you must have `DataFrame` in memory:
 
 ```Rust
-// Read file form local
-let lf = LazyCsvReader::new("./data/lfs_csv/pub0824.csv")
+// Read file from local
+let lf = LazyCsvReader::new("./data/lfs_csv/pub0124.csv")
     .with_has_header(true)
     .finish()
     .unwrap();
@@ -98,19 +97,34 @@ let lf = LazyCsvReader::new("./data/lfs_csv/pub0824.csv")
 // Bring it into memory (by converting it to DataFrame)
 let mut df = lf.collect().unwrap();
 ```
+You can then write a `.csv` or a `.parquet` to the cloud using the `CloudWriter` and the `cloud_options` created previously:
 
 ```Rust
-// Write `pub0824.csv`
-let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0824.csv", Some(&cloud_options))
+// Write `pub0124.csv`
+let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0124.csv", Some(&cloud_options))
     .await
     .unwrap();
 CsvWriter::new(&mut cloudfile).finish(&mut df).unwrap();
-```
 
-```Rust
-// Write `pub0824.parquet`
-let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0824.parquet", Some(&cloud_options))
+// Write `pub0124.parquet`
+let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0124.parquet", Some(&cloud_options))
     .await
     .unwrap();
 ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
+```
+
+You can also write a partitioned parquet file to the cloud with `write_partitioned_dataset` by passing the same `cloud_options`:
+
+```Rust
+// Write partitioned `pub0124.parquet` on "prov" and "gender"
+// `write_partitioned_dataset` is considered unstable
+write_partitioned_dataset(
+    &mut df,
+    std::path::Path::new("s3://lfs/pub0124/"),
+    vec!["prov".into(), "gender".into()],
+    &ParquetWriteOptions::default(),
+    Some(&cloud_options),
+    4294967296,
+)
+.unwrap();
 ```

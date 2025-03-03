@@ -20,7 +20,7 @@ fn main() {
 
     // Prepare query
     let query = &[CXQuery::from(
-    "SELECT survmnth, avg(hrlyearn / 100) as avg_hourly FROM lfs where survyear = 2010 group by survmnth",
+    "SELECT survmnth, avg(hrlyearn / 100) as avg_hourly FROM lfs where survyear = 2024 group by survmnth",
     )];
 
     // ConnectorX query PostgreSQL and return Polars object

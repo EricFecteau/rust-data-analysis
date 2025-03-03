@@ -3,8 +3,8 @@
 use polars::prelude::*;
 
 fn main() {
-    // Read `pub0824.csv` as LazyFrame
-    let lf = LazyCsvReader::new("./data/lfs_csv/pub0824.csv")
+    // Read `pub0124.csv` as LazyFrame
+    let lf = LazyCsvReader::new("./data/lfs_csv/pub0124.csv")
         .with_has_header(true)
         .finish()
         .unwrap();
@@ -15,8 +15,8 @@ fn main() {
     // This functionality is unstable according to the docs
     write_partitioned_dataset(
         &mut df,
-        std::path::Path::new("./data/_temp/"),
-        vec!["prov".into(), "sex".into()],
+        std::path::Path::new("./data/temp_data/_temp/"),
+        vec!["prov".into(), "gender".into()],
         &ParquetWriteOptions::default(),
         None,
         4294967296,
@@ -24,5 +24,5 @@ fn main() {
     .unwrap();
 
     // Delete the files to clean up
-    let _ = std::fs::remove_dir_all("./data/_temp");
+    let _ = std::fs::remove_dir_all("./data/temp_data");
 }

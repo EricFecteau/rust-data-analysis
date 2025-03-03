@@ -10,24 +10,24 @@ fn main() {
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 
-    // Count individuals with paid overtime by sex and marital status
+    // Count individuals with paid overtime by gender and marital status
     let df = lf
         .clone()
         .filter(col("paidot").is_null().not())
-        .group_by([col("sex"), col("marstat")])
+        .group_by([col("gender"), col("marstat")])
         .agg([col("paidot")
             .gt(0)
             .cast(DataType::Int8)
             .sum()
             .alias("ot_flag")])
-        .sort(["sex", "marstat"], Default::default())
+        .sort(["gender", "marstat"], Default::default())
         .collect()
         .unwrap();
 
     // Transpose
     let df = pivot::pivot_stable(
         &df,
-        ["sex"],
+        ["gender"],
         Some(["marstat"]),
         Some(["ot_flag"]),
         false,

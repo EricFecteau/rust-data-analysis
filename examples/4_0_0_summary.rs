@@ -8,7 +8,7 @@ fn main() {
     // Keep some variable, not-null hrlyearn, convert `hrlyearn` (in cents) to `hourly_wages` (in dollars and cents)
     let lf = lf.filter(col("hrlyearn").is_not_null()).select([
         col("^surv.*$"), // keep survyear, survmnth
-        col("sex"),
+        col("gender"),
         col("prov"),
         col("finalwt"),
         (col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"), // keep hrlyearn as hourly_wages

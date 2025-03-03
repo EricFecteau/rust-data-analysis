@@ -22,3 +22,4 @@ To convert a `DataFrame` to a `LazyFrame` you can use `let lf = df.lazy();`. Not
 
 ## Polars versions
 
+## Data order

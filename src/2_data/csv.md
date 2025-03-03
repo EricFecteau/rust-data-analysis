@@ -30,11 +30,11 @@ shape: (5, 60)
 │ ---     ┆ ---      ┆ ---      ┆ ---     ┆   ┆ ---     ┆ ---      ┆ ---     ┆ ---     │
 │ i64     ┆ i64      ┆ i64      ┆ i64     ┆   ┆ i64     ┆ i64      ┆ i64     ┆ i64     │
 ╞═════════╪══════════╪══════════╪═════════╪═══╪═════════╪══════════╪═════════╪═════════╡
-│ 1       ┆ 2010     ┆ 2        ┆ 4       ┆ … ┆ 3       ┆ 6        ┆ null    ┆ 204     │
-│ 2       ┆ 2010     ┆ 2        ┆ 1       ┆ … ┆ 1       ┆ 18       ┆ null    ┆ 858     │
-│ 3       ┆ 2010     ┆ 2        ┆ 1       ┆ … ┆ 1       ┆ 1        ┆ null    ┆ 102     │
-│ 4       ┆ 2010     ┆ 2        ┆ 1       ┆ … ┆ 1       ┆ 2        ┆ null    ┆ 71      │
-│ 5       ┆ 2010     ┆ 2        ┆ 1       ┆ … ┆ 1       ┆ 10       ┆ 4       ┆ 184     │
+│ 1       ┆ 2024     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 3        ┆ 1       ┆ 403     │
+│ 2       ┆ 2024     ┆ 1        ┆ 4       ┆ … ┆ null    ┆ 11       ┆ null    ┆ 140     │
+│ 3       ┆ 2024     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 1        ┆ null    ┆ 378     │
+│ 4       ┆ 2024     ┆ 1        ┆ 4       ┆ … ┆ 1       ┆ 18       ┆ null    ┆ 222     │
+│ 5       ┆ 2024     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 4        ┆ null    ┆ 34      │
 └─────────┴──────────┴──────────┴─────────┴───┴─────────┴──────────┴─────────┴─────────┘
 ```
 
@@ -47,7 +47,7 @@ You can write to CSV any `DataFrame` you have in memory. For this example, we wi
 
 use polars::prelude::*;
 
-// Read `pub0824.csv` as LazyFrame
+// Read `pub0124.csv` as LazyFrame
 let lf = LazyCsvReader::new("./data/lfs_csv/pub0124.csv")
     .with_has_header(true)
     .finish()
@@ -60,7 +60,7 @@ let mut df = lf.collect().unwrap();
 In order to save it, you have to create a file and write to it:
 
 ```Rust
-// Write `pub0824.csv`
-let mut file = std::fs::File::create("./data/lfs_csv/pub0824.csv").unwrap();
+// Write `pub0124.csv`
+let mut file = std::fs::File::create("./data/temp_data/pub0124.csv").unwrap();
 CsvWriter::new(&mut file).finish(&mut df).unwrap();
 ```
