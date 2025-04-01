@@ -25,7 +25,6 @@
 * [Statistics](4_stats/index.md)
     * [Summary statistics](4_stats/summary.md)
     * [Hypothesis testing](4_stats/hypors.md)
-    * [Models](4_stats/models.md)
 
 * [Publication](5_pub/index.md)
     * [Plotting](5_pub/plotting.md)
