@@ -13,7 +13,7 @@ zip = "2"
 
 # Polars - open-source library for data manipulation, with `lazy` feature
 #          enabled to support lazy evaluation 
-polars = { version = "0.46", features = ["lazy", "parquet", "polars-io", "regex", "is_in", "pivot", "cum_agg", "abs", "dtype-array", "rows", "cloud", "aws", "round_series"] }
+polars = { version = "0.46", features = ["lazy", "parquet", "polars-io", "regex", "is_in", "pivot", "cum_agg", "abs", "dtype-array", "rows", "cloud", "aws", "round_series", "replace"] }
 
 # Move data from SQL to Polars (through Arrow)
 connectorx = { version = "0.4", features = ["src_postgres", "dst_polars"] }

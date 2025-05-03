@@ -1,10 +1,10 @@
-// :dep polars = { version = "0.46", features = ["lazy", "parquet", "regex"] }
+// :dep polars = { version = "0.46", features = ["lazy", "parquet", "regex", "replace"] }
 
 use polars::prelude::pivot::pivot_stable;
 use polars::prelude::*;
 
 fn main() {
-    // Connect to LazyFrame (no data is brought into memory)
+    // Connect to parquet (no data is brought into memory)
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 
@@ -18,11 +18,26 @@ fn main() {
             .round(2)])
         .sort(["survyear", "prov"], SortMultipleOptions::default());
 
-    println!("{}", lf.clone().collect().unwrap());
+    // Change numeric province code to alpha-code
+    let df = lf
+        .with_column(col("prov").replace_strict(
+            lit(Series::from_iter(vec![
+                "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
+            ])),
+            lit(Series::from_iter(vec![
+                "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
+            ])),
+            None,
+            Some(DataType::String),
+        ))
+        .collect()
+        .unwrap();
+
+    println!("{}", &df);
 
     // Pivot wider / pivot
     let df_wide = pivot_stable(
-        &lf.collect().unwrap(),
+        &df,
         ["prov"],
         Some(["survyear"]),
         Some(["mean_hrlyearn"]),
@@ -37,7 +52,7 @@ fn main() {
     // Pivot longer / unpivot
     let df_long = df_wide
         .unpivot(
-            ["10", "11", "12", "13", "24", "35", "46", "47", "48", "59"],
+            ["NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC"],
             ["survyear"],
         )
         .unwrap();

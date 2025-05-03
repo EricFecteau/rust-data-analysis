@@ -22,7 +22,4 @@ fn main() {
         4294967296,
     )
     .unwrap();
-
-    // Delete the files to clean up
-    let _ = std::fs::remove_dir_all("./data/temp_data");
 }

@@ -1,5 +1,11 @@
 test-all: get-data test-rw test-transform
 
+render:
+    mdbook serve --open
+
+kill-minio:
+    pkill minio
+
 get-data:
     rm -r ./data
     minio server ./data/minio --quiet &

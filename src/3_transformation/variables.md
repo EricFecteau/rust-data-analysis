@@ -128,3 +128,23 @@ shape: (5, 5)
 │ 2011     ┆ 1        ┆ 1724         ┆ 17.24         ┆ Low      │
 └──────────┴──────────┴──────────────┴───────────────┴──────────┘
 ```
+
+
+TODO:
+
+```
+    // Change numeric province code to alpha-code
+    let df = lf
+        .with_column(col("prov").replace_strict(
+            lit(Series::from_iter(vec![
+                "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
+            ])),
+            lit(Series::from_iter(vec![
+                "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
+            ])),
+            None,
+            Some(DataType::String),
+        ))
+        .collect()
+        .unwrap();
+```
