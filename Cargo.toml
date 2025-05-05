@@ -29,3 +29,5 @@ aws-config = { version = "1.5.13", features = ["behavior-version-latest"] }
 tokio = { version = "1.43", features = ["full"] }
 
 object_store = "0.11"
+
+df-interchange = { version = "0.2", features = ["polars_0_43", "polars_0_46"] }

@@ -1,9 +1,8 @@
 // :dep polars = { version = "0.46", features = ["lazy", "parquet", "pivot"] }
 // :dep hypors = "0.2"
 
-use polars::prelude::*;
-
 use hypors::chi_square::independence;
+use polars::prelude::*;
 
 fn main() {
     // Connect to LazyFrame (no data is brought into memory)

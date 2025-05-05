@@ -1,8 +1,10 @@
 # Select
 
-This chapter will explore how to select columns from your data. 
+This chapter will explore how to select columns from your data. You can run the examples with `cargo run --example 3_2_1_select`.
 
-With Polars, you can select a few columns using `select()`. You can run this code with `cargo run --example 3_2_1_select`.
+## Select
+
+With Polars, you can select a few columns using `select()`. 
 
 ```Rust
 // Connect to LazyFrame (no data is brought into memory)
@@ -61,6 +63,8 @@ shape: (5, 5)
 │ 2011     ┆ 1        ┆ 12   ┆ 2462         ┆ 105     │
 └──────────┴──────────┴──────┴──────────────┴─────────┘
 ```
+
+## Drop
 
 You can also drop variables with `drop()`:
 

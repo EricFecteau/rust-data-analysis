@@ -1,8 +1,12 @@
 # Filter
 
-This chapter will explore how to filter rows from your data. 
+This chapter will explore how to filter rows from your data. You can run these examples with `cargo run --example 3_1_1_filter`.
 
-You can filter the rows in the data using `filter()`. You can run this code with `cargo run --example 3_1_1_filter`.
+## Filters
+
+### Simple filters
+
+You can filter the rows in the data using `filter()`. 
 
 First, lets load the partitioned parquet file:
 
@@ -53,7 +57,9 @@ let lf_filt = lf.clone().filter(
 );
 ```
 
-This is especially important when crafting more complex filters. For example, you can craft this filter to collect the second half of 2023 and first half of 2024: 
+### Complex filters
+
+The `and()` and `or()` options are especially important when crafting more complex filters. For example, you can craft this filter to collect the second half of 2023 and first half of 2024: 
 
 ```Rust 
 // ((survyear == 2023 & survmnt > 6) | (survyear == 2024 & survmnt <= 6))
@@ -77,7 +83,10 @@ You can then apply the expression with `.filter()`:
 // Apply the expression to a LazyFrame
 let lf_filt = lf.clone().filter(expr);
 ```
-With the `is_in` crate feature, you can see if a `col()` is within a list of `lit()`. The right side of the expression takes a `Polars::Series`, that can be built using `Series::from_iter(vec![<vals>])`. In this example, we see if `survyear` is equal to 2022, 2023 or 2024.
+
+### Value is in a list
+
+With the `is_in` crate feature, you can see if a `col()` is within a list of `lit()`. The right side of the expression takes a `Polars::Series`, that can be built using `Series::from_iter(vec![<vals>])`. oIn this example, we see if `survyear` is equal t 2022, 2023 or 2024.
 
 ```Rust
 // Using `is_in` crate feature with literals
@@ -86,11 +95,13 @@ let lf_filt = lf
     .filter(col("survyear").is_in(lit(Series::from_iter(vec![2022, 2023, 2024]))));
 ```
 
-### Lazy evaluation optimization
+TODO: from 2020 to 2024 (not needing all values)
+
+## Lazy evaluation optimization
 
 Filtering is a perfect example to show how `LazyFrame` use optimized queries, especially when using partitioned parquet files, as created in the [Parquet](../2_data/parquet.md#writing) chapter. This section can be run with `cargo run -r --example 3_1_2_filter_opt` (release mode is important for benchmarking).
 
-> ![NOTE]
+> [!NOTE]
 > This also works when connecting to data on the Cloud.
 
 First, lets connect to the `./data/lfs_large/lfs.parquet` file that contains nearly 15 years of monthly LFS data, 17 million rows, in one parquet file (approximately 300 MB), and filter it to the records in the second half of 2023, and non-null values for `hrlyearn` (hourly wages). Remember, this code creates and execution plan, but does not yet execute it.
