@@ -16,7 +16,7 @@ zip = "2"
 polars = { version = "0.46", features = ["lazy", "parquet", "polars-io", "regex", "is_in", "pivot", "cum_agg", "abs", "dtype-array", "rows", "cloud", "aws", "round_series", "replace"] }
 
 # Move data from SQL to Polars (through Arrow)
-connectorx = { version = "0.4", features = ["src_postgres", "dst_polars"] }
+connectorx = { git = "https://github.com/sfu-db/connector-x.git", features = ["src_postgres", "dst_polars"] }
 
 # Move data in and out of PostgreSQL
 postgres = "0.19"

@@ -10,7 +10,7 @@ fn main() {
     let query = &[CXQuery::from("SELECT * FROM lfs")];
 
     // ConnectorX query PostgreSQL and return Polars object
-    let df = get_arrow(&source_conn, None, query)
+    let df = get_arrow(&source_conn, None, query, None)
         .unwrap()
         .polars()
         .unwrap();
@@ -24,7 +24,7 @@ fn main() {
     )];
 
     // ConnectorX query PostgreSQL and return Polars object
-    let df = get_arrow(&source_conn, None, query)
+    let df = get_arrow(&source_conn, None, query, None)
         .unwrap()
         .polars()
         .unwrap();
