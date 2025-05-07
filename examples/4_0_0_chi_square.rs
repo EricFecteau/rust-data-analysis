@@ -24,7 +24,7 @@ fn main() {
         .unwrap();
 
     // Transpose
-    let df = pivot::pivot_stable(
+    let mut df = pivot::pivot_stable(
         &df,
         ["gender"],
         Some(["marstat"]),
@@ -55,6 +55,8 @@ fn main() {
 
     // Perform Chi-Square Test for Independence
     let result = independence(&cols, 0.01).unwrap();
+
+    // Verified
     println!(
         "Result: {}\nP value: {}\nReject null: {}",
         result.test_statistic, result.p_value, result.reject_null
