@@ -5,7 +5,7 @@ use hypors::chi_square::independence;
 use polars::prelude::*;
 
 fn main() {
-    // Connect to LazyFrame (no data is brought into memory)
+    // Connect to the parquet LFS data
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 
@@ -20,8 +20,29 @@ fn main() {
             .sum()
             .alias("ot_flag")])
         .sort(["gender", "marstat"], Default::default())
+        .with_column(col("gender").replace_strict(
+            lit(Series::from_iter(vec!["1", "2"])),
+            lit(Series::from_iter(vec!["Men+", "Women+"])),
+            None,
+            Some(DataType::String),
+        ))
+        .with_column(col("marstat").replace_strict(
+            lit(Series::from_iter(vec!["1", "2", "3", "4", "5", "6"])),
+            lit(Series::from_iter(vec![
+                "Married",
+                "Common-law",
+                "Widowed",
+                "Separated",
+                "Divorced",
+                "Single",
+            ])),
+            None,
+            Some(DataType::String),
+        ))
         .collect()
         .unwrap();
+
+    println!("{}", &df);
 
     // Transpose
     let df = pivot::pivot_stable(
@@ -36,6 +57,8 @@ fn main() {
     .unwrap()
     .drop("marstat")
     .unwrap();
+
+    println!("{}", &df);
 
     // Create an array of arrays of float64
     let cols = df
@@ -54,11 +77,11 @@ fn main() {
         .collect::<Vec<Vec<f64>>>();
 
     // Perform Chi-Square Test for Independence
-    let result = independence(&cols, 0.01).unwrap();
+    let alpha = 0.05;
+    let result = independence(&cols, alpha).unwrap();
 
-    // Verified
     println!(
-        "Result: {}\nP value: {}\nReject null: {}",
-        result.test_statistic, result.p_value, result.reject_null
+        "Result: {}\nP-value: {}\nNull hypothesis: {}\nReject null: {}",
+        result.test_statistic, result.p_value, result.null_hypothesis, result.reject_null
     );
 }
