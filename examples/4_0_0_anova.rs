@@ -14,7 +14,7 @@ fn main() {
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 
-    // Count individuals with paid overtime by gender and marital status
+    //
     let df = lf
         .clone()
         .filter(col("survyear").eq(lit(2020)))

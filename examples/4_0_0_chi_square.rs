@@ -24,7 +24,7 @@ fn main() {
         .unwrap();
 
     // Transpose
-    let mut df = pivot::pivot_stable(
+    let df = pivot::pivot_stable(
         &df,
         ["gender"],
         Some(["marstat"]),
