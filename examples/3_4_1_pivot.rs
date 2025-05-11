@@ -15,7 +15,7 @@ fn main() {
         .agg([(col("hrlyearn") / lit(100))
             .mean()
             .alias("mean_hrlyearn")
-            .round(2)])
+            .round(2, RoundMode::HalfAwayFromZero)])
         .sort(["survyear", "prov"], SortMultipleOptions::default());
 
     // Change numeric province code to alpha-code

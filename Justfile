@@ -8,8 +8,8 @@ kill-minio:
 
 get-data:
     rm -r ./data
-    minio server ./data/minio --quiet &
     cargo run -r --example 1_2_1_download
+    minio server ./data/minio --quiet &
     cargo run -r --example 1_2_2_styling
     cargo run -r --example 1_2_3_parquet
     cargo run -r --example 1_2_4_large

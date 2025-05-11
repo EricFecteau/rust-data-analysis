@@ -44,7 +44,7 @@ fn main() {
     // Using `is_in` crate feature with literals
     let lf_filt = lf
         .clone()
-        .filter(col("survyear").is_in(lit(Series::from_iter(vec![2022, 2023, 2024]))));
+        .filter(col("survyear").is_in(lit(Series::from_iter(vec![2022, 2023, 2024])), false));
 
     println!("{}", lf_filt.limit(5).collect().unwrap());
 }

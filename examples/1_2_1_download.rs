@@ -41,6 +41,7 @@ fn main() {
     std::fs::create_dir("./data/lfs_parquet").unwrap();
     std::fs::create_dir("./data/lfs_large").unwrap();
     std::fs::create_dir("./data/temp_data").unwrap();
+    std::fs::create_dir("./data/minio").unwrap();
 
     // For the full-year files (prior to current year)
     for y in years {

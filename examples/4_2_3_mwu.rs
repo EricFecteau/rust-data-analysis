@@ -52,7 +52,7 @@ fn main() {
     println!("{}", &df);
 
     // Convert from Polars 0.46 to Polars 0.43
-    let df = Interchange::from_polars_0_46(df)
+    let df = Interchange::from_polars_0_47(df)
         .unwrap()
         .to_polars_0_43()
         .unwrap();

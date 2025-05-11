@@ -22,26 +22,28 @@ async fn main() {
     let mut df = lf.collect().unwrap();
 
     // Write `pub0124.csv`
-    let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0124.csv", Some(&cloud_options))
-        .await
-        .unwrap();
-    CsvWriter::new(&mut cloudfile).finish(&mut df).unwrap();
+    // let mut cloudfile =
+    //     cloud::BlockingCloudWriter::new("s3://lfs/pub0124.csv", Some(&cloud_options))
+    //         .await
+    //         .unwrap();
+    // CsvWriter::new(&mut cloudfile).finish(&mut df).unwrap();
 
-    // Write `pub0124.parquet`
-    let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0124.parquet", Some(&cloud_options))
-        .await
-        .unwrap();
-    ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
+    // // Write `pub0124.parquet`
+    // let mut cloudfile =
+    //     cloud::BlockingCloudWriter::new("s3://lfs/pub0124.parquet", Some(&cloud_options))
+    //         .await
+    //         .unwrap();
+    // ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
 
-    // Write partitioned `pub0124.parquet` on "prov" and "gender"
-    // `write_partitioned_dataset` is considered unstable
-    write_partitioned_dataset(
-        &mut df,
-        std::path::Path::new("s3://lfs/pub0124/"),
-        vec!["prov".into(), "gender".into()],
-        &ParquetWriteOptions::default(),
-        Some(&cloud_options),
-        4294967296,
-    )
-    .unwrap();
+    // // Write partitioned `pub0124.parquet` on "prov" and "gender"
+    // // `write_partitioned_dataset` is considered unstable
+    // write_partitioned_dataset(
+    //     &mut df,
+    //     std::path::Path::new("s3://lfs/pub0124/"),
+    //     vec!["prov".into(), "gender".into()],
+    //     &ParquetWriteOptions::default(),
+    //     Some(&cloud_options),
+    //     4294967296,
+    // )
+    // .unwrap();
 }
