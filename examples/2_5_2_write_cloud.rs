@@ -1,9 +1,9 @@
 // :dep polars = { version = "0.46", features = ["lazy", "parquet", "aws"] }
 
 use polars::prelude::*;
+use tokio::runtime::Runtime;
 
-#[tokio::main]
-async fn main() {
+fn main() {
     let cloud_options = cloud::CloudOptions::default().with_aws(vec![
         (cloud::AmazonS3ConfigKey::AccessKeyId, "minioadmin"),
         (cloud::AmazonS3ConfigKey::SecretAccessKey, "minioadmin"),
@@ -22,28 +22,34 @@ async fn main() {
     let mut df = lf.collect().unwrap();
 
     // Write `pub0124.csv`
-    // let mut cloudfile =
-    //     cloud::BlockingCloudWriter::new("s3://lfs/pub0124.csv", Some(&cloud_options))
-    //         .await
-    //         .unwrap();
-    // CsvWriter::new(&mut cloudfile).finish(&mut df).unwrap();
+    let mut cloudfile = Runtime::new()
+        .unwrap()
+        .block_on(cloud::BlockingCloudWriter::new(
+            "s3://lfs/pub0124.csv",
+            Some(&cloud_options),
+        ))
+        .unwrap();
+    CsvWriter::new(&mut cloudfile).finish(&mut df).unwrap();
 
-    // // Write `pub0124.parquet`
-    // let mut cloudfile =
-    //     cloud::BlockingCloudWriter::new("s3://lfs/pub0124.parquet", Some(&cloud_options))
-    //         .await
-    //         .unwrap();
-    // ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
+    // Write `pub0124.parquet`
+    let mut cloudfile = Runtime::new()
+        .unwrap()
+        .block_on(cloud::BlockingCloudWriter::new(
+            "s3://lfs/pub0124.parquet",
+            Some(&cloud_options),
+        ))
+        .unwrap();
+    ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
 
-    // // Write partitioned `pub0124.parquet` on "prov" and "gender"
-    // // `write_partitioned_dataset` is considered unstable
-    // write_partitioned_dataset(
-    //     &mut df,
-    //     std::path::Path::new("s3://lfs/pub0124/"),
-    //     vec!["prov".into(), "gender".into()],
-    //     &ParquetWriteOptions::default(),
-    //     Some(&cloud_options),
-    //     4294967296,
-    // )
-    // .unwrap();
+    // Write partitioned `pub0124.parquet` on "prov" and "gender"
+    // `write_partitioned_dataset` is considered unstable
+    write_partitioned_dataset(
+        &mut df,
+        std::path::Path::new("s3://lfs/pub0124/"),
+        vec!["prov".into(), "gender".into()],
+        &ParquetWriteOptions::default(),
+        Some(&cloud_options),
+        4294967296,
+    )
+    .unwrap();
 }
