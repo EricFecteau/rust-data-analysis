@@ -10,7 +10,7 @@ Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage 
 To connect to the cloud of your choice, you have to set up the cloud options: use [with_aws](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_aws) and [AmazonS3ConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.AmazonS3ConfigKey.html) for S3 buckets, use [with_gcp](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_gcp) and [GoogleConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.GoogleConfigKey.html) for Google Cloud Storage, and use [with_azure](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_azure) and [AzureConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.AzureConfigKey.html) for Azure Blob Storage. For example, for the default configuration for the minio server, connect using `with_aws`: 
 
 ```Rust
-:dep polars = { version = "0.46", features = ["lazy", "parquet", "aws"] }
+:dep polars = { version = "0.48", features = ["lazy", "parquet", "aws"] }
 
 use polars::prelude::*;
 

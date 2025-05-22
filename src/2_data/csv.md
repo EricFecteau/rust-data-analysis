@@ -7,7 +7,7 @@ You can read and write from CSVs using Polars.
 You can connect to a CSV file, like the Jan 2024 LFS file `./data/lfs_csv/pub0124.csv`, without bringing it in memory, with the `LazyCsvReader`. You can run this section using `cargo run -r --example 2_2_2_read_csv`.
 
 ```rust
-:dep polars = { version = "0.46", features = ["lazy"] }
+:dep polars = { version = "0.48", features = ["lazy"] }
 
 use polars::prelude::*;
 
@@ -43,7 +43,7 @@ shape: (5, 60)
 You can write to CSV any `DataFrame` you have in memory. For this example, we will bring one month of the LFS into memory:
 
 ```Rust
-:dep polars = { version = "0.46", features = ["lazy"] }
+:dep polars = { version = "0.48", features = ["lazy"] }
 
 use polars::prelude::*;
 

@@ -18,7 +18,7 @@ All examples in this book are accompanied with [example scripts](https://github.
 Rust is a compiled programming language, which has significant advantages, at the disadvantage of quick data exploration (e.g. quickly querying the data multiple times to build the final query for your analysis). Thankfully, the [evcxr](https://github.com/evcxr/evcxr/blob/main/evcxr/README.md) evaluation context crate has created a [Rust REPL](https://github.com/evcxr/evcxr/blob/main/evcxr_repl/README.md) (Read-Eval-Print loop) and a [Kernel for Jupyter Notebooks]((https://github.com/evcxr/evcxr/blob/main/evcxr_jupyter/README.md)). This removes the need for the `main` function.
 
 > [!NOTE]
-> To import a dependency in either the REPL or the Jupyter Notebook, you submit a `Cargo.toml` dependency line starting with `:dep` (e.g. `:dep polars = { version = "0.46", features = ["lazy"] }` for `Polars 0.46` with the `lazy` feature). 
+> To import a dependency in either the REPL or the Jupyter Notebook, you submit a `Cargo.toml` dependency line starting with `:dep` (e.g. `:dep polars = { version = "0.48", features = ["lazy"] }` for `Polars 0.48` with the `lazy` feature). 
 >
 > All [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples) in this book start with a commented out `:dep` block that can be uncommented to run the script in the Rust REPL. A few scripts can not be run in the Rust REPL, and the `:dep` block has been omitted.
 

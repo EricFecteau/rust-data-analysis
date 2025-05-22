@@ -1,7 +1,7 @@
 // https://www.r-tutor.com/elementary-statistics/non-parametric-methods/mann-whitney-wilcoxon-test
 // https://docs.rs/hypors/latest/hypors/mann_whitney/u/fn.u_test.html
 
-// :dep polars = { version = "0.46", features = ["lazy", "parquet", "pivot"] }
+// :dep polars = { version = "0.48", features = ["lazy", "parquet", "pivot"] }
 // :dep hypors = "0.2"
 
 use df_interchange::Interchange;
@@ -51,8 +51,8 @@ fn main() {
 
     println!("{}", &df);
 
-    // Convert from Polars 0.46 to Polars 0.43
-    let df = Interchange::from_polars_0_47(df)
+    // Convert from Polars 0.48 to Polars 0.43
+    let df = Interchange::from_polars_0_48(df)
         .unwrap()
         .to_polars_0_43()
         .unwrap();

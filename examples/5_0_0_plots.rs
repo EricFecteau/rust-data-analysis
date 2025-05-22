@@ -10,62 +10,6 @@ fn main() {
         .filter(col("hrlyearn").is_not_null())
         .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"));
 
-    // Simple statistics (single point)
-    let mean_hourly_wages = lf
-        .clone()
-        .select([col("hourly_wages")])
-        .mean()
-        .collect()
-        .unwrap();
-
-    println!("Mean hourly wages (whole period): {}", mean_hourly_wages);
-
-    // Simple statistics by category
-    let mean_hourly_wages_by_prov = lf
-        .clone()
-        .group_by([col("prov")])
-        .agg([col("hourly_wages")
-            .mean()
-            .round(2, RoundMode::HalfAwayFromZero)])
-        .collect()
-        .unwrap();
-
-    println!(
-        "Mean hourly wages by province (whole period): {}",
-        mean_hourly_wages_by_prov
-    );
-
-    // Multiple statistics (calculated)
-    let hourly_wages_stats = lf
-        .clone()
-        .select([
-            (len() / lit(1000)).alias("count (x1000)"),
-            col("hourly_wages").mean().alias("mean"),
-            col("hourly_wages").min().alias("min"),
-            col("hourly_wages")
-                .quantile(lit(0.01), QuantileMethod::Nearest)
-                .alias("p01"),
-            col("hourly_wages")
-                .quantile(lit(0.25), QuantileMethod::Nearest)
-                .alias("p25"),
-            col("hourly_wages").median().alias("median"),
-            col("hourly_wages")
-                .quantile(lit(0.75), QuantileMethod::Nearest)
-                .alias("p75"),
-            col("hourly_wages")
-                .quantile(lit(0.99), QuantileMethod::Nearest)
-                .alias("p99"),
-            col("hourly_wages").max().alias("max"),
-        ])
-        .unpivot(UnpivotArgsDSL::default())
-        .collect()
-        .unwrap();
-
-    println!(
-        "Table of summary statistics about hourly wages (whole period): {}",
-        hourly_wages_stats
-    );
-
     // Calculate weighted quantile
     fn weighted_quantile(col: Expr, wt: Expr, percentile: Expr) -> Expr {
         col.sort_by(
@@ -83,19 +27,7 @@ fn main() {
     let hourly_wages_stats_wt = lf
         .clone()
         .sort(["hourly_wages"], SortMultipleOptions::new())
-        .select([
-            ((col("finalwt").sum()) / lit(1000000)).alias("count (x100,000)"),
-            (((col("hourly_wages") * col("finalwt")).sum()) / col("finalwt").sum())
-                .alias("mean")
-                .round(2, RoundMode::HalfAwayFromZero),
-            col("hourly_wages").min().alias("min"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.01)).alias("p01"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.25)).alias("p25"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.50)).alias("median"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.75)).alias("p75"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.99)).alias("p99"),
-            col("hourly_wages").max().alias("max"),
-        ])
+        .select([weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.50)).alias("median")])
         .unpivot(UnpivotArgsDSL::default())
         .collect()
         .unwrap();

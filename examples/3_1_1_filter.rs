@@ -1,4 +1,4 @@
-// :dep polars = { version = "0.46", features = ["lazy", "parquet", "is_in"] }
+// :dep polars = { version = "0.48", features = ["lazy", "parquet", "is_in"] }
 
 use polars::prelude::*;
 
@@ -42,9 +42,10 @@ fn main() {
     println!("{}", lf_filt.limit(5).collect().unwrap());
 
     // Using `is_in` crate feature with literals
-    let lf_filt = lf
-        .clone()
-        .filter(col("survyear").is_in(lit(Series::from_iter(vec![2022, 2023, 2024])), false));
+    let lf_filt = lf.clone().filter(col("survyear").is_in(
+        lit(Series::from_iter(vec![2022, 2023, 2024])).implode(),
+        false,
+    ));
 
     println!("{}", lf_filt.limit(5).collect().unwrap());
 }
