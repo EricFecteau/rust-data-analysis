@@ -9,7 +9,7 @@ edition = "2021"
 reqwest = { version = "0.12", features = ["blocking"] }
 
 # Extract ZIP files
-zip = "2"
+zip = "4"
 
 # Polars - open-source library for data manipulation, with `lazy` feature
 #          enabled to support lazy evaluation 

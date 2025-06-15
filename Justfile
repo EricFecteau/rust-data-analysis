@@ -1,7 +1,10 @@
-test-all: get-data test-rw test-transform
+compile-all:
+    cargo build -r --examples
 
 render:
     mdbook serve --open
+
+test-all: get-data test-rw test-transform
 
 kill-minio:
     pkill minio
@@ -34,5 +37,15 @@ test-rw:
 test-transform:
     cargo run -r --example 3_1_1_filter
     cargo run -r --example 3_1_2_filter_opt
-    cargo run -r --example 3_1_3_select
-    cargo run -r --example 3_2_1_variables
+    cargo run -r --example 3_2_1_select
+    cargo run -r --example 3_3_1_variables
+    cargo run -r --example 3_4_1_pivot
+
+test-stats:
+    cargo run -r --example 4_1_1_summary
+    cargo run -r --example 4_2_1_chi_square
+    cargo run -r --example 4_2_2_anova
+    cargo run -r --example 4_2_3_mwu
+
+test-pub:
+    cargo run -r --example 5_
