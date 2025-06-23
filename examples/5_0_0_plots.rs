@@ -1,4 +1,4 @@
-use polars::prelude::{pivot::pivot_stable, *};
+use polars::prelude::*;
 
 fn main() {
     // Connect to LazyFrame (no data is brought into memory)
@@ -6,7 +6,7 @@ fn main() {
     let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 
     // Modify var
-    let lf = lf
+    let _lf = lf
         .filter(col("hrlyearn").is_not_null())
         .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"));
 

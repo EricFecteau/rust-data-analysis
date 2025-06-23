@@ -13,7 +13,17 @@ zip = "4"
 
 # Polars - open-source library for data manipulation, with `lazy` feature
 #          enabled to support lazy evaluation 
-polars = { version = "0.48", features = ["lazy", "parquet", "polars-io", "regex", "is_in", "pivot", "cum_agg", "abs", "dtype-array", "rows", "cloud", "aws", "round_series", "replace", "dtype-categorical", "dtype-i128"] }
+polars = { version = "0.49", features = [
+    "lazy", # LazyFrame
+    "parquet", # Parquet files
+    "round_series", # Round values
+    "replace", # Replace value
+    "is_in", # List filter
+    "pivot", # Pivot data
+    "cum_agg", # Cumulative aggregate statistics
+    "abs", # Absolute value
+    "aws", # Read/write cloud (minio)
+] }
 
 # Move data from SQL to Polars (through Arrow)
 connectorx = { git = "https://github.com/sfu-db/connector-x.git", features = ["src_postgres", "dst_polars"] }
@@ -30,4 +40,4 @@ tokio = { version = "1" }
 
 object_store = "0.12"
 
-df-interchange = { version = "0.2", features = ["polars_0_43", "polars_0_48"] }
+df-interchange = { version = "0.2", features = ["polars_0_43", "polars_0_49"] }

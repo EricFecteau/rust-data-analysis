@@ -18,7 +18,10 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!("Mean hourly wages (whole period): {}", mean_hourly_wages);
+    println!(
+        "Mean hourly wages (whole period):\n\n{}\n",
+        mean_hourly_wages
+    );
 
     // Simple statistics by category
     let mean_hourly_wages_by_prov = lf
@@ -31,7 +34,7 @@ fn main() {
         .unwrap();
 
     println!(
-        "Mean hourly wages by province (whole period): {}",
+        "Mean hourly wages by province (whole period):\n\n{}\n",
         mean_hourly_wages_by_prov
     );
 
@@ -62,7 +65,7 @@ fn main() {
         .unwrap();
 
     println!(
-        "Table of summary statistics about hourly wages (whole period): {}",
+        "Table of summary statistics about hourly wages (whole period):\n\n{}\n",
         hourly_wages_stats
     );
 
@@ -101,7 +104,7 @@ fn main() {
         .unwrap();
 
     println!(
-        "Table of weighted summary statistics about hourly wages (whole period): {}",
+        "Table of weighted summary statistics about hourly wages (whole period):\n\n{}\n",
         hourly_wages_stats_wt
     );
 
@@ -153,7 +156,7 @@ fn main() {
     .unwrap();
 
     println!(
-        "Table of weighted summary statistics about hourly wages (whole period): {}",
+        "Table of weighted summary statistics about hourly wages (whole period):\n\n{}\n",
         hourly_wages_stats_wt_by_gender
     );
 }
