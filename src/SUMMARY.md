@@ -19,8 +19,8 @@
     * [Select](3_transformation/select.md)
     * [Filter](3_transformation/filter.md)
     * [Variables](3_transformation/variables.md)
-    * [Joins](3_transformation/joins.md)
     * [Pivots](3_transformation/pivots.md)
+    * [Joins](3_transformation/joins.md)
 
 * [Statistics](4_stats/index.md)
     * [Summary statistics](4_stats/summary.md)
