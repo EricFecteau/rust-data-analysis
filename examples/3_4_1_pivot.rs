@@ -1,4 +1,4 @@
-// :dep polars = { version = "0.48", features = ["lazy", "parquet", "regex", "replace"] }
+// :dep polars = { version = "0.49", features = ["lazy", "parquet", "regex", "replace"] }
 
 use polars::prelude::pivot::pivot_stable;
 use polars::prelude::*;

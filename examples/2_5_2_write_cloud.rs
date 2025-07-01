@@ -1,4 +1,4 @@
-// :dep polars = { version = "0.48", features = ["lazy", "parquet", "aws"] }
+// :dep polars = { version = "0.49", features = ["lazy", "parquet", "aws"] }
 
 use polars::prelude::*;
 use tokio::runtime::Runtime;

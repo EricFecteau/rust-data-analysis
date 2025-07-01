@@ -40,4 +40,7 @@ tokio = { version = "1" }
 
 object_store = "0.12"
 
-df-interchange = { version = "0.2", features = ["polars_0_43", "polars_0_49"] }
+df-interchange = { version = "0.2", features = ["polars_0_43", "polars_0_48", "polars_0_49"] }
+
+polars_excel_writer = "0.16"
+rust_xlsxwriter = "0.89"

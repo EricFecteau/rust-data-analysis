@@ -1,4 +1,4 @@
-// :dep polars = { version = "0.48", features = ["lazy", "parquet", "pivot"] }
+// :dep polars = { version = "0.49", features = ["lazy", "parquet", "pivot"] }
 // :dep hypors = "0.2"
 
 use hypors::chi_square::independence;

@@ -9,6 +9,8 @@ mkdir -p ./data/lfs_csv
 mkdir -p ./data/lfs_parquet
 mkdir -p ./data/lfs_large
 mkdir -p ./data/temp_data
+mkdir -p ./data/minio
+mkdir -p ./data/output
 
 for y in $(seq $start_year $end_year); do
     curl https://www150.statcan.gc.ca/n1/pub/71m0001x/2021001/hist/$y-CSV.zip --output ./data/$y.zip

@@ -1,4 +1,4 @@
-// :dep polars = { version = "0.48", features = ["lazy", "parquet", "is_in"] }
+// :dep polars = { version = "0.49", features = ["lazy", "parquet", "is_in"] }
 
 use polars::prelude::*;
 

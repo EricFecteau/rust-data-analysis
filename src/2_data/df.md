@@ -7,7 +7,7 @@ To create a DataFrame, you first have to create `Columns`. You can create column
 Run this script using `cargo run -r --example 2_1_1_dataframe`.
 
 ```Rust
-:dep polars = "0.48"
+:dep polars = "0.49"
 
 use polars::prelude::*;
 

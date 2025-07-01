@@ -67,6 +67,9 @@ std::fs::create_dir("./data").unwrap();
 std::fs::create_dir("./data/lfs_csv").unwrap();
 std::fs::create_dir("./data/lfs_parquet").unwrap();
 std::fs::create_dir("./data/lfs_large").unwrap();
+std::fs::create_dir("./data/temp_data").unwrap();
+std::fs::create_dir("./data/minio").unwrap();
+std::fs::create_dir("./data/output").unwrap();
 
 // For the full-year files (prior to current year)
 for y in years {
@@ -88,7 +91,7 @@ for y in years {
 Since there does not seem to exist a style guide for Polars, this guide will use the [R Tidyverse style guide](https://style.tidyverse.org/), when appropriate. Since all variables on the LFS CSV files are uppercase, this script will modify the variables to be lowercase. You can run this code with `cargo run -r --example 1_2_2_styling`.
 
 ```rust
-:dep polars = { version = "0.48", features = ["lazy"] }
+:dep polars = { version = "0.49", features = ["lazy"] }
 
 use polars::prelude::*;
 
@@ -140,7 +143,7 @@ for path in paths {
 This section will convert each CSV into individual Parquet files. It will create approximately 300 MB of Parquet file form the 2 GB of CSV files. You can run this code with `cargo run -r --example 1_2_3_parquet`.
 
 ```rust
-:dep polars = { version = "0.48", features = ["lazy", "parquet"] }
+:dep polars = { version = "0.49", features = ["lazy", "parquet"] }
 
 use polars::prelude::*;
 
@@ -177,7 +180,7 @@ for path in paths {
 This section will create a large CSV file and a large Parquet file. If you have the LFS files from 2011 to 2024, you will need at least 16 GB of RAM (or pagefile / swap memory). You can reduce the number of years you download if you have less RAM, and most of the examples will focus on 2023 and 2024. You can run this script using `cargo run -r --example 1_2_4_large`. 
 
 ```rust
-:dep polars = { version = "0.48", features = ["lazy", "parquet"] }
+:dep polars = { version = "0.49", features = ["lazy", "parquet"] }
 
 use polars::prelude::*;
 
@@ -234,7 +237,7 @@ The following example, using Arch Linux, will show how simple it is to set up:
 Once set up, you can use Rust to load he data into the database. You can run this script using `cargo run -r --example 1_2_5_sql`.
 
 ```Rust
-:dep polars = { version = "0.48", features = ["lazy"] }
+:dep polars = { version = "0.49", features = ["lazy"] }
 :dep postgres = "0.19"
 
 use polars::prelude::*;

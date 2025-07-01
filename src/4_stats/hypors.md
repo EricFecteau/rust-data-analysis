@@ -3,7 +3,7 @@
 You can perform various hypothesis tests in Rust using [hypors](https://docs.rs/hypors/latest/hypors/). This crate allows you to do t-tests, z-tests, proportion tests, ANOVA, Chi-square tests, and Mann-Whitney tests, using `polars` for data manipulations and `statrs` for statistical distributions. This section will give examples for a `Chi-square` test, an `ANOVA` and a `Mann-Whitney` test, focusing on modifying the `Polars` data used throughout the book to match the input necessary by the crate.
 
 > [!IMPORTANT]
-> `Hypors 0.2` uses `Polars 0.43`, while the rest of this book uses `Polars 0.48`. You will have to use [df-interchange](https://github.com/EricFecteau/df-interchange) as explained in the [concepts](../1_start/concepts.md) section of the book.
+> `Hypors 0.2` uses `Polars 0.43`, while the rest of this book uses `Polars 0.49`. You will have to use [df-interchange](https://github.com/EricFecteau/df-interchange) as explained in the [concepts](../1_start/concepts.md) section of the book.
 
 ## Chi-square test
 
@@ -252,10 +252,10 @@ shape: (49_391, 3)
 └─────────────────────────┴────────────────────────┴───────────────┘
 ```
 
-Now that we have the data from each immigration category, we can convert the `DataFrame` into `Series` with `get_columns()`. But first, `Hypors` assumes `Polars 0.43` `Series`, not `Polars 0.48` `Series`. So we must first pass the `DataFrame` through [df-interchange](https://github.com/EricFecteau/df-interchange) to convert it.
+Now that we have the data from each immigration category, we can convert the `DataFrame` into `Series` with `get_columns()`. But first, `Hypors` assumes `Polars 0.43` `Series`, not `Polars 0.49` `Series`. So we must first pass the `DataFrame` through [df-interchange](https://github.com/EricFecteau/df-interchange) to convert it.
 
 ```Rust
-// Convert from Polars 0.48 to Polars 0.43
+// Convert Polars versions
 let df = Interchange::from_polars_0_48(df)
     .unwrap()
     .to_polars_0_43()
@@ -388,10 +388,10 @@ shape: (49_391, 2)
 └────────┴───────┘
 ```
 
-Now that we have the data from each gender, we can convert the `DataFrame` into `Series` with `get_columns()`. But first, `Hypors` assumes `Polars 0.43` `Series`, not `Polars 0.48` `Series`. So we must first pass the `DataFrame` through [df-interchange](https://github.com/EricFecteau/df-interchange) to convert it.
+Now that we have the data from each gender, we can convert the `DataFrame` into `Series` with `get_columns()`. But first, `Hypors` assumes `Polars 0.43` `Series`, not `Polars 0.49` `Series`. So we must first pass the `DataFrame` through [df-interchange](https://github.com/EricFecteau/df-interchange) to convert it.
 
 ```Rust
-// Convert from Polars 0.48 to Polars 0.43
+// Convert Polars versions
 let df = Interchange::from_polars_0_48(df)
     .unwrap()
     .to_polars_0_43()

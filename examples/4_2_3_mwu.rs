@@ -1,4 +1,4 @@
-// :dep polars = { version = "0.48", features = ["lazy", "parquet", "pivot"] }
+// :dep polars = { version = "0.49", features = ["lazy", "parquet", "pivot"] }
 // :dep hypors = "0.2"
 
 use df_interchange::Interchange;
@@ -48,7 +48,7 @@ fn main() {
 
     println!("{}", &df);
 
-    // Convert from Polars 0.48 to Polars 0.43
+    // Convert from Polars 0.49 to Polars 0.43
     let df = Interchange::from_polars_0_49(df)
         .unwrap()
         .to_polars_0_43()

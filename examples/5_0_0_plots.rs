@@ -10,5 +10,13 @@ fn main() {
         .filter(col("hrlyearn").is_not_null())
         .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"));
 
-    // Mean wage over time
+    // Mean by province
+    let _df = _lf
+        .clone()
+        .group_by([col("prov")])
+        .agg([col("hourly_wages")
+            .mean()
+            .round(2, RoundMode::HalfAwayFromZero)])
+        .collect()
+        .unwrap();
 }
