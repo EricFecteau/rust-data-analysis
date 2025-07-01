@@ -16,7 +16,7 @@ fn main() {
         .unwrap();
 
     // Print table
-    println!("{}", df);
+    println!("{df}");
 
     // Prepare query
     let query = &[CXQuery::from(
@@ -30,5 +30,5 @@ fn main() {
         .unwrap();
 
     // Print table
-    println!("{}", df);
+    println!("{df}");
 }

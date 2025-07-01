@@ -14,5 +14,5 @@ fn main() {
     // Get the first data point from the first row
     let data_point: i64 = data[0].get(0);
 
-    println!("{}", data_point)
+    println!("{data_point}")
 }

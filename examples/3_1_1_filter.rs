@@ -34,7 +34,7 @@ fn main() {
         .eq(lit(2024))
         .and(col("survmnth").lt_eq(lit(6))));
 
-    println!("Expression: {}", expr); // You can print it
+    println!("Expression: {expr}"); // You can print it
 
     // Apply the expression to a LazyFrame
     let lf_filt = lf.clone().filter(expr);

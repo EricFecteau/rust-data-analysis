@@ -16,7 +16,7 @@ fn main() {
     // Using columns to create a DataFrame
     let df = DataFrame::new(vec![year, month, value]).unwrap();
 
-    println!("{}", df);
+    println!("{df}");
 
     // Use the df! macro to create DataFrame
     let df = df!("year" => [2008, 2008, 2008, 2008, 2009, 2009],
@@ -24,5 +24,5 @@ fn main() {
                             "value" => [0.21, 0.22, 0.23, 0.25, 0.24, 0.25])
     .unwrap();
 
-    println!("{}", df);
+    println!("{df}");
 }

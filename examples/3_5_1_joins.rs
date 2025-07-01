@@ -6,7 +6,7 @@ fn main() {
     // Connect and process multiple monthly parquet file
     let mut lfs_month = vec![];
     for m in 1..5 {
-        let mm = format!("{:02}", m);
+        let mm = format!("{m:02}");
 
         let args = ScanArgsParquet::default();
         let lf =
@@ -32,7 +32,7 @@ fn main() {
 
     // Update the lfs_month vector to remove variables and update values
     for m in 1..5 {
-        let mm = format!("{:02}", m);
+        let mm = format!("{m:02}");
 
         lfs_month[m - 1] = lfs_month[m - 1]
             .clone()

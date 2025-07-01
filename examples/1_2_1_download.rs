@@ -51,7 +51,7 @@ fn main() {
         let mut zip = download_zip(&url);
 
         for m in 1..(12 + 1) {
-            let mm = format!("{:02}", m);
+            let mm = format!("{m:02}");
             let yy = format!("{:02}", y % 2000);
 
             write_csv(&mut zip, &format!("pub{mm}{yy}.csv"));
