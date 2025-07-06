@@ -123,7 +123,7 @@ println!("{}", lf.clone().limit(5).collect().unwrap());
 ```
 
 ```
-hape: (5, 6)
+shape: (5, 6)
 ┌──────────┬──────────┬──────┬──────────────┬───────────────┬──────────┐
 │ survyear ┆ survmnth ┆ prov ┆ hourly_wages ┆ wages_dollars ┆ wage_cat │
 │ ---      ┆ ---      ┆ ---  ┆ ---          ┆ ---           ┆ ---      │

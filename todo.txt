@@ -4,7 +4,6 @@
     * Explain the various arrow crates in Rust
     * Explain the versions of Polars
     * Figure out what "data order" means
-* Write summary statistics
 * Write publication intro
 * Write plotting
 * Write reports

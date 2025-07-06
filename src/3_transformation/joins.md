@@ -2,7 +2,7 @@
 
 This section explore how to join two datasets, either by stacking them one on top of the other (same columns) or by stacking them side by side (same rows).
 
-## Concatonate
+## Concatenate
 
 Lets first create a vector containing four months (Jan to April) of LFS data, pulled form the single-month versions of the Parquet files.
 
@@ -20,10 +20,10 @@ for m in 1..5 {
 }
 ```
 
-To concatenate data of the same row-shape on top of eachother, we can use the `concat` function by listing the LazyFrames we want to stack. Here, we can concatonate all four months of the LFS found in the `lfs_month` vector.
+To concatenate data of the same row-shape on top of each other, we can use the `concat` function by listing the LazyFrames we want to stack. Here, we can concatenate all four months of the LFS found in the `lfs_month` vector.
 
 ```Rust
-// Concatonate vertically two (or more) datasts
+// Concatenate vertically two (or more) datasts
 let lf_jan_to_apr = concat(
     [
         lfs_month[0].clone(), // Cloned, since we need it later
@@ -178,10 +178,10 @@ shape: (6_494, 5)
 └─────────┴─────────┴─────────┴─────────┴─────────┘
 ```
 
-Polars has multiple of these "simple" joins, incliding `left_join`, `semi_join`, `full_join`, `inner_join`, `anti_join` and `cross_join`. But you can create singnificantly more complex joins by building the `join` yourself with the `join` function and all of it's options. For example, here is a `full join` on multiple variables:
+Polars has multiple of these "simple" joins, including `left_join`, `semi_join`, `full_join`, `inner_join`, `anti_join` and `cross_join`. But you can create significantly more complex joins by building the `join` yourself with the `join` function and all of it's options. For example, here is a `full join` on multiple variables:
 
 > [!NOTE]
-> For some reason, Polars does not reconsile the values of the keys in a `full join`, both in the `join` and `full_join` functions. This means that any keys not found in the left create `nulls` in the original key name and any key not found in the right creates `nulls` in the key with an `_right` suffix (e.g. rec_num_right). I fix this in the example below with an expression that applies to all four joins.
+> For some reason, Polars does not reconcile the values of the keys in a `full join`, both in the `join` and `full_join` functions. This means that any keys not found in the left create `nulls` in the original key name and any key not found in the right creates `nulls` in the key with an `_right` suffix (e.g. rec_num_right). I fix this in the example below with an expression that applies to all four joins.
 
 ```Rust
 let fix_full_join_vars = [

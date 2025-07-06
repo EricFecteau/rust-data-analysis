@@ -15,7 +15,7 @@ fn main() {
         lfs_month.push(lf);
     }
 
-    // Concatonate vertically two (or more) datasts
+    // Concatenate vertically two (or more) datasets
     let lf_jan_to_apr = concat(
         [
             lfs_month[0].clone(), // Cloned, since we need it later

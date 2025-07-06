@@ -18,7 +18,7 @@ fn main() {
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
-    // Can't use created columns in the same `select()`, but you can add new colum(s) with `with_column()`
+    // Can't use created columns in the same `select()`, but you can add new column(s) with `with_column()`
     let lf = lf.with_column(
         (col("five") + col("ten")).alias("fifteen"), // add two columns
     );

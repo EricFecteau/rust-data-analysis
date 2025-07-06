@@ -4,7 +4,7 @@ In the data analysis world, Excel is still the universal aggregate statistics ex
 
 ## Setup
 
-First, lets create some summary statistics to throw into the excel file. We will create a table of mean oft he hearly earnings by year and province, in a long format (e.g. 3 columns: "survyear", "prov" and "hourly_wages") and wide format (e.g. "survyear" as row and "prov" as column). Both `df_long` and `df_wide` are brought into memory as data frames.
+First, lets create some summary statistics to throw into the excel file. We will create a table of mean oft he hourly earnings by year and province, in a long format (e.g. 3 columns: "survyear", "prov" and "hourly_wages") and wide format (e.g. "survyear" as row and "prov" as column). Both `df_long` and `df_wide` are brought into memory as data frames.
 
 ```Rust
 // Connect to LazyFrame
