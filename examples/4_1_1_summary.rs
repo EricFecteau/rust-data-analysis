@@ -8,29 +8,33 @@ fn main() {
     // Modify var
     let lf = lf
         .filter(col("hrlyearn").is_not_null())
-        .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"));
+        .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"))
+        .with_column(col("prov").replace_strict(
+            lit(Series::from_iter(vec![
+                "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
+            ])),
+            lit(Series::from_iter(vec![
+                "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
+            ])),
+            None,
+            Some(DataType::String),
+        ))
+        .with_column(col("gender").replace_strict(
+            lit(Series::from_iter(vec!["1", "2"])),
+            lit(Series::from_iter(vec!["Men+", "Women+"])),
+            None,
+            Some(DataType::String),
+        ));
 
     // Simple statistics (single point)
     let mean_hourly_wages = lf
         .clone()
         .select([col("hourly_wages")])
-        .mean()
+        .median()
         .collect()
         .unwrap();
 
     println!("Mean hourly wages (whole period):\n\n{mean_hourly_wages}\n");
-
-    // Simple statistics by category
-    let mean_hourly_wages_by_prov = lf
-        .clone()
-        .group_by([col("prov")])
-        .agg([col("hourly_wages")
-            .mean()
-            .round(2, RoundMode::HalfAwayFromZero)])
-        .collect()
-        .unwrap();
-
-    println!("Mean hourly wages by province (whole period):\n\n{mean_hourly_wages_by_prov}\n");
 
     // Multiple statistics (calculated)
     let hourly_wages_stats = lf
@@ -61,6 +65,18 @@ fn main() {
     println!(
         "Table of summary statistics about hourly wages (whole period):\n\n{hourly_wages_stats}\n"
     );
+
+    // Simple statistics by category
+    let mean_hourly_wages_by_prov = lf
+        .clone()
+        .group_by([col("prov")])
+        .agg([col("hourly_wages")
+            .mean()
+            .round(2, RoundMode::HalfAwayFromZero)])
+        .collect()
+        .unwrap();
+
+    println!("Mean hourly wages by province (whole period):\n\n{mean_hourly_wages_by_prov}\n");
 
     // Calculate weighted quantile
     fn weighted_quantile(col: Expr, wt: Expr, percentile: Expr) -> Expr {
