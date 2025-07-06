@@ -47,15 +47,9 @@ fn main() {
     )
     .unwrap();
 
-    // // Convert between Polars versions
-    // let df_long = Interchange::from_polars_0_49(df_long)
-    //     .unwrap()
-    //     .to_polars_0_48()
-    //     .unwrap();
-    // let df_wide = Interchange::from_polars_0_49(df_wide)
-    //     .unwrap()
-    //     .to_polars_0_48()
-    //     .unwrap();
+    println!("Long:\n{df_long}");
+
+    println!("Wide:\n{df_wide}");
 
     // Create a new Excel writer.
     let mut excel_writer = PolarsExcelWriter::new();
@@ -77,6 +71,7 @@ fn main() {
 
     // Add a chart sheet for the "wide" data
 
+    // Get some info to limit the size and shape of the graph (e.g. rows, min/max values)
     let row_num = df_wide.shape().0;
     let col_num = df_wide.shape().1;
     let min_val: f64 = df_long
@@ -96,6 +91,7 @@ fn main() {
         .unwrap()
         .unwrap();
 
+    // Iterate throw rows to create multiple lines
     let mut chart = Chart::new(ChartType::Line);
     for i in 1..col_num {
         chart

@@ -4,13 +4,11 @@
     * Explain the various arrow crates in Rust
     * Explain the versions of Polars
     * Figure out what "data order" means
-* Write joins
 * Write summary statistics
 * Write publication intro
 * Write plotting
 * Write reports
 * Write visualization
-* Write excel
 * Write website article
 * Verify all examples work and are documented (in code)
 * Verify all examples have REPL code

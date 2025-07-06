@@ -1,4 +1,4 @@
-// :dep polars = "0.48"
+// :dep polars = "0.49"
 
 use polars::prelude::*;
 
