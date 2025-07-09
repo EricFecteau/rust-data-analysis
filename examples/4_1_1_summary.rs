@@ -1,12 +1,13 @@
 use polars::prelude::{pivot::pivot_stable, *};
 
 fn main() {
-    // Connect to LazyFrame (no data is brought into memory)
+    // Connect to LazyFrame
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 
     // Modify var
     let lf = lf
+        .filter(col("survyear").eq(2020).and(col("survmnth").eq(1))) // One month only
         .filter(col("hrlyearn").is_not_null())
         .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"))
         .with_column(col("prov").replace_strict(
@@ -34,7 +35,7 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!("Mean hourly wages (whole period):\n\n{mean_hourly_wages}\n");
+    println!("Mean hourly wages:\n\n{mean_hourly_wages}\n");
 
     // Multiple statistics (calculated)
     let hourly_wages_stats = lf
@@ -62,9 +63,7 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!(
-        "Table of summary statistics about hourly wages (whole period):\n\n{hourly_wages_stats}\n"
-    );
+    println!("Table of summary statistics about hourly wages:\n\n{hourly_wages_stats}\n");
 
     // Simple statistics by category
     let mean_hourly_wages_by_prov = lf
@@ -76,7 +75,7 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!("Mean hourly wages by province (whole period):\n\n{mean_hourly_wages_by_prov}\n");
+    println!("Mean hourly wages by province:\n\n{mean_hourly_wages_by_prov}\n");
 
     // Calculate weighted quantile
     fn weighted_quantile(col: Expr, wt: Expr, percentile: Expr) -> Expr {
@@ -113,7 +112,7 @@ fn main() {
         .unwrap();
 
     println!(
-        "Table of weighted summary statistics about hourly wages (whole period):\n\n{hourly_wages_stats_wt}\n"
+        "Table of weighted summary statistics about hourly wages:\n\n{hourly_wages_stats_wt}\n"
     );
 
     // Weighted statistics (by gender)
@@ -164,6 +163,6 @@ fn main() {
     .unwrap();
 
     println!(
-        "Table of weighted summary statistics about hourly wages (whole period):\n\n{hourly_wages_stats_wt_by_gender}\n"
+        "Table of weighted summary statistics about hourly wages:\n\n{hourly_wages_stats_wt_by_gender}\n"
     );
 }
