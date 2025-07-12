@@ -16,23 +16,10 @@ First, lets load the partitioned parquet file:
 === Rust 3_1_1_filter chunk_1
 ```
 
-```Rust
-:dep polars = { version = "0.49", features = ["lazy", "parquet", "is_in"] }
-
-use polars::prelude::*;
-
-// Connect to LazyFrame (no data is brought into memory)
-let args = ScanArgsParquet::default();
-let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
-```
-
 You can then filter using expressions. In this example, we have multiple filter filtering the data on the `survyear` (2023), `survmnth` (> 6) and `hrlyearn` (not null):
 
 ```Rust
-let lf_filtered = lf
-    .filter(col("survyear").eq(lit(2023)))
-    .filter(col("survmnth").gt(lit(6)))
-    .filter(col("hrlyearn").is_not_null());
+=== Rust 3_1_1_filter chunk_2
 ```
 
 As you can see, to reference a column in a filter you have to use `col()` function and to reference a literal you have to use `lit()` function. You can compare these using equality comparison such as:
@@ -54,13 +41,7 @@ As you can see, to reference a column in a filter you have to use `col()` functi
 Instead of the multiple `.filter()` you can use one `.filter()` and chain the commands with `.and()`, `.or()` and `.xor()`. The above example can be created using this filter:
 
 ```Rust
-// Filtering the data in one step
-let lf_filt = lf.clone().filter(
-    col("survyear")
-        .eq(lit(2023))
-        .and(col("survmnth").gt(lit(6)))
-        .and(col("hrlyearn").is_not_null()),
-);
+=== Rust 3_1_1_filter chunk_3
 ```
 
 ### Complex filters
@@ -68,13 +49,7 @@ let lf_filt = lf.clone().filter(
 The `and()` and `or()` options are especially important when crafting more complex filters. For example, you can craft this filter to collect the second half of 2023 and first half of 2024: 
 
 ```Rust 
-// ((survyear == 2023 & survmnt > 6) | (survyear == 2024 & survmnt <= 6))
-let expr = (col("survyear")
-    .eq(lit(2023))
-    .and(col("survmnth").gt(lit(6))))
-.or(col("survyear")
-    .eq(lit(2024))
-    .and(col("survmnth").lt_eq(lit(6))));
+=== Rust 3_1_1_filter chunk_4
 ```
 
 You can print the expression to see how it's being evaluated. This is especially useful when you use an IDE that can highlight bracket and parenthesis pairs.
@@ -86,8 +61,7 @@ You can print the expression to see how it's being evaluated. This is especially
 You can then apply the expression with `.filter()`:
 
 ```Rust
-// Apply the expression to a LazyFrame
-let lf_filt = lf.clone().filter(expr);
+=== Rust 3_1_1_filter chunk_5
 ```
 
 ### Value is in a list
@@ -95,10 +69,7 @@ let lf_filt = lf.clone().filter(expr);
 With the `is_in` crate feature, you can see if a `col()` is within a list of `lit()`. The right side of the expression takes a `Polars::Series`, that can be built using `Series::from_iter(vec![<vals>])`. oIn this example, we see if `survyear` is equal t 2022, 2023 or 2024.
 
 ```Rust
-// Using `is_in` crate feature with literals
-let lf_filt = lf
-    .clone()
-    .filter(col("survyear").is_in(lit(Series::from_iter(vec![2022, 2023, 2024]))));
+=== Rust 3_1_1_filter chunk_6
 ```
 
 TODO: from 2020 to 2024 (not needing all values)

@@ -1,30 +1,56 @@
 use std::fs;
 use std::fs::File;
+use std::fs::metadata;
 use std::io::prelude::*;
+use std::path::Path;
+use std::path::PathBuf;
 
 fn main() {
-    let md: String = fs::read_to_string("../src/3_transformation/filter.md").unwrap();
-    let split_text: Vec<&str> = md.split("=== Rust ").collect();
+    let path = Path::new("../src_processed/");
+    let mut files = vec![];
 
-    let mut output: Vec<String> = vec![];
-    output.push(split_text[0].to_string());
-    for chunk in split_text.into_iter().skip(1) {
-        let prog = chunk.split(" ").next().unwrap();
-        let name = chunk.split([' ', '\n']).nth(1).unwrap();
+    list_files(&mut files, path, "md");
 
-        let code = code_chunk(prog, name);
+    for file in files {
+        let content = fs::read_to_string(&file).unwrap();
 
-        output.push(code);
+        let split_text: Vec<&str> = content.split("=== Rust ").collect();
 
-        let fixed_chunk: Vec<&str> = chunk.split('\n').skip(1).collect();
+        let mut output: Vec<String> = vec![];
+        output.push(split_text[0].trim().to_string()); // First chunk
+        for chunk in split_text.into_iter().skip(1) {
+            // All other chunks but first
+            let prog = chunk.split(" ").next().unwrap();
+            let name = chunk.split([' ', '\n']).nth(1).unwrap();
 
-        output.push(fixed_chunk.join("\n"));
+            let code = code_chunk(prog, name); // Fetch code chunk
+
+            output.push(code);
+
+            let fixed_chunk: Vec<&str> = chunk.split('\n').skip(1).collect(); // Don't print commands
+
+            output.push(fixed_chunk.join("\n"));
+        }
+
+        let output: String = output.join("\n");
+
+        let mut file = File::create(file).unwrap();
+        file.write_all(output.as_bytes()).unwrap();
     }
+}
 
-    let output: String = output.join("\n");
-
-    let mut file = File::create("../src_processed/3_transformation/filter.md").unwrap();
-    file.write_all(output.as_bytes()).unwrap();
+fn list_files(file_vec: &mut Vec<PathBuf>, path: &Path, ext: &str) {
+    if metadata(path).unwrap().is_dir() {
+        let paths = fs::read_dir(path).unwrap();
+        for path_result in paths {
+            let full_path = path_result.unwrap().path();
+            if metadata(&full_path).unwrap().is_dir() {
+                list_files(file_vec, &full_path, ext);
+            } else if full_path.extension().unwrap() == ext {
+                file_vec.push(full_path);
+            }
+        }
+    }
 }
 
 fn code_chunk(program_path: &str, chunk_name: &str) -> String {
@@ -41,7 +67,10 @@ fn code_chunk(program_path: &str, chunk_name: &str) -> String {
             let mut final_line: Vec<String> = vec![];
             for line in fixed_code {
                 if line.starts_with("    ") {
+                    // Main indentation
                     final_line.push(line.chars().skip(4).collect());
+                } else if line.starts_with("// :dep") {
+                    final_line.push(line.chars().skip(3).collect())
                 } else {
                     final_line.push(line.to_owned())
                 }
