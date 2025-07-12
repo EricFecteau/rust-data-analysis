@@ -1,7 +1,13 @@
 compile-all:
     cargo build -r --examples
 
-render:
+process-book: 
+    rm -rf ./src_processed
+    mkdir src_processed
+    cp -r ./src/* ./src_processed
+    cd book_processor && cargo run -r
+
+render: process-book
     mdbook serve --open
 
 test-all: get-data test-rw test-transform

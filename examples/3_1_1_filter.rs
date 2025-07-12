@@ -1,8 +1,13 @@
+// === evcxr
 // :dep polars = { version = "0.49", features = ["lazy", "parquet", "is_in"] }
 
+// === imports
 use polars::prelude::*;
 
+// === main
 fn main() {
+    // === chunk_1
+
     // Connect to LazyFrame (no data is brought into memory)
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
@@ -15,6 +20,8 @@ fn main() {
         .filter(col("hrlyearn").is_not_null());
 
     println!("{}", lf_filt.limit(5).collect().unwrap());
+
+    // === chunk_2
 
     // Filtering the data in one step
     let lf_filt = lf.clone().filter(
