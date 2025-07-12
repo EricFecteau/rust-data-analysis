@@ -10,6 +10,9 @@ You can filter the rows in the data using `filter()`.
 
 First, lets load the partitioned parquet file:
 
+
+
+
 ```Rust
 :dep polars = { version = "0.49", features = ["lazy", "parquet", "is_in"] }
 
