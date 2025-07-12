@@ -3,7 +3,7 @@ title = "Data Analysis with Rust"
 authors = ["Eric Fecteau"]
 language = "en"
 multilingual = false
-src = "src"
+src = "src_processed"
 
 [preprocessor.alerts]
 
