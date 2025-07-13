@@ -1,8 +1,12 @@
+// === evcxr
 // :dep polars = { version = "0.49", features = ["lazy", "parquet"] }
 
+// === imports
 use polars::prelude::*;
 
+// === main
 fn main() {
+    // === program
     // Get all files in path
     let paths = std::fs::read_dir("./data/lfs_parquet").unwrap();
 
@@ -41,4 +45,6 @@ fn main() {
         4294967296,
     )
     .unwrap();
+
+    // === end
 }

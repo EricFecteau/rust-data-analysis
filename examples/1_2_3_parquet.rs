@@ -1,8 +1,12 @@
+// === evcxr
 // :dep polars = { version = "0.49", features = ["lazy", "parquet"] }
 
+// === imports
 use polars::prelude::*;
 
+// === main
 fn main() {
+    // === program
     // Get all files in path
     let paths = std::fs::read_dir("./data/lfs_csv").unwrap();
 
@@ -29,4 +33,5 @@ fn main() {
         let mut file = std::fs::File::create(path_parquet).unwrap();
         ParquetWriter::new(&mut file).finish(&mut df).unwrap();
     }
+    // === end
 }

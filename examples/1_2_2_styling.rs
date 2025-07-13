@@ -1,8 +1,12 @@
+// === evcxr
 // :dep polars = { version = "0.49", features = ["lazy"] }
 
+// === imports
 use polars::prelude::*;
 
+// === main
 fn main() {
+    // === program
     // Function to lower the case of variable names in a CSV
     fn rename_tolower(mut lf: LazyFrame) -> LazyFrame {
         let cols: Vec<String> = lf
@@ -44,4 +48,5 @@ fn main() {
             .finish(&mut df)
             .unwrap();
     }
+    // === end
 }

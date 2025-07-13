@@ -25,11 +25,11 @@ fn main() {
 
             let code = code_chunk(prog, name); // Fetch code chunk
 
-            output.push(code);
+            output.push(code.trim().to_string());
 
             let fixed_chunk: Vec<&str> = chunk.split('\n').skip(1).collect(); // Don't print commands
 
-            output.push(fixed_chunk.join("\n"));
+            output.push(fixed_chunk.join("\n").trim().to_string());
         }
 
         let output: String = output.join("\n");

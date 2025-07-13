@@ -7,26 +7,15 @@ To create a DataFrame, you first have to create `Columns`. You can create column
 Run this script using `cargo run -r --example 2_1_1_dataframe`.
 
 ```Rust
-:dep polars = "0.49"
-
-use polars::prelude::*;
-
-// Creating columns
-let year = Column::new("year".into(), [2010, 2010, 2011, 2011, 2011, 2011]);
-let month = Column::new(
-    "month".into(),
-    [
-        "November", "December", "January", "February", "March", "April",
-    ],
-);
-let value = Column::new("value".into(), [1.25, 2.50, 3.75, 4.00, 3.75, 4.25]);
+=== Rust 2_1_1_dataframe evcxr
+=== Rust 2_1_1_dataframe imports
+=== Rust 2_1_1_dataframe block_1
 ```
 
 Once you have created columns of the same length, you can create a DataFrame using `DataFrame::new()`.
 
 ```Rust
-// Using columns to create a DataFrame
-let df = DataFrame::new(vec![year, month, value]).unwrap();
+=== Rust 2_1_1_dataframe block_2
 ```
 
 This creates a `DataFrame` with 3 columns and 6 rows:
@@ -50,11 +39,7 @@ shape: (6, 3)
 The `df!()` macro can simplify this! Instead of creating a DataFrame from `Columns`, you can do it all in one step. Here we create the "year" (i32), "month" (str) and value (f64) variables.
 
 ```Rust
-// Use the df! macro to create DataFrame
-let df = df!("year" => [2008, 2008, 2008, 2008, 2009, 2009],
-             "month" => ["September", "October", "November", "December", "January", "February"],
-             "value" => [0.21, 0.22, 0.23, 0.25, 0.24, 0.25])
-.unwrap();
+=== Rust 2_1_1_dataframe block_3
 ```
 
 Similar to above, this creates a `DataFrame` with 3 columns and 6 rows:

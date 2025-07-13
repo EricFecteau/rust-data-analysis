@@ -7,24 +7,20 @@ You can read and write from Parquet using Polars.
 You can connect to a Parquet file, like the large `./data/lfs_large/lfs.parquet`, without bringing it in memory, with the `LazyCsvReader`. You can run this section using `cargo run -r --example 2_3_1_read_parquet`.
 
 ```rust
-:dep polars = { version = "0.49", features = ["lazy", "parquet"] }
-
-use polars::prelude::*;
-
-let args = ScanArgsParquet::default();
-let lf = LazyFrame::scan_parquet("./data/lfs_large/lfs.parquet", args).unwrap();
+=== Rust 2_3_1_read_parquet evcxr
+=== Rust 2_3_1_read_parquet imports
+=== Rust 2_3_1_read_parquet block_1
 ```
 You can also connect to a partitioned parquet folder (`./data/lfs_large/part`) in the same exact way:
 
 ```rust
-let args = ScanArgsParquet::default();
-let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+=== Rust 2_3_1_read_parquet block_2
 ```
 
 In both cases, in the same way as with `LazyFrame` with CSV, the data is not brought into memory. You can convert a few rows to a `DataFrame` (bring them into memory) to visualize it.
 
 ```Rust
-println!("{}", lf.limit(5).collect().unwrap());
+=== Rust 2_3_1_read_parquet block_3
 ```
 
 ```

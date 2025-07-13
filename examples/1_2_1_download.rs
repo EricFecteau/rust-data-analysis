@@ -1,9 +1,13 @@
+// === evcxr
 // :dep reqwest = { version = "0.12", features = ["blocking"] }
 // :dep zip = "2"
 
+// === imports
 use std::io::{Read, Write};
 
+// === main
 fn main() {
+    // === program
     let years = 2011..2024 + 1;
 
     // Function to download ZIP file from URL and return a Reader
@@ -57,4 +61,6 @@ fn main() {
             write_csv(&mut zip, &format!("pub{mm}{yy}.csv"));
         }
     }
+
+    // === end
 }

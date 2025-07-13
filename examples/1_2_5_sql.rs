@@ -1,10 +1,14 @@
+// === evcxr
 // :dep polars = { version = "0.49", features = ["lazy"] }
 // :dep postgres = "0.19"
 
+// === imports
 use polars::prelude::*;
 use std::io::{Read, Write};
 
+// === main
 fn main() {
+    // === program
     // Connect to postgresql
     let mut client =
         postgres::Client::connect("host=localhost user=postgres", postgres::NoTls).unwrap();
@@ -55,4 +59,6 @@ fn main() {
         writer.write_all(&buffer).unwrap();
         writer.finish().unwrap();
     }
+
+    // === end
 }
