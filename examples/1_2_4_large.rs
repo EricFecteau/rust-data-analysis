@@ -24,27 +24,43 @@ fn main() {
     let union_args = UnionArgs::default();
     let lf = concat(lf_vec, union_args).unwrap();
 
-    // Bring to memory (large)
-    let mut df = lf.collect().unwrap();
+    // Get latest year available in the data
+    let latest_year: i64 = lf
+        .clone()
+        .select([col("survyear").max()])
+        .collect()
+        .unwrap()
+        .column("survyear")
+        .unwrap()
+        .as_materialized_series()
+        .get(0)
+        .unwrap()
+        .try_extract()
+        .unwrap();
 
-    // Write large file as `lfs_large.csv`
-    let mut file = std::fs::File::create("./data/lfs_large/lfs.csv").unwrap();
-    CsvWriter::new(&mut file).finish(&mut df).unwrap();
+    println!("{latest_year:?}");
 
-    // Write Single Parquet
-    let mut file = std::fs::File::create("./data/lfs_large/lfs.parquet").unwrap();
-    ParquetWriter::new(&mut file).finish(&mut df).unwrap();
+    // // Bring to memory (large)
+    // let mut df = lf.collect().unwrap();
 
-    // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
-    write_partitioned_dataset(
-        &mut df,
-        std::path::Path::new("./data/lfs_large/part/"),
-        vec!["survyear".into(), "survmnth".into()],
-        &ParquetWriteOptions::default(),
-        None,
-        4294967296,
-    )
-    .unwrap();
+    // // Write large file as `lfs_large.csv`
+    // let mut file = std::fs::File::create("./data/lfs_large/lfs.csv").unwrap();
+    // CsvWriter::new(&mut file).finish(&mut df).unwrap();
+
+    // // Write Single Parquet
+    // let mut file = std::fs::File::create("./data/lfs_large/lfs.parquet").unwrap();
+    // ParquetWriter::new(&mut file).finish(&mut df).unwrap();
+
+    // // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
+    // write_partitioned_dataset(
+    //     &mut df,
+    //     std::path::Path::new("./data/lfs_large/part/"),
+    //     vec!["survyear".into(), "survmnth".into()],
+    //     &ParquetWriteOptions::default(),
+    //     None,
+    //     4294967296,
+    // )
+    // .unwrap();
 
     // === end
 }
