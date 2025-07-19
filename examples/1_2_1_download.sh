@@ -1,6 +1,6 @@
 #!/bin/bash
 
-start_year=2001
+start_year=2011
 end_year=2024
 
 rm -r ./data

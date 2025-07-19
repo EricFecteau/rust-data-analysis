@@ -17,10 +17,8 @@ fn main() {
     let _ = client.batch_execute("drop TABLE lfs;");
 
     // Get all variable names using Polars;
-    let mut lf = LazyCsvReader::new("./data/lfs_large/lfs.csv")
-        .with_has_header(true)
-        .finish()
-        .unwrap();
+    let args = ScanArgsParquet::default();
+    let mut lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 
     let cols: Vec<String> = lf
         .collect_schema()

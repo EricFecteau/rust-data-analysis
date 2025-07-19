@@ -8,7 +8,7 @@ use std::io::{Read, Write};
 // === main
 fn main() {
     // === program
-    let years = 2006..2024 + 1;
+    let years = 2011..2024 + 1;
 
     // Function to download ZIP file from URL and return a Reader
     fn download_zip(url: &str) -> std::io::Cursor<Vec<u8>> {

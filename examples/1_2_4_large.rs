@@ -1,6 +1,8 @@
 // === evcxr
 // :dep polars = { version = "0.49", features = ["lazy", "parquet"] }
 
+use std::fs::File;
+
 // === imports
 use polars::prelude::*;
 
@@ -25,42 +27,58 @@ fn main() {
     let lf = concat(lf_vec, union_args).unwrap();
 
     // Get latest year available in the data
-    let latest_year: i64 = lf
+    let years = lf
         .clone()
-        .select([col("survyear").max()])
+        .select([col("survyear").unique()])
         .collect()
         .unwrap()
         .column("survyear")
         .unwrap()
-        .as_materialized_series()
-        .get(0)
+        .i64()
         .unwrap()
-        .try_extract()
+        .to_vec_null_aware()
+        .left()
         .unwrap();
 
-    println!("{latest_year:?}");
+    // Ready write large parquet file by batch
+    let file = File::create("./data/lfs_large/lfs.parquet").unwrap();
+    let schema = lf.clone().collect_schema().unwrap();
+    let mut pq_writer = ParquetWriter::new(file)
+        .set_parallel(true)
+        .batched(&schema)
+        .unwrap();
 
-    // // Bring to memory (large)
-    // let mut df = lf.collect().unwrap();
+    // Ready write large csv file by batch
+    let file = File::create("./data/lfs_large/lfs.csv").unwrap();
+    let schema = lf.clone().collect_schema().unwrap();
+    let mut csv_writer = CsvWriter::new(file).batched(&schema).unwrap();
 
-    // // Write large file as `lfs_large.csv`
-    // let mut file = std::fs::File::create("./data/lfs_large/lfs.csv").unwrap();
-    // CsvWriter::new(&mut file).finish(&mut df).unwrap();
+    for y in years {
+        // Collect one year of data
+        let mut year_df = lf
+            .clone()
+            .filter(col("survyear").eq(lit(y)))
+            .collect()
+            .unwrap();
 
-    // // Write Single Parquet
-    // let mut file = std::fs::File::create("./data/lfs_large/lfs.parquet").unwrap();
-    // ParquetWriter::new(&mut file).finish(&mut df).unwrap();
+        // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
+        write_partitioned_dataset(
+            &mut year_df,
+            std::path::Path::new("./data/lfs_large/part/"),
+            vec!["survyear".into(), "survmnth".into()],
+            &ParquetWriteOptions::default(),
+            None,
+            4294967296,
+        )
+        .unwrap();
 
-    // // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
-    // write_partitioned_dataset(
-    //     &mut df,
-    //     std::path::Path::new("./data/lfs_large/part/"),
-    //     vec!["survyear".into(), "survmnth".into()],
-    //     &ParquetWriteOptions::default(),
-    //     None,
-    //     4294967296,
-    // )
-    // .unwrap();
+        // Write 1 year to a large parquet file
+        pq_writer.write_batch(&year_df).unwrap();
+        csv_writer.write_batch(&year_df).unwrap();
+    }
+
+    pq_writer.finish().unwrap();
+    csv_writer.finish().unwrap();
 
     // === end
 }

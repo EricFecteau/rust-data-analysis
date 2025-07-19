@@ -85,8 +85,16 @@ async fn main() {
         .await
         .unwrap();
 
-    // Copy ./data/lfs_large/lfs.csv to `lfs` bucket using multi-part upload (otherwise too big)
+    // Copy large Parquet
+    upload_multipart(
+        &client,
+        "./data/lfs_large/lfs.parquet",
+        "lfs.parquet",
+        bucket,
+    )
+    .await;
 
+    // Copy large CSV
     upload_multipart(&client, "./data/lfs_large/lfs.csv", "lfs.csv", bucket).await;
 
     // Get all the path of files in a folder (recursive)
