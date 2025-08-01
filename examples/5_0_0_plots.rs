@@ -2,17 +2,17 @@ use plotlars::{BarPlot, Legend, Orientation, Plot, Rgb, ScatterPlot, Text};
 use polars::prelude::*;
 
 fn main() {
-    // Connect to LazyFrame (no data is brought into memory)
+    // Connect to LazyFrame
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
 
     // Modify var
-    let _lf = lf
+    let lf = lf
         .filter(col("hrlyearn").is_not_null())
         .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"));
 
     // Mean by province and gender
-    let df = _lf
+    let df_bar = lf
         .clone()
         .group_by([col("gender"), col("prov")])
         .agg([col("hourly_wages")
@@ -37,10 +37,10 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!("{df}");
+    println!("{df_bar}");
 
     let html = BarPlot::builder()
-        .data(&df)
+        .data(&df_bar)
         .labels("prov")
         .values("hourly_wages")
         .orientation(Orientation::Vertical)
@@ -67,7 +67,7 @@ fn main() {
     std::io::Write::write_all(&mut file, html.as_bytes()).unwrap();
 
     // Mean by gender and age (grouped)
-    let df = _lf
+    let df_scatter = lf
         .clone()
         .group_by([col("age_12"), col("gender")])
         .agg([col("hourly_wages")
@@ -82,10 +82,10 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!("{df}");
+    println!("{df_scatter}");
 
     let html = ScatterPlot::builder()
-        .data(&df)
+        .data(&df_scatter)
         .x("age_12")
         .y("hourly_wages")
         .group("gender")
@@ -101,4 +101,20 @@ fn main() {
 
     let mut file = std::fs::File::create("./data/output/scatter.html").unwrap();
     std::io::Write::write_all(&mut file, html.as_bytes()).unwrap();
+
+    ScatterPlot::builder()
+        .data(&df_scatter)
+        .x("age_12")
+        .y("hourly_wages")
+        .group("gender")
+        .opacity(0.5)
+        .size(12)
+        .colors(vec![Rgb(178, 34, 34), Rgb(65, 105, 225), Rgb(255, 140, 0)])
+        .plot_title("Penguin Flipper Length vs Body Mass")
+        .x_title("Body Mass (g)")
+        .y_title("Flipper Length (mm)")
+        .legend_title("Species")
+        .build()
+        .write_image("./data/output/out.png", 800, 600, 1.0)
+        .unwrap();
 }

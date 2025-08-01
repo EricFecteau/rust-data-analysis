@@ -29,5 +29,4 @@
 * [Publication](5_pub/index.md)
     * [Plotting](5_pub/plotting.md)
     * [Reports](5_pub/reports.md)
-    * [Visualization](5_pub/visualization.md)
     * [Excel](5_pub/excel.md)
