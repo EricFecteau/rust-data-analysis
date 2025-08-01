@@ -4,7 +4,7 @@ use polars::prelude::*;
 
 fn main() {
     // Read `pub0124.csv` as LazyFrame
-    let lf = LazyCsvReader::new("./data/lfs_csv/pub0124.csv")
+    let lf = LazyCsvReader::new(PlPath::from_str("./data/lfs_csv/pub0124.csv"))
         .with_has_header(true)
         .finish()
         .unwrap();
@@ -15,7 +15,7 @@ fn main() {
     // This functionality is unstable according to the docs
     write_partitioned_dataset(
         &mut df,
-        std::path::Path::new("./data/temp_data/_temp/"),
+        PlPath::from_str("./data/temp_data/_temp/").as_ref(),
         vec!["prov".into(), "gender".into()],
         &ParquetWriteOptions::default(),
         None,

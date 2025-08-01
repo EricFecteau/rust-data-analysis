@@ -9,8 +9,11 @@ fn main() {
         let mm = format!("{m:02}");
 
         let args = ScanArgsParquet::default();
-        let lf =
-            LazyFrame::scan_parquet(format!("./data/lfs_parquet/pub{mm}23.parquet"), args).unwrap();
+        let lf = LazyFrame::scan_parquet(
+            PlPath::from_string(format!("./data/lfs_parquet/pub{mm}23.parquet")),
+            args,
+        )
+        .unwrap();
 
         lfs_month.push(lf);
     }

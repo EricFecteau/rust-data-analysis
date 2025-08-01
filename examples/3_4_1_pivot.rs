@@ -6,7 +6,7 @@ use polars::prelude::*;
 fn main() {
     // Connect to parquet (no data is brought into memory)
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
     // Mean hourly wage by year and province (for those with an hourly wage) - unweighted
     let lf = lf

@@ -12,7 +12,7 @@ fn main() {
     ]);
 
     // Connect to LazyFrame (no data is brought into memory)
-    let lf = LazyCsvReader::new("s3://lfs/lfs.csv")
+    let lf = LazyCsvReader::new(PlPath::from_str("s3://lfs/lfs.csv"))
         .with_cloud_options(Some(cloud_options.clone()))
         .finish()
         .unwrap();
@@ -24,7 +24,7 @@ fn main() {
         cloud_options: Some(cloud_options.clone()),
         ..Default::default()
     };
-    let lf = LazyFrame::scan_parquet("s3://lfs/part/", args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("s3://lfs/part/"), args).unwrap();
 
     // Print first 5 rows
     println!("{}", lf.limit(5).collect().unwrap());

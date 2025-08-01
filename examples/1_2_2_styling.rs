@@ -26,10 +26,10 @@ fn main() {
 
     // For each file, lower case
     for path in paths {
-        let path_csv = path.unwrap().path();
+        let path_csv = path.unwrap().path().into_os_string().into_string().unwrap();
 
         // Connect to CSV
-        let mut lf = LazyCsvReader::new(path_csv.clone())
+        let mut lf = LazyCsvReader::new(PlPath::from_string(path_csv.clone()))
             .with_has_header(true)
             .finish()
             .unwrap();

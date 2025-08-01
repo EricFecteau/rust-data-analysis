@@ -5,7 +5,8 @@ use polars::prelude::*;
 fn main() {
     // Connect to LazyFrame (one large parquet file)
     let args = ScanArgsParquet::default();
-    let lf_one = LazyFrame::scan_parquet("./data/lfs_large/lfs.parquet", args).unwrap();
+    let lf_one =
+        LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/lfs.parquet"), args).unwrap();
 
     // Filter it
     let lf_one = lf_one
@@ -15,7 +16,7 @@ fn main() {
 
     // Connect to LazyFrame (partitioned parquet file)
     let args = ScanArgsParquet::default();
-    let lf_part = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+    let lf_part = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
     // Filter it
     let lf_part = lf_part

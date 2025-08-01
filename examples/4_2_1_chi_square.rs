@@ -7,7 +7,7 @@ use polars::prelude::*;
 fn main() {
     // Connect to the parquet LFS data
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
     // Count individuals with paid overtime by gender and marital status
     let df = lf

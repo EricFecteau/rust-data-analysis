@@ -9,7 +9,7 @@ use polars::prelude::*;
 fn main() {
     // Connect to LazyFrame (no data is brought into memory)
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
     // Hourly earnings by gender (Jan 2020)
     let df = lf

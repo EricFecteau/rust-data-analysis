@@ -5,7 +5,7 @@ use polars::prelude::*;
 fn main() {
     // Connect to LazyFrame (no data is brought into memory)
     let args = ScanArgsParquet::default();
-    let mut lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+    let mut lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
     // Get names of columns
     let cols: Vec<String> = lf

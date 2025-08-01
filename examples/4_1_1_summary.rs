@@ -3,7 +3,7 @@ use polars::prelude::{pivot::pivot_stable, *};
 fn main() {
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
     // Modify var
     let lf = lf

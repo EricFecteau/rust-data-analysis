@@ -15,10 +15,10 @@ fn main() {
     let mut lf_vec = vec![];
 
     for path in paths {
-        let parquet = path.unwrap().path();
+        let parquet = path.unwrap().path().into_os_string().into_string().unwrap();
 
         let args = ScanArgsParquet::default();
-        let lf = LazyFrame::scan_parquet(parquet, args.clone()).unwrap();
+        let lf = LazyFrame::scan_parquet(PlPath::from_string(parquet), args.clone()).unwrap();
 
         lf_vec.push(lf);
     }
@@ -64,7 +64,7 @@ fn main() {
         // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
         write_partitioned_dataset(
             &mut year_df,
-            std::path::Path::new("./data/lfs_large/part/"),
+            PlPath::from_str("./data/lfs_large/part/").as_ref(),
             vec!["survyear".into(), "survmnth".into()],
             &ParquetWriteOptions::default(),
             None,
