@@ -32,8 +32,8 @@ fn main() {
     // Print selected column (top 5 values)
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
-    // Drop variables
-    let lf = lf.drop([col("prov"), col("hourly_wages")]);
+    // Drop variables (better to simply select the columns needed)
+    let lf = lf.select([all().exclude_cols(["prov", "hourly_wages"]).as_expr()]);
 
     // Print selected column (top 5 values)
     println!("{}", lf.clone().limit(5).collect().unwrap());

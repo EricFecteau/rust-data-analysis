@@ -27,7 +27,7 @@ fn main() {
 
     // Cast the value from an `i64` to a `f64` and modify it (divide by 100)
     let lf = lf
-        .drop([col("five"), col("ten"), col("fifteen")])
+        .select([all().exclude_cols(["five", "ten", "fifteen"]).as_expr()])
         .filter(col("hourly_wages").is_not_null())
         .with_column(
             (col("hourly_wages").cast(DataType::Float64) / lit(100)).alias("wages_dollars"),

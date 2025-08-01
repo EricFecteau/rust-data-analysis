@@ -49,9 +49,9 @@ fn main() {
     println!("{}", &df);
 
     // Convert from Polars 0.49 to Polars 0.43
-    let df = Interchange::from_polars_0_49(df)
+    let df = Interchange::from_polars_0_50(df)
         .unwrap()
-        .to_polars_0_43()
+        .to_polars_0_49()
         .unwrap();
 
     // Create Vec<Series> for MWU
@@ -60,8 +60,8 @@ fn main() {
     // Perform the Mann-Whiteny U test
     let alpha = 0.05;
     let result = u_test(
-        &cols[0].drop_nulls(),
-        &cols[1].drop_nulls(),
+        cols[0].drop_nulls().as_materialized_series(),
+        cols[1].drop_nulls().as_materialized_series(),
         alpha,
         TailType::Two,
     )

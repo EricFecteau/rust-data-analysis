@@ -59,7 +59,7 @@ fn main() {
                 .alias("p99"),
             col("hourly_wages").max().alias("max"),
         ])
-        .unpivot(UnpivotArgsDSL::default())
+        .unpivot(UnpivotArgsDSL::  )
         .collect()
         .unwrap();
 
