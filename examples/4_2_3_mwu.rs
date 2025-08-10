@@ -1,7 +1,6 @@
 // :dep polars = { version = "0.49", features = ["lazy", "parquet", "pivot"] }
 // :dep hypors = "0.2"
 
-use df_interchange::Interchange;
 use hypors::common::types::TailType;
 use hypors::mann_whitney::u_test;
 use polars::prelude::*;
@@ -48,24 +47,25 @@ fn main() {
 
     println!("{}", &df);
 
-    // Convert from Polars 0.49 to Polars 0.43
-    let df = Interchange::from_polars_0_50(df)
-        .unwrap()
-        .to_polars_0_49()
-        .unwrap();
-
     // Create Vec<Series> for MWU
-    let cols = df.get_columns();
+    let cols = df
+        .get_columns()
+        .iter()
+        .map(|c| {
+            c.as_materialized_series()
+                .to_float()
+                .unwrap()
+                .f64()
+                .unwrap()
+                .to_vec_null_aware()
+                .left()
+                .unwrap()
+        })
+        .collect::<Vec<Vec<f64>>>();
 
     // Perform the Mann-Whiteny U test
     let alpha = 0.05;
-    let result = u_test(
-        cols[0].drop_nulls().as_materialized_series(),
-        cols[1].drop_nulls().as_materialized_series(),
-        alpha,
-        TailType::Two,
-    )
-    .unwrap();
+    let result = u_test(cols[0].clone(), cols[1].clone(), alpha, TailType::Two).unwrap();
 
     println!(
         "U-statistic: {}\nP-value: {}\nNull hypothesis: {}\nReject null: {}",

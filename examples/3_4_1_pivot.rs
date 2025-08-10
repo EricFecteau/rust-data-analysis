@@ -57,5 +57,7 @@ fn main() {
         )
         .unwrap();
 
+    // Unpivot can be done lazily! Add that!
+
     println!("{}", &df_long);
 }

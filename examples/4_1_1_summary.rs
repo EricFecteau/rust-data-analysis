@@ -59,7 +59,12 @@ fn main() {
                 .alias("p99"),
             col("hourly_wages").max().alias("max"),
         ])
-        .unpivot(UnpivotArgsDSL::  )
+        .unpivot(UnpivotArgsDSL {
+            on: Selector::Empty,
+            index: Selector::Empty,
+            variable_name: Some("statistic".into()),
+            value_name: Some("value".into()),
+        })
         .collect()
         .unwrap();
 
@@ -107,7 +112,12 @@ fn main() {
             weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.99)).alias("p99"),
             col("hourly_wages").max().alias("max"),
         ])
-        .unpivot(UnpivotArgsDSL::default())
+        .unpivot(UnpivotArgsDSL {
+            on: Selector::Empty,
+            index: Selector::Empty,
+            variable_name: Some("statistic".into()),
+            value_name: Some("value".into()),
+        })
         .collect()
         .unwrap();
 

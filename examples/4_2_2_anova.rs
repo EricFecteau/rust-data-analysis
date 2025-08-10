@@ -1,7 +1,6 @@
 // :dep polars = { version = "0.49", features = ["lazy", "parquet", "pivot"] }
 // :dep hypors = "0.2"
 
-use df_interchange::Interchange;
 use hypors::anova::anova;
 use polars::prelude::*;
 
@@ -53,26 +52,25 @@ fn main() {
 
     println!("{}", &df);
 
-    // Convert from Polars 0.49 to Polars 0.43
-    let df = Interchange::from_polars_0_50(df)
-        .unwrap()
-        .to_polars_0_49()
-        .unwrap();
-
-    // Create Vec<Series> for ANOVA
-    let cols = df.get_columns();
+    // Create Vec<Vec<f64>> for ANOVA
+    let cols = df
+        .get_columns()
+        .iter()
+        .map(|c| {
+            c.as_materialized_series()
+                .to_float()
+                .unwrap()
+                .f64()
+                .unwrap()
+                .to_vec_null_aware()
+                .left()
+                .unwrap()
+        })
+        .collect::<Vec<Vec<f64>>>();
 
     // Perform one-way ANOVA
     let alpha = 0.05;
-    let result = anova(
-        &[
-            cols[0].drop_nulls().as_materialized_series(),
-            cols[1].drop_nulls().as_materialized_series(),
-            cols[2].drop_nulls().as_materialized_series(),
-        ],
-        alpha,
-    )
-    .unwrap();
+    let result = anova(&cols, alpha).unwrap();
 
     println!(
         "F-statistic: {}\nP-value: {}\nNull hypothesis: {}\nReject null: {}",

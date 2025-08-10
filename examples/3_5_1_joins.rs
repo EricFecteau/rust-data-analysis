@@ -50,19 +50,25 @@ fn main() {
     // Left join (creating a cohort)
     let jan_cohort = lfs_month[0]
         .clone()
-        .drop([col("survyear")])
+        .select([all().exclude_cols(["survyear"]).as_expr()])
         .left_join(
-            lfs_month[1].clone().drop([col("survyear")]),
+            lfs_month[1]
+                .clone()
+                .select([all().exclude_cols(["survyear"]).as_expr()]),
             col("rec_num"),
             col("rec_num"),
         )
         .left_join(
-            lfs_month[2].clone().drop([col("survyear")]),
+            lfs_month[2]
+                .clone()
+                .select([all().exclude_cols(["survyear"]).as_expr()]),
             col("rec_num"),
             col("rec_num"),
         )
         .left_join(
-            lfs_month[3].clone().drop([col("survyear")]),
+            lfs_month[3]
+                .clone()
+                .select([all().exclude_cols(["survyear"]).as_expr()]),
             col("rec_num"),
             col("rec_num"),
         );
@@ -72,19 +78,25 @@ fn main() {
     // Inner join (creating a "always earning" cohort)
     let longitudinal_all = lfs_month[0]
         .clone()
-        .drop([col("survyear")])
+        .select([all().exclude_cols(["survyear"]).as_expr()])
         .inner_join(
-            lfs_month[1].clone().drop([col("survyear")]),
+            lfs_month[1]
+                .clone()
+                .select([all().exclude_cols(["survyear"]).as_expr()]),
             col("rec_num"),
             col("rec_num"),
         )
         .inner_join(
-            lfs_month[2].clone().drop([col("survyear")]),
+            lfs_month[2]
+                .clone()
+                .select([all().exclude_cols(["survyear"]).as_expr()]),
             col("rec_num"),
             col("rec_num"),
         )
         .inner_join(
-            lfs_month[3].clone().drop([col("survyear")]),
+            lfs_month[3]
+                .clone()
+                .select([all().exclude_cols(["survyear"]).as_expr()]),
             col("rec_num"),
             col("rec_num"),
         );
@@ -112,7 +124,9 @@ fn main() {
             JoinArgs::new(JoinType::Full),
         )
         .with_columns(fix_full_join_vars.clone())
-        .drop([col("rec_num_right"), col("survyear_right")])
+        .select([all()
+            .exclude_cols(["rec_num_right", "survyear_right"])
+            .as_expr()])
         .join(
             lfs_month[2].clone(),
             [col("rec_num"), col("survyear")],
@@ -120,7 +134,9 @@ fn main() {
             JoinArgs::new(JoinType::Full),
         )
         .with_columns(fix_full_join_vars.clone())
-        .drop([col("rec_num_right"), col("survyear_right")])
+        .select([all()
+            .exclude_cols(["rec_num_right", "survyear_right"])
+            .as_expr()])
         .join(
             lfs_month[3].clone(),
             [col("rec_num"), col("survyear")],
@@ -128,7 +144,9 @@ fn main() {
             JoinArgs::new(JoinType::Full),
         )
         .with_columns(fix_full_join_vars.clone())
-        .drop([col("rec_num_right"), col("survyear_right")])
+        .select([all()
+            .exclude_cols(["rec_num_right", "survyear_right"])
+            .as_expr()])
         .sort(["rec_num", "survyear"], Default::default());
 
     println!("{}", longitudinal_all.collect().unwrap());
