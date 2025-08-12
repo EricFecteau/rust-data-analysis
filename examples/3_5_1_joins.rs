@@ -1,8 +1,13 @@
+// === evcxr
 // :dep polars = { version = "0.49", features = ["lazy", "parquet", "regex", "replace"] }
 
+// === imports
 use polars::prelude::*;
 
+// === main
 fn main() {
+    // === block_1
+
     // Connect and process multiple monthly parquet file
     let mut lfs_month = vec![];
     for m in 1..5 {
@@ -150,4 +155,6 @@ fn main() {
         .sort(["rec_num", "survyear"], Default::default());
 
     println!("{}", longitudinal_all.collect().unwrap());
+
+    // === end
 }

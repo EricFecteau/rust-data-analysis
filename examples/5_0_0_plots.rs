@@ -1,7 +1,13 @@
+// === evcxr
+
+// === imports
 use plotlars::{BarPlot, Legend, Orientation, Plot, Rgb, ScatterPlot, Text};
 use polars::prelude::*;
 
+// === main
 fn main() {
+    // === block_1
+
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
@@ -117,4 +123,6 @@ fn main() {
         .build()
         .write_image("./data/output/out.png", 800, 600, 1.0)
         .unwrap();
+
+    // === end
 }

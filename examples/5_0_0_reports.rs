@@ -1,5 +1,6 @@
-// use std::{env, fmt::Debug};
+// === evcxr
 
+// === imports
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
@@ -8,7 +9,10 @@ use polars::prelude::*;
 
 use comrak::{Options, markdown_to_html};
 
+// === main
 fn main() {
+    // === block_1
+
     let mut file = File::create("./data/output/report.html").unwrap();
 
     let mut html = r#"<!DOCTYPE html>
@@ -88,4 +92,6 @@ Maecenas posuere tellus porttitor turpis pulvinar luctus. Nunc lacinia suscipit 
     );
 
     file.write_all(html.as_bytes()).unwrap();
+
+    // === end
 }

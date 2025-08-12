@@ -11,6 +11,7 @@ You can connect to a Parquet file, like the large `./data/lfs_large/lfs.parquet`
 === Rust 2_3_1_read_parquet imports
 === Rust 2_3_1_read_parquet block_1
 ```
+
 You can also connect to a partitioned parquet folder (`./data/lfs_large/part`) in the same exact way:
 
 ```rust
@@ -42,6 +43,11 @@ shape: (5, 60)
 
 You can write to Parquet any `DataFrame` you have in memory. For this example, we will bring one month of the LFS into memory:
 
+```rust
+=== Rust 2_3_1_write_parquet evcxr
+=== Rust 2_3_1_write_parquet imports
+=== Rust 2_3_1_write_parquet block_1
+```
 
 ```Rust
 :dep polars = { version = "0.49", features = ["lazy"] }

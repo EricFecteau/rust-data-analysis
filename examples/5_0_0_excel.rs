@@ -1,10 +1,16 @@
+// === evcxr
+
+// === imports
 use df_interchange::Interchange;
 use polars::prelude::pivot::pivot_stable;
 use polars::prelude::*;
 use polars_excel_writer::PolarsExcelWriter;
 use rust_xlsxwriter::{Chart, ChartLegendPosition, ChartType, Workbook};
 
+// === main
 fn main() {
+    // === block_1
+
     // Connect to LazyFrame (no data is brought into memory)
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
@@ -123,4 +129,6 @@ fn main() {
     workbook
         .save("./data/output/mean_hourly_wages.xlsx")
         .unwrap();
+
+    // === end
 }

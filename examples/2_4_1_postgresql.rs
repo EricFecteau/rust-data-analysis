@@ -1,8 +1,13 @@
+// === evcxr
 // :dep postgres = "0.19"
 
+// === imports
 use postgres::{Client, NoTls};
 
+// === main
 fn main() {
+    // === block_1
+
     // Connect to postgresql
     let mut client = Client::connect("host=localhost user=postgres", NoTls).unwrap();
 
@@ -15,4 +20,6 @@ fn main() {
     let data_point: i64 = data[0].get(0);
 
     println!("{data_point}")
+
+    // === end
 }

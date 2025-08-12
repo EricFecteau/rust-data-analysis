@@ -1,7 +1,13 @@
+// === evcxr
+
+// === imports
 use connectorx::prelude::*;
 use std::convert::TryFrom;
 
+// === main
 fn main() {
+    // === block_1
+
     // Connect to PostgreSQL through the ConnectorX
     let source_conn =
         SourceConn::try_from("postgresql://postgres:postgres@localhost:5432").unwrap();
@@ -31,4 +37,6 @@ fn main() {
 
     // Print table
     println!("{df}");
+
+    // === end
 }

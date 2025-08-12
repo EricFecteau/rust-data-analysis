@@ -1,8 +1,13 @@
+// === evcxr
 // :dep polars = { version = "0.49", features = ["lazy", "parquet"] }
 
+// === imports
 use polars::prelude::*;
 
+// === main
 fn main() {
+    // === block_1
+
     // Connect to LazyFrame (one large parquet file)
     let args = ScanArgsParquet::default();
     let lf_one =
@@ -51,4 +56,6 @@ fn main() {
     let before = std::time::Instant::now();
     let _ = lf_part.select([col("hrlyearn")]).mean().collect().unwrap();
     println!("Elapsed time: {:.2?}", before.elapsed());
+
+    // === end
 }

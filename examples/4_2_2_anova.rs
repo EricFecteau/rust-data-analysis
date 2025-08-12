@@ -1,10 +1,15 @@
+// === evcxr
 // :dep polars = { version = "0.49", features = ["lazy", "parquet", "pivot"] }
 // :dep hypors = "0.2"
 
+// === imports
 use hypors::anova::anova;
 use polars::prelude::*;
 
+// === main
 fn main() {
+    // === block_1
+
     // Connect to LazyFrame (no data is brought into memory)
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
@@ -76,4 +81,6 @@ fn main() {
         "F-statistic: {}\nP-value: {}\nNull hypothesis: {}\nReject null: {}",
         result.test_statistic, result.p_value, result.null_hypothesis, result.reject_null
     );
+
+    // === end
 }

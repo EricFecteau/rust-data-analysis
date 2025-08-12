@@ -1,9 +1,14 @@
+// === evcxr
 // :dep polars = { version = "0.49", features = ["lazy", "parquet", "aws"] }
 
+// === imports
 use polars::prelude::*;
 use tokio::runtime::Runtime;
 
+// === main
 fn main() {
+    // === block_1
+
     let cloud_options = cloud::CloudOptions::default().with_aws(vec![
         (cloud::AmazonS3ConfigKey::AccessKeyId, "minioadmin"),
         (cloud::AmazonS3ConfigKey::SecretAccessKey, "minioadmin"),
@@ -52,4 +57,6 @@ fn main() {
         4294967296,
     )
     .unwrap();
+
+    // === end
 }

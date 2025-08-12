@@ -1,6 +1,12 @@
+// === evcxr
+
+// === imports
 use polars::prelude::{pivot::pivot_stable, *};
 
+// === main
 fn main() {
+    // === block_1
+
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
@@ -175,4 +181,6 @@ fn main() {
     println!(
         "Table of weighted summary statistics about hourly wages:\n\n{hourly_wages_stats_wt_by_gender}\n"
     );
+
+    // === end
 }
