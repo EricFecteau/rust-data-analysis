@@ -1,13 +1,8 @@
 * Write intro
 * Write crates page
-* Write concepts page
-    * Explain the various arrow crates in Rust
-    * Explain the versions of Polars
-    * Figure out what "data order" means
 * Write publication intro
 * Write plotting
 * Write reports
-* Write visualization
 * Write website article
 * Verify all examples work and are documented (in code)
 * Verify all examples have REPL code
