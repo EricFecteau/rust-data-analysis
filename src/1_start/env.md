@@ -8,10 +8,12 @@ Install [Rust](https://www.rust-lang.org/tools/install) for your environment (ru
 
 Install [VSCode](https://code.visualstudio.com/download) for your environment and [set it up](https://code.visualstudio.com/docs/languages/rust) to work with Rust. Make sure that in this process you install and configure [clippy](https://github.com/rust-lang/rust-clippy) for lints to catch common mistakes. I also recommend `Editor: Format on Save` with [rustfmt](https://github.com/rust-lang/rustfmt). Lastly, it is useful to install and configure the rust debugger. 
 
+To build the crates required for this book, you will also need to install [cmake](https://cmake.org/) and [perl](https://www.perl.org/).
+
 > [!IMPORTANT]
 > This book assumes some familiarity with Rust and it's toolkit. The [Rust Book](https://doc.rust-lang.org/stable/book/) (free) and [Programming Rust, 2nd Edition](https://www.oreilly.com/library/view/programming-rust-2nd/9781492052586/) (paid) are really great resources to learn Rust.
 
-All examples in this book are accompanied with [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). These scripts can be run with `cargo run -r --example 0_0_0_name_of_script`.
+All examples in this book are accompanied with [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). These scripts can be run with `cargo run -r --example 0_0_0_name_of_example`. The first time an example is run, it will take a long time to build all the dependencies, but subsequent runs, including of other examples, will be significantly quicker.
 
 ## Data analysis environment
 

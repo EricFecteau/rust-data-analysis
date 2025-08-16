@@ -16,7 +16,7 @@ The [fifth and last section](./5_pub/index.md) has examples of publication avenu
 
 # Running the examples
 
-This [repository](https://github.com/EricFecteau/rust-data-analysis) works both as the repository for this `mdBook` and a runnable copy of all the examples in the book. All examples in this book can be [found in the examples folder](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). You can get access to all the examples by running `git clone "https://github.com/EricFecteau/rust-data-analysis.git"` and then running `cargo run -r --example name_of_example`.
+This [repository](https://github.com/EricFecteau/rust-data-analysis) works both as the repository for this `mdBook` and a runnable copy of all the examples in the book. All examples in this book can be [found in the examples folder](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). You can get access to all the examples by running `git clone "https://github.com/EricFecteau/rust-data-analysis.git"` and then running `cargo run -r --example 0_0_0_name_of_example`.
 
 # Specification
 
