@@ -7,3 +7,4 @@
 * Tone? We/you vs neutral
 * Review entire document
 * Verify on windows
+* Finish moving examples into text (with script)
