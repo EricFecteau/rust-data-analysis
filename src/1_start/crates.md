@@ -82,20 +82,20 @@ The [connectorx](https://github.com/sfu-db/connector-x) crate enables you to loa
 
 ## DataFrame Interchange
 
-The [df_interchange]()
+The [df_interchange](https://docs.rs/df-interchange/latest/df_interchange/) allows for seamless interoperability between any version of Polars (>=0.40) and any version of Arrow (>=54), including between versions of the same crate (e.g. Polars 0.40 to Polars 0.46), using the Arrow C Data Interchange format.
 
 ## HypoRS
 
-The [hypors](https://docs.rs/hypors/latest/hypors/) crate
+The [hypors](https://docs.rs/hypors/latest/hypors/) crate is designed for performing a variety of hypothesis tests, including t-tests, z-tests, proportion tests, ANOVA, Chi-square tests, and Mann-Whitney tests.
 
 ## Excel
 
-The [polars_excel_writer]() and the [rust_xlsxwriter]() crates
+The [polars_excel_writer](https://docs.rs/polars_excel_writer/latest/polars_excel_writer/) crate provides an interface to write excel files from Polars data. The [rust_xlsxwriter](https://docs.rs/rust_xlsxwriter/0.90.0/rust_xlsxwriter/index.html) crate allows for further manipulation of the excel file (e.g. adding charts, formating cells).
 
 ## Plotlars
 
-The [plotlars]()
+The [plotlars](https://docs.rs/plotlars/latest/plotlars/) crate is a wrapper around the [plotly]() crate, bridging the gap between the powerful Polars data analysis library and Plotly. Similart to [ggplot2](https://ggplot2.tidyverse.org/) it follows the [grammar of graphics](https://ggplot2-book.org/mastery.html) approach to creating plots. 
 
 ## Markdown
 
-The [comrak]() crates
+The [comrak](https://docs.rs/comrak/latest/comrak/) crate is a [CommonMark](https://commonmark.org/) and [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/) compatible Markdown parser.
