@@ -1,6 +1,4 @@
-* Write intro
-* Write crates page
-* Write publication intro
+* Write github readme
 * Write plotting
 * Write reports
 * Write website article
@@ -8,3 +6,4 @@
 * Verify all examples have REPL code
 * Tone? We/you vs neutral
 * Review entire document
+* Verify on windows
