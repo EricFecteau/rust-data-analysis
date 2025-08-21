@@ -23,7 +23,7 @@ for m in 1..5 {
 To concatenate data of the same row-shape on top of each other, we can use the `concat` function by listing the LazyFrames we want to stack. Here, we can concatenate all four months of the LFS found in the `lfs_month` vector.
 
 ```Rust
-// Concatenate vertically two (or more) datasts
+// Concatenate vertically two (or more) datasets
 let lf_jan_to_apr = concat(
     [
         lfs_month[0].clone(), // Cloned, since we need it later

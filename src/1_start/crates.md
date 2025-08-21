@@ -61,9 +61,9 @@ The [Polars](https://docs.rs/polars/latest/polars/) crates is the main data anal
 
 For the book, the following features are enabled:
 * "lazy": Allows for lazy-evaluation of data (recommended)
-* "parquet": Allows for reading and wraiting [Apache Parquet](https://parquet.apache.org/) files, a column-oriented data file format designed for efficient data storage and retrieval.
+* "parquet": Allows for reading and writing [Apache Parquet](https://parquet.apache.org/) files, a column-oriented data file format designed for efficient data storage and retrieval.
 * "round_series": Allows for data rounding (e.g. 0.386738 to 0.39)
-* "replace": Allows for data repacement (e.g. 35 to "Ontario")
+* "replace": Allows for data replacement (e.g. 35 to "Ontario")
 * "is_in": Allows for list-filtering (e.g. value is_in [2020, 2021, 2021])
 * "pivot": Allows for data pivots
 * "cum_agg": Allows for cumulative aggregate statistics
@@ -74,7 +74,7 @@ For the book, the following features are enabled:
 
 ## PostgreSQL
 
-The [postgres](https://docs.rs/postgres/latest/postgres/) crates is a syncronous library to read and write data to a PostgreSQL database. Postgres, being simple to install and use, is used as an example in this book. It could be replaced by various other crates used to read other databases: [MySql](https://docs.rs/mysql_common/latest/mysql_common/), [Sqlite](https://docs.rs/rusqlite/0.32.1/rusqlite/), [MSSQL](https://crates.io/crates/tiberius), [Oracle](https://docs.rs/tiberius/0.12.3/tiberius/). Other databases should also be available through these crates, such as Mariadb (MySql), ClickHouse (MySql), Redshift (PostgreSQL), Azure SQL Database (MSSql).
+The [postgres](https://docs.rs/postgres/latest/postgres/) crates is a synchronous library to read and write data to a PostgreSQL database. Postgres, being simple to install and use, is used as an example in this book. It could be replaced by various other crates used to read other databases: [MySql](https://docs.rs/mysql_common/latest/mysql_common/), [Sqlite](https://docs.rs/rusqlite/0.32.1/rusqlite/), [MSSQL](https://crates.io/crates/tiberius), [Oracle](https://docs.rs/tiberius/0.12.3/tiberius/). Other databases should also be available through these crates, such as Mariadb (MySql), ClickHouse (MySql), Redshift (PostgreSQL), Azure SQL Database (MSSql).
 
 ## ConnectorX
 
@@ -90,11 +90,11 @@ The [hypors](https://docs.rs/hypors/latest/hypors/) crate is designed for perfor
 
 ## Excel
 
-The [polars_excel_writer](https://docs.rs/polars_excel_writer/latest/polars_excel_writer/) crate provides an interface to write excel files from Polars data. The [rust_xlsxwriter](https://docs.rs/rust_xlsxwriter/0.90.0/rust_xlsxwriter/index.html) crate allows for further manipulation of the excel file (e.g. adding charts, formating cells).
+The [polars_excel_writer](https://docs.rs/polars_excel_writer/latest/polars_excel_writer/) crate provides an interface to write excel files from Polars data. The [rust_xlsxwriter](https://docs.rs/rust_xlsxwriter/0.90.0/rust_xlsxwriter/index.html) crate allows for further manipulation of the excel file (e.g. adding charts, formatting cells).
 
 ## Plotlars
 
-The [plotlars](https://docs.rs/plotlars/latest/plotlars/) crate is a wrapper around the [plotly]() crate, bridging the gap between the powerful Polars data analysis library and Plotly. Similart to [ggplot2](https://ggplot2.tidyverse.org/) it follows the [grammar of graphics](https://ggplot2-book.org/mastery.html) approach to creating plots. 
+The [plotlars](https://docs.rs/plotlars/latest/plotlars/) crate is a wrapper around the [plotly]() crate, bridging the gap between the powerful Polars data analysis library and Plotly. Similar to [ggplot2](https://ggplot2.tidyverse.org/) it follows the [grammar of graphics](https://ggplot2-book.org/mastery.html) approach to creating plots. 
 
 ## Markdown
 

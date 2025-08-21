@@ -19,7 +19,7 @@ To convert a `DataFrame` to a `LazyFrame` you can use `let lf = df.lazy();`. Not
 
 ## Arrow crates
 
-Arrow is a language-independent columnar memory format for flat and nested data, organized for efficient analytic operations on modern hardware. In Rust, there are three crates that can manipulate [Apache Arrow](https://arrow.apache.org/) data. This book generally uses `polars_arrow`, through `polars`. Since the data echosystem in Rust has not standardized, it's useful to be aware of the other crates: 
+Arrow is a language-independent columnar memory format for flat and nested data, organized for efficient analytic operations on modern hardware. In Rust, there are three crates that can manipulate [Apache Arrow](https://arrow.apache.org/) data. This book generally uses `polars_arrow`, through `polars`. Since the data ecosystem in Rust has not standardized, it's useful to be aware of the other crates: 
 
 * [arrow](https://docs.rs/arrow/latest/arrow/): A complete, safe, native Rust implementation of Apache Arrow, a cross-language development platform for in-memory data. This crate is the official implementation of Arrow in Rust, by Apache.
 * [polars_arrow](https://docs.rs/polars-arrow/latest/polars_arrow/): An Arrow implementation by Polars. Polars uses the Apache Arrow memory model for their DataFrame.

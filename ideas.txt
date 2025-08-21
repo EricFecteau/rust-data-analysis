@@ -1,8 +1,0 @@
-https://crates.io/crates/hypors/
-https://github.com/plotters-rs/plotters 
-https://github.com/alceal/plotlars
-https://pola.rs/
-https://rust-lang-nursery.github.io/rust-cookbook/database.html
-https://www.datawill.io/posts/apache-arrow-2022-reflection/
-https://rerun.io/blog/dataframe
-https://github.com/mathnya/umya-spreadsheet

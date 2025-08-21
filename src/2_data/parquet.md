@@ -44,9 +44,9 @@ shape: (5, 60)
 You can write to Parquet any `DataFrame` you have in memory. For this example, we will bring one month of the LFS into memory:
 
 ```rust
-=== Rust 2_3_1_write_parquet evcxr
-=== Rust 2_3_1_write_parquet imports
-=== Rust 2_3_1_write_parquet block_1
+=== Rust 2_3_2_write_parquet evcxr
+=== Rust 2_3_2_write_parquet imports
+=== Rust 2_3_2_write_parquet block_1
 ```
 
 ```Rust

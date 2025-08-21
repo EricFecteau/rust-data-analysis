@@ -1,10 +1,10 @@
 # Excel
 
-In the data analysis world, Excel is still the universal aggregate statistics exchange format and quick analysis tool. It is much simpler to send a fellow researcher an Excel file with some summary statistics or a few hundred rows of data than it is to send pretty much any other data format. With the 
+In the data analysis world, Excel is still the universal aggregate statistics exchange format and quick analysis tool. It is much simpler to send a fellow researcher an Excel file with some summary statistics or a few hundred rows of data than it is to send pretty much any other data format. With the following code, you can export any data from Polars to Excel, format it as needed and even add plots.
 
 ## Setup
 
-First, lets create some summary statistics to throw into the excel file. We will create a table of mean oft he hourly earnings by year and province, in a long format (e.g. 3 columns: "survyear", "prov" and "hourly_wages") and wide format (e.g. "survyear" as row and "prov" as column). Both `df_long` and `df_wide` are brought into memory as data frames.
+First, lets create some summary statistics to throw into the excel file. We will create a table of mean hourly earnings by year and province, in a long format (e.g. 3 columns: "survyear", "prov" and "hourly_wages") and wide format (e.g. "survyear" as row and "prov" as column). Both `df_long` and `df_wide` are brought into memory as data frames.
 
 ```Rust
 // Connect to LazyFrame
@@ -158,7 +158,7 @@ let max_val: f64 = df_long
     .unwrap()
     .unwrap();
 
-// Iterate throw rows to create multiple lines
+// Iterate through rows to create multiple lines
 let mut chart = Chart::new(ChartType::Line);
 for i in 1..col_num {
     chart

@@ -1,6 +1,6 @@
-# Manipulating data
+# Transforming data
 
-Now that we know how to access data, we can manipulate it by filtering and selecting columns, adding new variables, joining tables and pivoting.
+This section demonstrates how to transform data by filtering rows, adding and removing columns, pivoting the data and joining various data together.
 
 * [Filter](filter.md)
 * [Select](select.md)

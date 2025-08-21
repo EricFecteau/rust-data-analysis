@@ -68,7 +68,7 @@ fn main() {
         })
         .collect::<Vec<Vec<f64>>>();
 
-    // Perform the Mann-Whiteny U test
+    // Perform the Mann-Whitney U test
     let alpha = 0.05;
     let result = u_test(cols[0].clone(), cols[1].clone(), alpha, TailType::Two).unwrap();
 

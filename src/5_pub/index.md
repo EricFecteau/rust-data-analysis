@@ -1,6 +1,6 @@
 # Publication
 
-Now that we know how to do our analysis, we can publish.
+This section has examples of publication avenues, such as exporting summary statistics to excel, plotting results and writing markdown reports.
 
 * [Plotting](plotting.md)
 * [Excel](excel.md)

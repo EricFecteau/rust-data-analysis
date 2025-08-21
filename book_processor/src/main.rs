@@ -12,6 +12,7 @@ fn main() {
     list_files(&mut files, path, "md");
 
     for file in files {
+        println!("Processing: {}", file.display());
         let content = fs::read_to_string(&file).unwrap();
 
         let split_text: Vec<&str> = content.split("=== Rust ").collect();
@@ -55,6 +56,7 @@ fn list_files(file_vec: &mut Vec<PathBuf>, path: &Path, ext: &str) {
 
 fn code_chunk(program_path: &str, chunk_name: &str) -> String {
     let path = format!("../examples/{program_path}.rs");
+    println!(" ↳ Fetching: {path}");
     let code: String = fs::read_to_string(path).unwrap();
 
     let split_text: Vec<&str> = code.split("=== ").collect();

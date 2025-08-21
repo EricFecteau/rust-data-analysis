@@ -404,7 +404,7 @@ let cols = df.get_columns();
 We can now pass each `Series` to the `u_test()` function from `Hypors`. Because of the way the data was pivoted, we must deal with null values with `drop_null()`.
 
 ```Rust
-// Perform the Mann-Whiteny U test
+// Perform the Mann-Whitney U test
 let alpha = 0.05;
 let result = u_test(
     &cols[0].drop_nulls(),
