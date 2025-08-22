@@ -45,6 +45,8 @@ fn main() {
 
     println!("{df_bar}");
 
+    // === block_2
+
     let html = BarPlot::builder()
         .data(&df_bar)
         .labels("prov")
@@ -69,8 +71,12 @@ fn main() {
         .build()
         .to_html();
 
+    // === block_3
+
     let mut file = std::fs::File::create("./data/output/bar.html").unwrap();
     std::io::Write::write_all(&mut file, html.as_bytes()).unwrap();
+
+    // === block_4
 
     // Mean by gender and age (grouped)
     let df_scatter = lf
@@ -90,6 +96,8 @@ fn main() {
 
     println!("{df_scatter}");
 
+    // === block_5
+
     let html = ScatterPlot::builder()
         .data(&df_scatter)
         .x("age_12")
@@ -104,6 +112,8 @@ fn main() {
         .legend_title("Species")
         .build()
         .to_html();
+
+    // === block_6
 
     let mut file = std::fs::File::create("./data/output/scatter.html").unwrap();
     std::io::Write::write_all(&mut file, html.as_bytes()).unwrap();

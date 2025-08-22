@@ -27,6 +27,6 @@
     * [Hypothesis testing](4_stats/hypors.md)
 
 * [Publication](5_pub/index.md)
+    * [Excel](5_pub/excel.md)
     * [Plotting](5_pub/plotting.md)
     * [Reports](5_pub/reports.md)
-    * [Excel](5_pub/excel.md)
