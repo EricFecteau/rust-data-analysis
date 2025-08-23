@@ -1,8 +1,8 @@
 // === evcxr
 
 // === imports
-use plotlars::{BarPlot, Legend, Orientation, Plot, Rgb, ScatterPlot, Text};
-use polars::prelude::*;
+use plotlars::{BarPlot, Legend, LinePlot, Orientation, Plot, Rgb, Text};
+use polars::prelude::{pivot::pivot_stable, *};
 
 // === main
 fn main() {
@@ -24,6 +24,7 @@ fn main() {
         .agg([col("hourly_wages")
             .mean()
             .round(2, RoundMode::HalfAwayFromZero)])
+        .sort(["gender", "prov"], SortMultipleOptions::new())
         .with_column(col("prov").replace_strict(
             lit(Series::from_iter(vec![
                 "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
@@ -59,9 +60,9 @@ fn main() {
                 .font("Arial")
                 .size(18),
         )
-        .x_title(Text::from("").font("Arial").size(15))
-        .y_title(Text::from("hourly_wages").font("Arial").size(15))
-        .legend_title(Text::from("gender").font("Arial").size(15))
+        .x_title(Text::from("Province").font("Arial").size(15))
+        .y_title(Text::from("Mean hourly wage").font("Arial").size(15))
+        .legend_title(Text::from("Gender").font("Arial").size(15))
         .legend(
             &Legend::new()
                 .orientation(Orientation::Horizontal)
@@ -78,13 +79,14 @@ fn main() {
 
     // === block_4
 
-    // Mean by gender and age (grouped)
-    let df_scatter = lf
+    // Mean hourly wage by gender and tenure
+    let df_line = lf
         .clone()
-        .group_by([col("age_12"), col("gender")])
+        .group_by([col("gender"), col("tenure")])
         .agg([col("hourly_wages")
             .mean()
             .round(2, RoundMode::HalfAwayFromZero)])
+        .sort(["gender", "tenure"], SortMultipleOptions::new())
         .with_column(col("gender").replace_strict(
             lit(Series::from_iter(vec!["1", "2"])),
             lit(Series::from_iter(vec!["Men+", "Women+"])),
@@ -94,45 +96,40 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!("{df_scatter}");
+    // Pivot to make two lines out of gender values
+    let df_line = pivot_stable(
+        &df_line,
+        ["gender"],
+        Some(["tenure"]),
+        Some(["hourly_wages"]),
+        false,
+        None,
+        None,
+    )
+    .unwrap();
+
+    println!("{df_line}");
 
     // === block_5
 
-    let html = ScatterPlot::builder()
-        .data(&df_scatter)
-        .x("age_12")
-        .y("hourly_wages")
-        .group("gender")
-        .opacity(0.5)
+    let html = LinePlot::builder()
+        .data(&df_line)
+        .x("tenure")
+        .y("Men+")
+        .additional_lines(vec!["Women+"])
         .size(12)
         .colors(vec![Rgb(178, 34, 34), Rgb(65, 105, 225), Rgb(255, 140, 0)])
-        .plot_title("Penguin Flipper Length vs Body Mass")
-        .x_title("Body Mass (g)")
-        .y_title("Flipper Length (mm)")
-        .legend_title("Species")
+        .plot_title("Mean hourly wage by job tenure and gender")
+        .x_title("Mean hourly wage")
+        .y_title("Job tenure (months)")
+        .legend_title("Gender")
         .build()
         .to_html();
 
     // === block_6
 
-    let mut file = std::fs::File::create("./data/output/scatter.html").unwrap();
+    let mut file = std::fs::File::create("./data/output/line.html").unwrap();
     std::io::Write::write_all(&mut file, html.as_bytes()).unwrap();
-
-    ScatterPlot::builder()
-        .data(&df_scatter)
-        .x("age_12")
-        .y("hourly_wages")
-        .group("gender")
-        .opacity(0.5)
-        .size(12)
-        .colors(vec![Rgb(178, 34, 34), Rgb(65, 105, 225), Rgb(255, 140, 0)])
-        .plot_title("Penguin Flipper Length vs Body Mass")
-        .x_title("Body Mass (g)")
-        .y_title("Flipper Length (mm)")
-        .legend_title("Species")
-        .build()
-        .write_image("./data/output/out.png", 800, 600, 1.0)
-        .unwrap();
 
     // === end
 }

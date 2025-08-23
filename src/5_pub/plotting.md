@@ -6,7 +6,7 @@ Plots are the langauge of data analysts. There are mutiple dozens of types of pl
 
 ### Setup
 
-First, lets get some summary statistics to output as a plot. Here is a table of the mean hourly wage by gender and province:
+Lets get some summary statistics to output as a bar graph. Here is a table of the mean hourly wage by gender and province:
 
 ```rust
 === Rust 5_2_0_plots evcxr
@@ -21,17 +21,17 @@ shape: (20, 3)
 │ ---    ┆ ---  ┆ ---          │
 │ str    ┆ str  ┆ f64          │
 ╞════════╪══════╪══════════════╡
-│ Women+ ┆ SK   ┆ 25.7         │
-│ Men+   ┆ NS   ┆ 25.98        │
-│ Women+ ┆ NL   ┆ 24.91        │
-│ Men+   ┆ BC   ┆ 31.0         │
-│ Men+   ┆ NB   ┆ 25.21        │
-│ …      ┆ …    ┆ …            │
-│ Women+ ┆ MB   ┆ 23.4         │
-│ Women+ ┆ ON   ┆ 26.8         │
+│ Men+   ┆ NL   ┆ 29.76        │
 │ Men+   ┆ PE   ┆ 23.83        │
+│ Men+   ┆ NS   ┆ 25.98        │
+│ Men+   ┆ NB   ┆ 25.21        │
+│ Men+   ┆ QC   ┆ 28.11        │
+│ …      ┆ …    ┆ …            │
+│ Women+ ┆ ON   ┆ 26.8         │
+│ Women+ ┆ MB   ┆ 23.4         │
+│ Women+ ┆ SK   ┆ 25.7         │
 │ Women+ ┆ AB   ┆ 27.24        │
-│ Women+ ┆ QC   ┆ 25.25        │
+│ Women+ ┆ BC   ┆ 25.84        │
 └────────┴──────┴──────────────┘
 ```
 
@@ -66,39 +66,53 @@ Opening this file, will give you this interactive bar chart:
 
 Instead of the `to_html()`, you can also write an image using this syntax: `.write_image("./data/output/out.png", 800, 600, 1.0).unwrap()`
 
-## Scatter Plot
+## Line Plot
 
 ### Setup
 
-
+Lets also get some summary statistics to output as a scatter plot. Here is a table of the mean hourly wage by gender and job tenure (months), pivoted on gender:
 
 
 ```rust
-=== Rust 5_2_0_plots evcxr
-=== Rust 5_2_0_plots imports
-=== Rust 5_2_0_plots block_1
+=== Rust 5_2_0_plots block_4
 ```
 
 ```
-shape: (20, 3)
-┌────────┬──────┬──────────────┐
-│ gender ┆ prov ┆ hourly_wages │
-│ ---    ┆ ---  ┆ ---          │
-│ str    ┆ str  ┆ f64          │
-╞════════╪══════╪══════════════╡
-│ Women+ ┆ SK   ┆ 25.7         │
-│ Men+   ┆ NS   ┆ 25.98        │
-│ Women+ ┆ NL   ┆ 24.91        │
-│ Men+   ┆ BC   ┆ 31.0         │
-│ Men+   ┆ NB   ┆ 25.21        │
-│ …      ┆ …    ┆ …            │
-│ Women+ ┆ MB   ┆ 23.4         │
-│ Women+ ┆ ON   ┆ 26.8         │
-│ Men+   ┆ PE   ┆ 23.83        │
-│ Women+ ┆ AB   ┆ 27.24        │
-│ Women+ ┆ QC   ┆ 25.25        │
-└────────┴──────┴──────────────┘
+shape: (240, 3)
+┌────────┬───────┬────────┐
+│ tenure ┆ Men+  ┆ Women+ │
+│ ---    ┆ ---   ┆ ---    │
+│ i64    ┆ f64   ┆ f64    │
+╞════════╪═══════╪════════╡
+│ 1      ┆ 21.23 ┆ 18.02  │
+│ 2      ┆ 21.5  ┆ 18.27  │
+│ 3      ┆ 21.88 ┆ 18.54  │
+│ 4      ┆ 22.28 ┆ 18.95  │
+│ 5      ┆ 22.73 ┆ 19.2   │
+│ …      ┆ …     ┆ …      │
+│ 236    ┆ 36.0  ┆ 32.06  │
+│ 237    ┆ 36.29 ┆ 32.0   │
+│ 238    ┆ 36.2  ┆ 31.97  │
+│ 239    ┆ 36.26 ┆ 31.78  │
+│ 240    ┆ 36.14 ┆ 32.14  │
+└────────┴───────┴────────┘
 ```
+
+### Building the line plot
+
+Similar to the bar graph, for the line plot, you start with the data, you give it an `x` axis and a `y` axis (and here, you add another `y` axis with `additional_lines` to add a new line to the line plot), and then various options, like `x_title`, `y_title`, `plot_title`, `size` for text, etc. Most functions are self-explanatory, but they are described in the documentation of the [line plot](https://docs.rs/plotlars/latest/plotlars/struct.LinePlot.html).
+
+```Rust
+=== Rust 5_2_0_plots block_5
+```
+
+In this example, `to_html()` was used to imbed in this page to be interactive. You can save it to a `.html` file:
+
+```Rust
+=== Rust 5_2_0_plots block_6
+```
+
+Opening this file, will give you this interactive bar chart:
 
 
 ## EVCXR / Jupyter!

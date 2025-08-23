@@ -13,6 +13,22 @@ use comrak::{Options, markdown_to_html};
 fn main() {
     // === block_1
 
+    // ScatterPlot::builder()
+    //     .data(&df_scatter)
+    //     .x("age_12")
+    //     .y("hourly_wages")
+    //     .group("gender")
+    //     .opacity(0.5)
+    //     .size(12)
+    //     .colors(vec![Rgb(178, 34, 34), Rgb(65, 105, 225), Rgb(255, 140, 0)])
+    //     .plot_title("Penguin Flipper Length vs Body Mass")
+    //     .x_title("Body Mass (g)")
+    //     .y_title("Flipper Length (mm)")
+    //     .legend_title("Species")
+    //     .build()
+    //     .write_image("./data/output/out.png", 800, 600, 1.0)
+    //     .unwrap();
+
     let mut file = File::create("./data/output/report.html").unwrap();
 
     let mut html = r#"<!DOCTYPE html>
