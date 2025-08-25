@@ -47,7 +47,7 @@ polars_excel_writer = "0.17"
 rust_xlsxwriter = "0.89"
 
 # Plots
-plotlars = {version = "0.10", features = ["static_export_geckodriver", "static_export_wd_download"] }
+plotlars = {path = "/home/eric/Rust/plotlars", features = ["static_export_geckodriver", "static_export_wd_download"] }
 
 # Markdown documents
 comrak = "0.41"
