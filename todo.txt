@@ -1,4 +1,3 @@
-* Write plotting
 * Write reports
 * Write website article
 * Verify all examples work and are documented (in code)
