@@ -6,12 +6,75 @@ use std::fs::File;
 use std::io::prelude::*;
 
 use comrak::{Options, markdown_to_html};
-use plotlars::{BarPlot, Legend, LinePlot, Orientation, Plot, Rgb, Text};
-use polars::prelude::*;
+use plotlars::{BarPlot, Legend, Orientation, Plot, Rgb, Text};
+use polars::prelude::{pivot::pivot_stable, *};
 
 // === main
 fn main() {
-    // === ignore_block
+    // === block_1
+
+    let mut file = File::create("./data/output/report.html").unwrap();
+
+    // === block_2
+
+    let mut html = r#"<!DOCTYPE html>
+                            <html>
+                            <head>
+                            <style>
+                                body {background-color: #36454F; ;}
+                                div {width: 900px;}
+                                h1 {color: white;}
+                                h2 {color: white;}
+                                p {
+                                    color: white;
+                                    text-align: justify;
+                                }
+                                table, th, td {
+                                    color: white;
+                                    border: 1px solid;
+                                    border-collapse: collapse;
+                                    padding: 3px;
+                                    text-align: left;
+                                }
+                                table {
+                                    margin-left: none;
+                                    margin-right: auto;
+                                }
+                                img {
+                                    display: block;
+                                    margin-left: none;
+                                    width: 80%;
+                                }
+                            </style>
+                            </head>
+                            <body>
+                            <div>"#
+        .to_string();
+
+    // === block_3
+
+    unsafe {
+        env::set_var("POLARS_FMT_TABLE_FORMATTING", "MARKDOWN");
+        env::set_var("POLARS_FMT_TABLE_HIDE_COLUMN_DATA_TYPES", "1");
+        env::set_var("POLARS_FMT_TABLE_HIDE_DATAFRAME_SHAPE_INFORMATION", "1");
+        env::set_var("POLARS_FMT_MAX_COLS", "11"); // Provinces + Gender
+    }
+
+    // === block_4
+
+    let mut markdown = "# Title of Report \n".to_string();
+
+    markdown.push_str("## Intro \n");
+
+    markdown.push_str("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet ornare dolor, eget iaculis diam tempor sit amet. Ut non diam euismod, dapibus ligula at, vulputate eros. Integer mattis leo at ligula interdum dignissim. Nam at justo id ipsum venenatis lacinia ac id diam. Aenean sit amet urna suscipit tortor varius iaculis non quis ligula. Vestibulum sed nunc eu elit dictum rutrum. Vivamus sit amet mattis dolor, a ultricies urna. Nam viverra, purus at dictum accumsan, est justo mattis turpis, ultrices faucibus nibh libero ac risus. Praesent et lectus imperdiet lectus consectetur convallis. Sed vitae velit tortor. Aliquam nibh magna, auctor et lectus porta, laoreet cursus nisi.
+
+Maecenas posuere tellus porttitor turpis pulvinar luctus. Nunc lacinia suscipit nisl nec efficitur. Praesent in purus vitae quam viverra interdum. Pellentesque ut blandit lorem, et mattis odio. Maecenas suscipit cursus rhoncus. Maecenas consectetur mauris libero, malesuada efficitur tellus condimentum in. Suspendisse ornare odio in est malesuada egestas. Fusce vel magna nibh. Nam molestie ut sem porta viverra. Vivamus ut convallis orci. Suspendisse ornare hendrerit sodales. Cras ipsum massa, eleifend in ullamcorper at, ullamcorper eget ligula. \n");
+
+    // === block_5
+
+    markdown.push_str("## Data \n");
+
+    markdown.push_str("Donec mollis faucibus finibus. Etiam hendrerit odio accumsan, egestas purus et, tristique sem. Praesent metus velit, molestie fringilla nulla hendrerit, lobortis egestas velit. Duis vitae metus quis diam egestas convallis sed ac nunc. Duis dignissim risus a diam aliquam, sit amet pulvinar justo volutpat. Sed eget cursus arcu. Etiam eget ornare ipsum. Aliquam egestas dignissim odio vel sagittis.\n\n");
 
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
@@ -22,7 +85,7 @@ fn main() {
         .filter(col("hrlyearn").is_not_null())
         .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"));
 
-    // Mean by province and gender
+    // Mean hourly wage by province and gender
     let df_bar = lf
         .clone()
         .group_by([col("gender"), col("prov")])
@@ -49,11 +112,29 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!("{df_bar}");
+    // Pivot to make two lines out of gender values
+    let df_bar_trans = pivot_stable(
+        &df_bar,
+        ["prov"],
+        Some(["gender"]),
+        Some(["hourly_wages"]),
+        false,
+        None,
+        None,
+    )
+    .unwrap();
 
-    // === block_1
+    markdown.push_str("**Table 1**: Hourly wages by gender and province \n");
+    markdown.push_str(&df_bar_trans.to_string());
+    markdown.push_str("\n\n");
 
-    let html = BarPlot::builder()
+    // === block_6
+
+    markdown.push_str("## Graphic \n");
+
+    markdown.push_str("Sed pharetra quis tellus ut porta. Aliquam maximus neque aliquet elit rhoncus feugiat. Fusce scelerisque elit in quam accumsan feugiat. Vivamus et venenatis neque, non congue ligula. In sit amet mollis eros. Quisque justo velit, luctus elementum nisi vel, lobortis eleifend mauris. Curabitur eget posuere augue, et facilisis ipsum.\n\n");
+
+    BarPlot::builder()
         .data(&df_bar)
         .labels("prov")
         .values("hourly_wages")
@@ -61,7 +142,7 @@ fn main() {
         .group("gender")
         .colors(vec![Rgb(255, 127, 80), Rgb(64, 224, 208)])
         .plot_title(
-            Text::from("Hourly wages by gender and province")
+            Text::from("Chart 1: Hourly wages by gender and province")
                 .font("Arial")
                 .size(18),
         )
@@ -75,75 +156,18 @@ fn main() {
                 .x(0.4),
         )
         .build()
-        .to_html();
+        .write_image("./data/output/out.png", 1000, 600, 1.0)
+        .unwrap();
 
-    let mut file = File::create("./data/output/report.html").unwrap();
+    markdown.push_str("![alt text](out.png) \n");
 
-    let mut html = r#"<!DOCTYPE html>
-                            <html>
-                            <head>
-                            <style>
-                                body {background-color: #36454F; ;}
-                                div {width: 900px;}
-                                h1 {color: white;}
-                                p {
-                                    color: white;
-                                    text-align: justify;
-                                }
-                                table, th, td {
-                                    color: white;
-                                    border: 1px solid;
-                                    border-collapse: collapse;
-                                    padding: 3px;
-                                    text-align: left;
-                                }
-                                table {
-                                    margin-left: auto;
-                                    margin-right: auto;
-                                }
-                                img {
-                                    display: block;
-                                    margin: auto;
-                                    width: 80%;
-                                }
-                            </style>
-                            </head>
-                            <body>
-                            <div>"#
-        .to_string();
+    // === block_7
 
-    let mut markdown = "# Hello World\nThis is a new line\n".to_string();
+    markdown.push_str("## Conclusion \n");
 
-    unsafe {
-        env::set_var("POLARS_FMT_TABLE_FORMATTING", "MARKDOWN");
-        env::set_var("POLARS_FMT_TABLE_HIDE_COLUMN_DATA_TYPES", "1");
-        env::set_var("POLARS_FMT_TABLE_HIDE_DATAFRAME_SHAPE_INFORMATION", "1");
-    }
+    markdown.push_str(" In elit libero, hendrerit sit amet placerat et, posuere id justo. Cras eleifend porta ex eu varius. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc id nisi eleifend, sollicitudin est a, maximus metus. Nulla urna nisi, suscipit vitae tincidunt sit amet, aliquam a dui. Donec pellentesque, nisi a ornare convallis, nibh odio posuere quam, ac consequat mauris nisi sit amet lacus. Proin sit amet condimentum enim. Maecenas fringilla enim a est dignissim, sed vehicula tellus euismod. Duis vitae lobortis enim.\n\n");
 
-    markdown.push_str("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet ornare dolor, eget iaculis diam tempor sit amet. Ut non diam euismod, dapibus ligula at, vulputate eros. Integer mattis leo at ligula interdum dignissim. Nam at justo id ipsum venenatis lacinia ac id diam. Aenean sit amet urna suscipit tortor varius iaculis non quis ligula. Vestibulum sed nunc eu elit dictum rutrum. Vivamus sit amet mattis dolor, a ultricies urna. Nam viverra, purus at dictum accumsan, est justo mattis turpis, ultrices faucibus nibh libero ac risus. Praesent et lectus imperdiet lectus consectetur convallis. Sed vitae velit tortor. Aliquam nibh magna, auctor et lectus porta, laoreet cursus nisi.
-
-Maecenas posuere tellus porttitor turpis pulvinar luctus. Nunc lacinia suscipit nisl nec efficitur. Praesent in purus vitae quam viverra interdum. Pellentesque ut blandit lorem, et mattis odio. Maecenas suscipit cursus rhoncus. Maecenas consectetur mauris libero, malesuada efficitur tellus condimentum in. Suspendisse ornare odio in est malesuada egestas. Fusce vel magna nibh. Nam molestie ut sem porta viverra. Vivamus ut convallis orci. Suspendisse ornare hendrerit sodales. Cras ipsum massa, eleifend in ullamcorper at, ullamcorper eget ligula. ");
-
-    // Creating columns
-    let year = Column::new("year".into(), [2010, 2010, 2011, 2011, 2011, 2011]);
-    let month = Column::new(
-        "month".into(),
-        [
-            "November", "December", "January", "February", "March", "April",
-        ],
-    );
-    let value = Column::new("value".into(), [1.25, 2.50, 3.75, 4.00, 3.75, 4.25]);
-
-    let df = DataFrame::new(vec![year, month, value]).unwrap();
-
-    let str = df.to_string();
-
-    println!("{str}");
-
-    markdown.push_str("\n\n\n");
-    markdown.push_str(&str);
-    markdown.push_str("\n\n\n");
-    markdown.push_str("![alt text](/home/eric/Rust/rust-data-analysis/data/output/out.png)");
+    // === block_8
 
     let mut options = Options::default();
     options.extension.table = true;

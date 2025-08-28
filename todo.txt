@@ -3,5 +3,6 @@
 * Verify all examples work and are documented (in code)
 * Verify all examples have REPL code
 * Tone? We/you vs neutral
+* Section / chapter / whatever - be consistant
 * Review entire document
 * Finish moving examples into text (with script)
