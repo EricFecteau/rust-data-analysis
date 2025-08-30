@@ -19,6 +19,8 @@ fn main() {
         .filter(col("survmnth").gt(lit(6)))
         .filter(col("hrlyearn").is_not_null());
 
+    // === block_2
+
     // Connect to LazyFrame (partitioned parquet file)
     let args = ScanArgsParquet::default();
     let lf_part = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
@@ -29,26 +31,36 @@ fn main() {
         .filter(col("survmnth").gt(lit(6)))
         .filter(col("hrlyearn").is_not_null());
 
+    // === block_3
+
     // Unoptimized
     println!(
         "\nUnoptimized single-parquet file:\n\n{}",
         lf_one.explain(false).unwrap()
     );
+
+    // === block_4
+
     println!(
         "\nUnoptimized multi-parquet file:\n\n{}",
         lf_part.explain(false).unwrap()
     );
 
     // Optimized
+
+    // === block_5
     println!(
         "\nOptimized single-parquet file:\n\n{}",
         lf_one.explain(true).unwrap()
     );
+
+    // === block_6
     println!(
         "\nOptimized multi-parquet file:\n\n{}",
         lf_part.explain(true).unwrap()
     );
 
+    // === block_7
     let before = std::time::Instant::now();
     let _ = lf_one.select([col("hrlyearn")]).mean().collect().unwrap();
     println!("Elapsed time: {:.2?}", before.elapsed());

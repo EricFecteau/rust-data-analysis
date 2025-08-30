@@ -11,45 +11,10 @@ With `Hypors`, you can perform a [Chi-Square Test for Independence](https://docs
 
 We first must create some summary statistics for the contingency table needed for the Chi-Square test. We will create a count of individuals (unweighted) with paid overtime, by gender and marital status.
 
-```Rust
-// Connect to the parquet LFS data 
-let args = ScanArgsParquet::default();
-let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
-
-// Count individuals with paid overtime by gender and marital status
-let df = lf
-    .clone()
-    .filter(col("paidot").is_null().not())
-    .group_by([col("gender"), col("marstat")])
-    .agg([col("paidot")
-        .gt(0)
-        .cast(DataType::Int8)
-        .sum()
-        .alias("ot_flag")])
-    .sort(["gender", "marstat"], Default::default())
-    .with_column(col("gender").replace_strict(
-        lit(Series::from_iter(vec!["1", "2"])),
-        lit(Series::from_iter(vec!["Men+", "Women+"])),
-        None,
-        Some(DataType::String),
-    ))
-    .with_column(col("marstat").replace_strict(
-        lit(Series::from_iter(vec!["1", "2", "3", "4", "5", "6"])),
-        lit(Series::from_iter(vec![
-            "Married",
-            "Common-law",
-            "Widowed",
-            "Separated",
-            "Divorced",
-            "Single",
-        ])),
-        None,
-        Some(DataType::String),
-    ))
-    .collect()
-    .unwrap();
-
-println!("{}", &df);
+```rust
+=== Rust 4_2_1_chi_square evcxr
+=== Rust 4_2_1_chi_square imports
+=== Rust 4_2_1_chi_square block_1
 ```
 
 We then have this table:
@@ -77,22 +42,8 @@ shape: (12, 3)
 
 Now that we have this contingency table, we can convert it to a `Vec<Vec<f64>>`, as required by the `independence()` function of `Hypors`. To do this, we can pivot the table:
 
-```Rust
-// Transpose
-let df = pivot::pivot_stable(
-    &df,
-    ["gender"],
-    Some(["marstat"]),
-    Some(["ot_flag"]),
-    false,
-    None,
-    None,
-)
-.unwrap()
-.drop("marstat")
-.unwrap();
-
-println!("{}", &df);
+```rust
+=== Rust 4_2_1_chi_square block_2
 ```
 
 ```
@@ -113,35 +64,14 @@ shape: (6, 2)
 
 And then convert the `Polars` data into the `Vec<Vec<f64>>`:
 
-```Rust
-// Create an array of arrays of f64
-let cols = df
-    .get_columns()
-    .iter()
-    .map(|c| {
-        c.as_materialized_series()
-            .to_float()
-            .unwrap()
-            .f64()
-            .unwrap()
-            .to_vec_null_aware()
-            .left()
-            .unwrap()
-    })
-    .collect::<Vec<Vec<f64>>>();
+```rust
+=== Rust 4_2_1_chi_square block_3
 ```
 
 Now that the data is ready, we can provide it to `Hypors` and get the results.
 
-```Rust
-// Perform Chi-Square Test for Independence
-let alpha = 0.05;
-let result = independence(&cols, alpha).unwrap();
-
-println!(
-    "Result: {}\nP-value: {}\nNull hypothesis: {}\nReject null: {}",
-    result.test_statistic, result.p_value, result.null_hypothesis, result.reject_null
-);
+```rust
+=== Rust 4_2_1_chi_square block_4
 ```
 
 ```
@@ -157,37 +87,10 @@ With `Hypors`, you can perform a [one-way Analysis of Variance (ANOVA)](https://
 
 We first must subset our data for the analysis. The data we will use for the ANOVA will be the (unweighted) hourly earnings by immigration status (from January 2020).
 
-```Rust
-// Connect to LazyFrame (no data is brought into memory)
-let args = ScanArgsParquet::default();
-let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
-
-// Hourly earnings by immigration category (Jan 2020)
-let df = lf
-    .clone()
-    .filter(col("survyear").eq(lit(2020)))
-    .filter(col("survmnth").eq(lit(1)))
-    .filter(col("hrlyearn").is_null().not())
-    .select([
-        (col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hrlyearn"),
-        col("immig"),
-    ])
-    .sort(["immig"], Default::default())
-    .with_column(col("immig").replace_strict(
-        lit(Series::from_iter(vec!["1", "2", "3"])),
-        lit(Series::from_iter(vec![
-            "Immigrant (<= 10 years)",
-            "Immigrant (> 10 years)",
-            "Non-immigrant",
-        ])),
-        None,
-        Some(DataType::String),
-    ))
-    .with_row_index("index", None)
-    .collect()
-    .unwrap();
-
-println!("{}", &df);
+```rust
+=== Rust 4_2_2_anova evcxr
+=== Rust 4_2_2_anova imports
+=== Rust 4_2_2_anova block_1
 ```
 
 ```
@@ -213,22 +116,8 @@ shape: (49_391, 3)
 
 To get Polars `Series`, as needed by `Hypors` as the input, we will have to first pivot the data:
 
-```Rust
-// Transpose
-let df = pivot::pivot_stable(
-    &df,
-    ["immig"],
-    Some(["index"]),
-    Some(["hrlyearn"]),
-    false,
-    None,
-    None,
-)
-.unwrap()
-.drop("index")
-.unwrap();
-
-println!("{}", &df);
+```rust
+=== Rust 4_2_2_anova block_2
 ```
 
 ```
@@ -254,36 +143,16 @@ shape: (49_391, 3)
 
 Now that we have the data from each immigration category, we can convert the `DataFrame` into `Series` with `get_columns()`. But first, `Hypors` assumes `Polars 0.43` `Series`, not `Polars 0.49` `Series`. So we must first pass the `DataFrame` through [df-interchange](https://github.com/EricFecteau/df-interchange) to convert it.
 
-```Rust
-// Convert Polars versions
-let df = Interchange::from_polars_0_48(df)
-    .unwrap()
-    .to_polars_0_43()
-    .unwrap();
+TODO: NOT RELEVANT ANYMORE?
 
-// Create Vec<Series> for ANOVA
-let cols = df.get_columns();
+```rust
+=== Rust 4_2_2_anova block_3
 ```
 
 We can now pass each `Series` to the `anova()` function from `Hypors`. Because of the way the data was pivoted, we must deal with null values with `drop_null()`.
 
-```Rust
-// Perform one-way ANOVA
-let alpha = 0.05;
-let result = anova(
-    &[
-        &cols[0].drop_nulls(),
-        &cols[1].drop_nulls(),
-        &cols[2].drop_nulls(),
-    ],
-    alpha,
-)
-.unwrap();
-
-println!(
-    "F-statistic: {}\nP-value: {}\nNull hypothesis: {}\nReject null: {}",
-    result.test_statistic, result.p_value, result.null_hypothesis, result.reject_null
-);
+```rust
+=== Rust 4_2_2_anova block_4
 ```
 
 ```
@@ -299,31 +168,10 @@ With `Hypors`, you can perform a [Mann-Whitney U Test](https://docs.rs/hypors/la
 
 We first must subset our data for the analysis. The data we will use for the Mann-Whitney U test will be the (unweighted) hourly earnings by gender (from January 2020).
 
-```Rust
-// Connect to LazyFrame (no data is brought into memory)
-let args = ScanArgsParquet::default();
-let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
-
-// Hourly earnings by gender (Jan 2020)
-let df = lf
-    .clone()
-    .filter(col("survyear").eq(lit(2020)))
-    .filter(col("survmnth").eq(lit(1)))
-    .filter(col("hrlyearn").is_null().not())
-    .select([
-        col("gender").replace_strict(
-            lit(Series::from_iter(vec!["1", "2"])),
-            lit(Series::from_iter(vec!["Men+", "Women+"])),
-            None,
-            Some(DataType::String),
-        ),
-        (col("hrlyearn").cast(DataType::Float64) / lit(100)),
-    ])
-    .with_row_index("index", None)
-    .collect()
-    .unwrap();
-
-println!("{}", &df);
+```rust
+=== Rust 4_2_3_mwu evcxr
+=== Rust 4_2_3_mwu imports
+=== Rust 4_2_3_mwu block_1
 ```
 
 ```
@@ -349,22 +197,8 @@ shape: (49_391, 3)
 
 To get Polars `Series`, as needed by `Hypors` as the input, we will have to first pivot the data:
 
-```Rust
-// Transpose
-let df = pivot::pivot_stable(
-    &df,
-    ["gender"],
-    Some(["index"]),
-    Some(["hrlyearn"]),
-    false,
-    None,
-    None,
-)
-.unwrap()
-.drop("index")
-.unwrap();
-
-println!("{}", &df);
+```rust
+=== Rust 4_2_3_mwu block_2
 ```
 
 ```
@@ -390,34 +224,14 @@ shape: (49_391, 2)
 
 Now that we have the data from each gender, we can convert the `DataFrame` into `Series` with `get_columns()`. But first, `Hypors` assumes `Polars 0.43` `Series`, not `Polars 0.49` `Series`. So we must first pass the `DataFrame` through [df-interchange](https://github.com/EricFecteau/df-interchange) to convert it.
 
-```Rust
-// Convert Polars versions
-let df = Interchange::from_polars_0_48(df)
-    .unwrap()
-    .to_polars_0_43()
-    .unwrap();
-
-// Create Vec<Series> for MWU
-let cols = df.get_columns();
+```rust
+=== Rust 4_2_3_mwu block_3
 ```
 
 We can now pass each `Series` to the `u_test()` function from `Hypors`. Because of the way the data was pivoted, we must deal with null values with `drop_null()`.
 
-```Rust
-// Perform the Mann-Whitney U test
-let alpha = 0.05;
-let result = u_test(
-    &cols[0].drop_nulls(),
-    &cols[1].drop_nulls(),
-    alpha,
-    TailType::Two,
-)
-.unwrap();
-
-println!(
-    "F-statistic: {}\nP-value: {}\nNull hypothesis: {}\nReject null: {}",
-    result.test_statistic, result.p_value, result.null_hypothesis, result.reject_null
-);
+```rust
+=== Rust 4_2_3_mwu block_4
 ```
 
 ```

@@ -17,6 +17,8 @@ fn main() {
         (cloud::AmazonS3ConfigKey::Endpoint, "http://127.0.0.1:9000"),
     ]);
 
+    // === block_2
+
     // Read file form local
     let lf = LazyCsvReader::new(PlPath::from_str("./data/lfs_csv/pub0124.csv"))
         .with_has_header(true)
@@ -25,6 +27,8 @@ fn main() {
 
     // Bring it into memory (by converting it to DataFrame)
     let mut df = lf.collect().unwrap();
+
+    // === block_3
 
     // Write `pub0124.csv`
     let mut cloudfile = Runtime::new()
@@ -45,6 +49,8 @@ fn main() {
         ))
         .unwrap();
     ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
+
+    // === block_4
 
     // Write partitioned `pub0124.parquet` on "prov" and "gender"
     // `write_partitioned_dataset` is considered unstable

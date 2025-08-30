@@ -17,6 +17,8 @@ fn main() {
     // Bring it into memory (by converting it to DataFrame)
     let mut df = lf.collect().unwrap();
 
+    // === block_2
+
     // This functionality is unstable according to the docs
     write_partitioned_dataset(
         &mut df,

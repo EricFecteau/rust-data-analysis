@@ -6,13 +6,13 @@ use polars::prelude::*;
 
 // === main
 fn main() {
-    // === chunk_1
+    // === block_1
 
     // Connect to LazyFrame (no data is brought into memory)
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
-    // === chunk_2
+    // === block_2
 
     //Filtering the data in multiple steps
     let lf_filt_mult = lf
@@ -21,7 +21,7 @@ fn main() {
         .filter(col("survmnth").gt(lit(6)))
         .filter(col("hrlyearn").is_not_null());
 
-    // === chunk_3
+    // === block_3
 
     // Filtering the data in one step
     let lf_filt_one = lf.clone().filter(
@@ -31,7 +31,7 @@ fn main() {
             .and(col("hrlyearn").is_not_null()),
     );
 
-    // === chunk_4
+    // === block_4
 
     // ((survyear == 2023 & survmnt > 6) | (survyear == 2024 & survmnt <= 6))
     let expr = (col("survyear")
@@ -43,12 +43,12 @@ fn main() {
 
     println!("{expr}"); // You can print it
 
-    // === chunk_5
+    // === block_5
 
     // Apply the expression to a LazyFrame
     let lf_filt_complex = lf.clone().filter(expr);
 
-    // === chunk_6
+    // === block_6
 
     // Using `is_in` crate feature with literals
     let lf_filt_is_in = lf.clone().filter(col("survyear").is_in(

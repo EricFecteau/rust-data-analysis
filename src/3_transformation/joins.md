@@ -6,40 +6,22 @@ This section explore how to join two datasets, either by stacking them one on to
 
 Lets first create a vector containing four months (Jan to April) of LFS data, pulled form the single-month versions of the Parquet files.
 
-```Rust
-// Connect and process multiple monthly parquet file
-let mut lfs_month = vec![];
-for m in 1..5 {
-    let mm = format!("{:02}", m);
-
-    let args = ScanArgsParquet::default();
-    let lf =
-        LazyFrame::scan_parquet(format!("./data/lfs_parquet/pub{mm}23.parquet"), args).unwrap();
-
-    lfs_month.push(lf);
-}
+```rust
+=== Rust 3_5_1_joins evcxr
+=== Rust 3_5_1_joins imports
+=== Rust 3_5_1_joins block_1
 ```
 
 To concatenate data of the same row-shape on top of each other, we can use the `concat` function by listing the LazyFrames we want to stack. Here, we can concatenate all four months of the LFS found in the `lfs_month` vector.
 
-```Rust
-// Concatenate vertically two (or more) datasets
-let lf_jan_to_apr = concat(
-    [
-        lfs_month[0].clone(), // Cloned, since we need it later
-        lfs_month[1].clone(),
-        lfs_month[2].clone(),
-        lfs_month[3].clone(),
-    ],
-    UnionArgs::default(),
-)
-.unwrap();
+```rust
+=== Rust 3_5_1_joins block_2
 ```
 
 If we print the result, it shows that we have a DataFrame of over 400,000 rows (4 x ~100,000 rows per monthly file). It is also possible to see that `survmnth` has multiple monthly values.
 
-```Rust
-println!("{}", lf_jan_to_apr.collect().unwrap());
+```rust
+=== Rust 3_5_1_joins block_3
 ```
 
 ```
@@ -67,44 +49,14 @@ shape: (413_982, 60)
 
 Polars has multiple options for joining data by row. To make the data visualization simpler, the below code processes the data found in the `lfs_month` vector to keep only a few variables, remove those without any hourly earnings and renames the `hrlyearn` to reflect the month of the data. Note that `rec_num` is a row number, but will be used as linkage key in this example.
 
-```Rust
-for m in 1..5 {
-    let mm = format!("{:02}", m);
-
-    lfs_month[m - 1] = lfs_month[m - 1]
-        .clone()
-        .filter(col("hrlyearn").is_not_null())
-        .select([
-            col("rec_num"),
-            col("survyear"),
-            col("hrlyearn").alias(format!("earn_{mm}")),
-        ]);
-}
+```rust
+=== Rust 3_5_1_joins block_4
 ```
 
 Now that we have simpler data, we can join these. In this example, we are doing multiple left joins in a row with the `left_join` function, always keeping the original population (akin to creating a cohort). To do these joins, all we need is the data and the left and right key (`rec_num` in this example).
 
-```Rust
-let jan_cohort = lfs_month[0]
-    .clone()
-    .drop([col("survyear")])
-    .left_join(
-        lfs_month[1].clone().drop([col("survyear")]),
-        col("rec_num"),
-        col("rec_num"),
-    )
-    .left_join(
-        lfs_month[2].clone().drop([col("survyear")]),
-        col("rec_num"),
-        col("rec_num"),
-    )
-    .left_join(
-        lfs_month[3].clone().drop([col("survyear")]),
-        col("rec_num"),
-        col("rec_num"),
-    );
-
-println!("{}", jan_cohort.collect().unwrap());
+```rust
+=== Rust 3_5_1_joins block_5
 ```
 
 This gives us a longitudinal cohort, keeping the population from the first dataset (january):
@@ -131,28 +83,8 @@ shape: (54_207, 5)
 ```
 In the same way, we can also use other types of joins, like the `inner_join`:
 
-```Rust
-let longitudinal_all = lfs_month[0]
-    .clone()
-    .drop([col("survyear")])
-    .inner_join(
-        lfs_month[1].clone().drop([col("survyear")]),
-        col("rec_num"),
-        col("rec_num"),
-    )
-    .inner_join(
-        lfs_month[2].clone().drop([col("survyear")]),
-        col("rec_num"),
-        col("rec_num"),
-    )
-    .inner_join(
-        lfs_month[3].clone().drop([col("survyear")]),
-        col("rec_num"),
-        col("rec_num"),
-    );
-
-println!("{}", longitudinal_all.collect().unwrap());
-
+```rust
+=== Rust 3_5_1_joins block_6
 ```
 
 This creates a cohort of those who are in every dataset.
@@ -183,47 +115,8 @@ Polars has multiple of these "simple" joins, including `left_join`, `semi_join`,
 > [!NOTE]
 > For some reason, Polars does not reconcile the values of the keys in a `full join`, both in the `join` and `full_join` functions. This means that any keys not found in the left create `nulls` in the original key name and any key not found in the right creates `nulls` in the key with an `_right` suffix (e.g. rec_num_right). I fix this in the example below with an expression that applies to all four joins.
 
-```Rust
-let fix_full_join_vars = [
-    when(col("rec_num").is_not_null())
-        .then(col("rec_num"))
-        .otherwise(col("rec_num_right"))
-        .alias("rec_num"),
-    when(col("survyear").is_not_null())
-        .then(col("survyear"))
-        .otherwise(col("survyear_right"))
-        .alias("survyear"),
-];
-
-let longitudinal_all = lfs_month[0]
-    .clone()
-    .join(
-        lfs_month[1].clone(),
-        [col("rec_num"), col("survyear")],
-        [col("rec_num"), col("survyear")],
-        JoinArgs::new(JoinType::Full),
-    )
-    .with_columns(fix_full_join_vars.clone())
-    .drop([col("rec_num_right"), col("survyear_right")])
-    .join(
-        lfs_month[2].clone(),
-        [col("rec_num"), col("survyear")],
-        [col("rec_num"), col("survyear")],
-        JoinArgs::new(JoinType::Full),
-    )
-    .with_columns(fix_full_join_vars.clone())
-    .drop([col("rec_num_right"), col("survyear_right")])
-    .join(
-        lfs_month[3].clone(),
-        [col("rec_num"), col("survyear")],
-        [col("rec_num"), col("survyear")],
-        JoinArgs::new(JoinType::Full),
-    )
-    .with_columns(fix_full_join_vars.clone())
-    .drop([col("rec_num_right"), col("survyear_right")])
-    .sort(["rec_num", "survyear"], Default::default());
-
-println!("{}", longitudinal_all.collect().unwrap());
+```rust
+=== Rust 3_5_1_joins block_7
 ```
 
 This full join keeps a superpopulation of all the four datasets:

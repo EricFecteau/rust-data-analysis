@@ -40,6 +40,8 @@ fn main() {
 
     println!("{}", &df);
 
+    // === block_2
+
     // Pivot wider / pivot
     let df_wide = pivot_stable(
         &df,
@@ -53,6 +55,8 @@ fn main() {
     .unwrap();
 
     println!("{}", &df_wide);
+
+    // === block_3
 
     // Pivot longer / unpivot
     let df_long = df_wide

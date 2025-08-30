@@ -57,6 +57,8 @@ fn main() {
 
     println!("Wide:\n{df_wide}");
 
+    // === block_2
+
     // Convert from Polars 0.50 to Polars 0.49
     let df_long = Interchange::from_polars_0_50(df_long)
         .unwrap()
@@ -79,11 +81,15 @@ fn main() {
         .write_dataframe_to_worksheet(&df_long, ws_long, 0, 0)
         .unwrap();
 
+    // === block_3
+
     // Write wide table to "wide" worksheet
     let ws_wide = workbook.add_worksheet().set_name("wide").unwrap();
     excel_writer
         .write_dataframe_to_worksheet(&df_wide, ws_wide, 0, 0)
         .unwrap();
+
+    // === block_4
 
     // Add a chart sheet for the "wide" data
 
@@ -124,6 +130,8 @@ fn main() {
         .set_max((max_val + 1.0).round());
     chart.legend().set_position(ChartLegendPosition::Bottom);
     ws_wide.insert_chart(1, 12, &chart).unwrap();
+
+    // === block_5
 
     // Save the file to disk.
     workbook

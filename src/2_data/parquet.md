@@ -49,26 +49,11 @@ You can write to Parquet any `DataFrame` you have in memory. For this example, w
 === Rust 2_3_2_write_parquet block_1
 ```
 
-```Rust
-:dep polars = { version = "0.49", features = ["lazy"] }
-
-use polars::prelude::*;
-
-// Read `pub0124.csv` as LazyFrame
-let lf = LazyCsvReader::new("./data/lfs_csv/pub0124.csv")
-    .with_has_header(true)
-    .finish()
-    .unwrap();
-
-// Bring it into memory (by converting it to DataFrame)
-let mut df = lf.collect().unwrap();
-```
 In order to save it, you have to create a file and write to it:
 
-```Rust
-// Write `pub0124.parquet`
-let mut file = std::fs::File::create("./data/temp_data/pub0124.parquet").unwrap();
-ParquetWriter::new(&mut file).finish(&mut df).unwrap();
+
+```rust
+=== Rust 2_3_2_write_parquet block_2
 ```
 
 This saves the data into one `.parquet` file. The `write_partitioned_dataset` function can be used to write a partitioned Parquet files, based on the values in one or more columns. 
@@ -82,19 +67,10 @@ For example, you can write one month of LFS data by `prov` and `gender` using `w
 > The value of `4294967296` bytes (4 GB) was selected for the `chunk_size` as it is the default for the partitioned parquet files in [Polars for Python](https://docs.pola.rs/api/python/dev/reference/api/polars.DataFrame.write_parquet.html). This will be the approximate maximum size of each `.parquet` file created. 
 
 ```Rust
-write_partitioned_dataset(
-    &mut df,
-    std::path::Path::new("./data/temp_data/_temp"),
-    vec!["prov", "gender"],
-    &ParquetWriteOptions::default(),
-    None, // Cloud options
-    4294967296,
-)
-.unwrap();
+=== Rust 2_3_3_write_partitioned_parquet block_2
 ```
 
 This will create a hive partitioned Parquet file based on `prov` and `gender`:
-
 
 ```
 folder/

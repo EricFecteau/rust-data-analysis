@@ -41,6 +41,8 @@ fn main() {
 
     println!("{}", &df);
 
+    // === block_2
+
     // Transpose
     let df = pivot::pivot_stable(
         &df,
@@ -57,6 +59,8 @@ fn main() {
 
     println!("{}", &df);
 
+    // === block_3
+
     // Create Vec<Vec<f64>> for ANOVA
     let cols = df
         .get_columns()
@@ -72,6 +76,8 @@ fn main() {
                 .unwrap()
         })
         .collect::<Vec<Vec<f64>>>();
+
+    // === block_4
 
     // Perform one-way ANOVA
     let alpha = 0.05;

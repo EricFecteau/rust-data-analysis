@@ -9,31 +9,18 @@ Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage 
 
 To connect to the cloud of your choice, you have to set up the cloud options: use [with_aws](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_aws) and [AmazonS3ConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.AmazonS3ConfigKey.html) for S3 buckets, use [with_gcp](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_gcp) and [GoogleConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.GoogleConfigKey.html) for Google Cloud Storage, and use [with_azure](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_azure) and [AzureConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.AzureConfigKey.html) for Azure Blob Storage. For example, for the default configuration for the minio server, connect using `with_aws`: 
 
-```Rust
-:dep polars = { version = "0.49", features = ["lazy", "parquet", "aws"] }
-
-use polars::prelude::*;
-
-let cloud_options = cloud::CloudOptions::default().with_aws(vec![
-    (cloud::AmazonS3ConfigKey::AccessKeyId, "minioadmin"),
-    (cloud::AmazonS3ConfigKey::SecretAccessKey, "minioadmin"),
-    (cloud::AmazonS3ConfigKey::Region, "us-east-1"),
-    (cloud::AmazonS3ConfigKey::Bucket, "lfs"),
-    (cloud::AmazonS3ConfigKey::Endpoint, "http://127.0.0.1:9000"),
-]);
+```rust
+=== Rust 2_5_1_read_cloud evcxr
+=== Rust 2_5_1_read_cloud imports
+=== Rust 2_5_1_read_cloud block_1
 ```
+
 ## Reading
 
 For `.csv` files, in the same way as was shown for the [CSV](csv.md) data stored locally, you can get a LazyFrame from `LazyCsvReader` with data on the cloud, by passing the cloud_options created above to `with_cloud_options()`:
 
-```Rust
-// Connect to LazyFrame (no data is brought into memory)
-let lf = LazyCsvReader::new("s3://lfs/lfs.csv")
-    .with_cloud_options(Some(cloud_options.clone()))
-    .finish()
-    .unwrap();
-
-println!("{:?}", println!("{}", lf.limit(5).collect().unwrap()));
+```rust
+=== Rust 2_5_1_read_cloud block_2
 ```
 
 ```
@@ -56,16 +43,8 @@ For `.parquet` files, in the same way as was shown for the [Parquet](parquet.md)
 > [!NOTE]
 > For partitioned parquet files on the cloud, the `/` at the end of `s3://lfs/part/` is required (unlike on local data).
 
-```Rust
-// Connect to LazyFrame (no data is brought into memory)
-let args = ScanArgsParquet {
-    cloud_options: Some(cloud_options),
-    ..Default::default()
-};
-let lf = LazyFrame::scan_parquet("s3://lfs/part/", args).unwrap();
-
-// Print first 5 rows
-println!("{}", lf.limit(5).collect().unwrap());
+```rust
+=== Rust 2_5_1_read_cloud block_3
 ```
 
 ```
@@ -87,44 +66,18 @@ shape: (5, 60)
 
 Writing to the cloud is similar to writing to local data. Instead of providing a `std::fs::File` writer, you provide a `CloudWriter` from polars. To write, you must have `DataFrame` in memory:
 
-```Rust
-// Read file from local
-let lf = LazyCsvReader::new("./data/lfs_csv/pub0124.csv")
-    .with_has_header(true)
-    .finish()
-    .unwrap();
-
-// Bring it into memory (by converting it to DataFrame)
-let mut df = lf.collect().unwrap();
+```rust
+=== Rust 2_5_2_write_cloud block_2
 ```
+
 You can then write a `.csv` or a `.parquet` to the cloud using the `CloudWriter` and the `cloud_options` created previously:
 
-```Rust
-// Write `pub0124.csv`
-let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0124.csv", Some(&cloud_options))
-    .await
-    .unwrap();
-CsvWriter::new(&mut cloudfile).finish(&mut df).unwrap();
-
-// Write `pub0124.parquet`
-let mut cloudfile = cloud::CloudWriter::new("s3://lfs/pub0124.parquet", Some(&cloud_options))
-    .await
-    .unwrap();
-ParquetWriter::new(&mut cloudfile).finish(&mut df).unwrap();
+```rust
+=== Rust 2_5_2_write_cloud block_3
 ```
 
 You can also write a partitioned parquet file to the cloud with `write_partitioned_dataset` by passing the same `cloud_options`:
 
-```Rust
-// Write partitioned `pub0124.parquet` on "prov" and "gender"
-// `write_partitioned_dataset` is considered unstable
-write_partitioned_dataset(
-    &mut df,
-    std::path::Path::new("s3://lfs/pub0124/"),
-    vec!["prov".into(), "gender".into()],
-    &ParquetWriteOptions::default(),
-    Some(&cloud_options),
-    4294967296,
-)
-.unwrap();
+```rust
+=== Rust 2_5_2_write_cloud block_4
 ```

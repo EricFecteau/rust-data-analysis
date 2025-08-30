@@ -11,37 +11,10 @@ Since the data has to be materialized (i.e. in-memory) to be pivoted, lets first
 
 In this example, we connect to the Parquet file, summarize the hourly wage data (unweighted) by year and province.
 
-```Rust
-// Connect to Parquet
-let args = ScanArgsParquet::default();
-let lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
-
-// Mean hourly wage by year and province (for those with an hourly wage) - unweighted
-let lf = lf
-    .filter(col("hrlyearn").is_not_null())
-    .group_by([col("survyear"), col("prov")])
-    .agg([(col("hrlyearn") / lit(100))
-        .mean()
-        .alias("mean_hrlyearn")
-        .round(2)])
-    .sort(["survyear", "prov"], SortMultipleOptions::default());
-
-// Change numeric province code to alpha-code
-let df = lf
-    .with_column(col("prov").replace_strict(
-        lit(Series::from_iter(vec![
-            "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
-        ])),
-        lit(Series::from_iter(vec![
-            "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
-        ])),
-        None,
-        Some(DataType::String),
-    ))
-    .collect()
-    .unwrap();
-
-println!("{}", &df);
+```rust
+=== Rust 3_4_1_pivot evcxr
+=== Rust 3_4_1_pivot imports
+=== Rust 3_4_1_pivot block_1
 ```
 
 ```
@@ -71,20 +44,8 @@ We now have a fairly long `DataFrame` in memory (10 provinces per year, for mult
 
 To pivot this long `DataFrame` wider (also simply known as "pivot"), we can take either the year column or the province column and make them individual columns, using the data found in `mean_hrlyearn`. In this example, we will take the 10 provinces and make them columns.
 
-```Rust
-// Pivot wider
-let df_wide = pivot_stable(
-    &df,
-    ["prov"],
-    Some(["survyear"]),
-    Some(["mean_hrlyearn"]),
-    false,
-    None,
-    None,
-)
-.unwrap();
-
-println!("{}", &df_wide);
+```rust
+=== Rust 3_4_1_pivot block_2
 ```
 
 ```
@@ -114,17 +75,10 @@ This `DataFrame` is simpler to display and analyze.
 
 We can do the inverse, by pivoting this wide `DataFrame` to longer (also known as "unpivot"). This will move the 10 province column into one province row. 
 
-```Rust
-// Pivot longer / unpivot
-let df_long = df_wide
-    .unpivot(
-        ["NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC"],
-        ["survyear"],
-    )
-    .unwrap();
-
-println!("{}", &df_long);
+```rust
+=== Rust 3_4_1_pivot block_3
 ```
+
 ```
 shape: (140, 3)
 ┌──────────┬──────────┬───────┐

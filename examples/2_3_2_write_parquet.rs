@@ -17,6 +17,8 @@ fn main() {
     // Bring it into memory (by converting it to DataFrame)
     let mut df = lf.collect().unwrap();
 
+    // === block_2
+
     // Write `pub0124.parquet`
     let mut file = std::fs::File::create("./data/temp_data/pub0124.parquet").unwrap();
     ParquetWriter::new(&mut file).finish(&mut df).unwrap();

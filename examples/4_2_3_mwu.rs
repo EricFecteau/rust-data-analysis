@@ -36,6 +36,8 @@ fn main() {
 
     println!("{}", &df);
 
+    // === block_2
+
     // Transpose
     let df = pivot::pivot_stable(
         &df,
@@ -52,6 +54,8 @@ fn main() {
 
     println!("{}", &df);
 
+    // === block_3
+
     // Create Vec<Series> for MWU
     let cols = df
         .get_columns()
@@ -67,6 +71,8 @@ fn main() {
                 .unwrap()
         })
         .collect::<Vec<Vec<f64>>>();
+
+    // === block_4
 
     // Perform the Mann-Whitney U test
     let alpha = 0.05;

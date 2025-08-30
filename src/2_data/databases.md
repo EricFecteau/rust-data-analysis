@@ -4,19 +4,12 @@ This section will explore how to work with SQL databases in Rust. This section r
 
 ## Direct queries
 
-You can direct query the data using the appropriate crate: [PostgreSQL](https://docs.rs/postgres/latest/postgres/), [MySql](https://docs.rs/mysql_common/latest/mysql_common/), [Sqlite](https://docs.rs/rusqlite/0.32.1/rusqlite/), [MSSQL](https://crates.io/crates/tiberius), [Oracle](https://docs.rs/tiberius/0.12.3/tiberius/). Other databases should also be available through these crates, such as Mariadb (MySql), ClickHouse (MySql), Redshift (PostgreSQL), Azure SQL Database (MSSql). You can run this section using `cargo run -r --example 2_3_1_postgresql`. 
+You can direct query the data using the appropriate crate: [PostgreSQL](https://docs.rs/postgres/latest/postgres/), [MySql](https://docs.rs/mysql_common/latest/mysql_common/), [Sqlite](https://docs.rs/rusqlite/0.32.1/rusqlite/), [MSSQL](https://crates.io/crates/tiberius), [Oracle](https://docs.rs/tiberius/0.12.3/tiberius/). Other databases should also be available through these crates, such as Mariadb (MySql), ClickHouse (MySql), Redshift (PostgreSQL), Azure SQL Database (MSSql). You can run this section using `cargo run -r --example 2_4_1_postgresql`. 
 
-```Rust
-// Connect to postgresql
-let mut client = Client::connect("host=localhost user=postgres", NoTls).unwrap();
-
-// Query the database, returns a vector of rows
-let data = client
-    .query("select count(*) as count from lfs", &[])
-    .unwrap();
-
-// Get the first data point from the first row
-let data_point: i64 = data[0].get(0);
+```rust
+=== Rust 2_4_1_postgresql evcxr
+=== Rust 2_4_1_postgresql imports
+=== Rust 2_4_1_postgresql block_1
 ```
 
 > [!NOTE]
@@ -26,40 +19,18 @@ Using this method, each type of databases will have their own special connection
 
 ## SQL to Polars
 
-Using [ConnectorX](https://github.com/sfu-db/connector-x), you can move data from SQL servers to Polars with `.polars()`. It will return a `DataFrame` (currently `Polars 0.45`, but can be converted to the latest version of Polars with `df-interchange` as explained in the [concepts](../1_start/concepts.md#polars-versions) section of the setup). You can run this section using `cargo run -r --example 2_3_2_sql_to_polars`.
+Using [ConnectorX](https://github.com/sfu-db/connector-x), you can move data from SQL servers to Polars with `.polars()`. It will return a `DataFrame` (currently `Polars 0.45`, but can be converted to the latest version of Polars with `df-interchange` as explained in the [concepts](../1_start/concepts.md#polars-versions) section of the setup). You can run this section using `cargo run -r --example 2_4_2_sql_to_polars`.
 
-```Rust
-// Connect to PostgreSQL through the ConnectorX
-let source_conn =
-    SourceConn::try_from("postgresql://postgres:postgres@localhost:5432").unwrap();
-
-// Prepare query
-let query = &[CXQuery::from("SELECT * FROM lfs")];
-
-// ConnectorX query PostgreSQL and return Polars object
-let arrow_obj = get_arrow(&source_conn, None, query)
-    .unwrap()
-    .polars()
-    .unwrap();
+```rust
+=== Rust 2_4_2_sql_to_polars evcxr
+=== Rust 2_4_2_sql_to_polars imports
+=== Rust 2_4_2_sql_to_polars block_1
 ```
 
 This example will move the entirety of the SQL server into memory as a `DataFrame`. Further manipulations or analysis can be done on this data using Polars. This may or not be desirable, since the SQL server may contain too much data and will be slow. It may be preferable to pre-filter or to summarize the data using an SQL query. For example, you can collect the unweighted mean hourly wages in 2024, by month (using the following query: `"SELECT survmnth, avg(hrlyearn / 100) as avg_hourly FROM lfs where survyear = 2024 group by survmnth"`). This can then be converted into a `DataFrame` with `.polars()`.
 
-```Rust
-// Connect to PostgreSQL through the ConnectorX
-let source_conn =
-    SourceConn::try_from("postgresql://postgres:postgres@localhost:5432").unwrap();
-
-// Prepare query
-let query = &[CXQuery::from(
-    "SELECT survmnth, avg(hrlyearn / 100) as avg_hourly FROM lfs where survyear = 2024 group by survmnth",
-)];
-
-// ConnectorX query PostgreSQL and return Polars object
-let df = get_arrow(&source_conn, None, query)
-    .unwrap()
-    .polars()
-    .unwrap();
+```rust
+=== Rust 2_4_2_sql_to_polars block_1
 ```
 
 This will return a `DataFrame`.

@@ -12,6 +12,8 @@ fn main() {
     let args = ScanArgsParquet::default();
     let mut lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
+    // === block_2
+
     // Get names of columns
     let cols: Vec<String> = lf
         .collect_schema()
@@ -26,6 +28,8 @@ fn main() {
         cols
     );
 
+    // === block_3
+
     // Select some columns by name & with regex & with rename
     let lf = lf.select([
         col("^surv.*$"), // survyear, survmnth
@@ -36,6 +40,8 @@ fn main() {
 
     // Print selected column (top 5 values)
     println!("{}", lf.clone().limit(5).collect().unwrap());
+
+    // === block_4
 
     // Drop variables (better to simply select the columns needed)
     let lf = lf.select([all().exclude_cols(["prov", "hourly_wages"]).as_expr()]);

@@ -6,28 +6,16 @@ This chapter will explore how to select columns from your data. You can run the 
 
 With Polars, you can select a few columns using `select()`. 
 
-```Rust
-// Connect to LazyFrame (no data is brought into memory)
-let args = ScanArgsParquet::default();
-let mut lf = LazyFrame::scan_parquet("./data/lfs_large/part", args).unwrap();
+```rust
+=== Rust 3_2_1_select evcxr
+=== Rust 3_2_1_select imports
+=== Rust 3_2_1_select block_1
 ```
 
 You can get a vector of all the variables in the connected data with: 
 
-```Rust
-// Get names of columns
-let cols: Vec<String> = lf
-    .collect_schema()
-    .unwrap()
-    .iter_names()
-    .map(|c| c.to_owned().to_string())
-    .collect();
-
-println!(
-    "Vector of the {} variables in the LazyFrame: {:?}",
-    cols.len(),
-    cols
-);
+```rust
+=== Rust 3_2_1_select block_2
 ```
 
 ```
@@ -36,17 +24,8 @@ Vector of the 60 variables in the LazyFrame: ["rec_num", "survyear", "survmnth",
 
 Using `select()` you can select various columns using the `col()` function. With the `regex` Polars crate feature, you can also use regular expressions to identify columns following a pattern. This pattern must start with `^` and end with `$`. In this example, we are keeping `survyear`, `survmnth`, `prov`, `hrlyearn` and `finalwt`. With `alias` we are renaming `hrlyearn` to `hourly_wages`.
 
-```Rust
-// Select some columns by name & with regex & with rename
-let lf = lf.select([
-    col("^surv.*$"), // survyear, survmnth
-    col("prov"),
-    col("hrlyearn").alias("hourly_wages"),
-    col("finalwt"),
-]);
-
-// Print selected column (top 5 values)
-println!("{}", lf.clone().limit(5).collect().unwrap());
+```rust
+=== Rust 3_2_1_select block_3
 ```
 
 ```
@@ -68,12 +47,8 @@ shape: (5, 5)
 
 You can also drop variables with `drop()`:
 
-```Rust
-// Drop variables
-let lf = lf.drop([col("prov"), col("hourly_wages")]);
-
-// Print selected column (top 5 values)
-println!("{}", lf.clone().limit(5).collect().unwrap());
+```rust
+=== Rust 3_2_1_select block_4
 ```
 
 ```

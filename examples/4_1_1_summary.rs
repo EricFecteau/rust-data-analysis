@@ -33,6 +33,8 @@ fn main() {
             Some(DataType::String),
         ));
 
+    // === block_2
+
     // Simple statistics (single point)
     let mean_hourly_wages = lf
         .clone()
@@ -42,6 +44,8 @@ fn main() {
         .unwrap();
 
     println!("Mean hourly wages:\n\n{mean_hourly_wages}\n");
+
+    // === block_3
 
     // Multiple statistics (calculated)
     let hourly_wages_stats = lf
@@ -76,6 +80,8 @@ fn main() {
 
     println!("Table of summary statistics about hourly wages:\n\n{hourly_wages_stats}\n");
 
+    // === block_4
+
     // Simple statistics by category
     let mean_hourly_wages_by_prov = lf
         .clone()
@@ -87,6 +93,8 @@ fn main() {
         .unwrap();
 
     println!("Mean hourly wages by province:\n\n{mean_hourly_wages_by_prov}\n");
+
+    // === block_5
 
     // Calculate weighted quantile
     fn weighted_quantile(col: Expr, wt: Expr, percentile: Expr) -> Expr {
@@ -130,6 +138,8 @@ fn main() {
     println!(
         "Table of weighted summary statistics about hourly wages:\n\n{hourly_wages_stats_wt}\n"
     );
+
+    // === block_6
 
     // Weighted statistics (by gender)
     let hourly_wages_stats_wt_by_gender = lf

@@ -12,6 +12,8 @@ fn main() {
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
+    // === block_2
+
     // Add new variables from literals
     let lf = lf.select([
         col("^surv.*$"),                         // keep survyear, survmnth
@@ -23,12 +25,16 @@ fn main() {
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
+    // === block_3
+
     // Can't use created columns in the same `select()`, but you can add new column(s) with `with_column()`
     let lf = lf.with_column(
         (col("five") + col("ten")).alias("fifteen"), // add two columns
     );
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
+
+    // === block_4
 
     // Cast the value from an `i64` to a `f64` and modify it (divide by 100)
     let lf = lf
@@ -39,6 +45,8 @@ fn main() {
         );
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
+
+    // === block_5
 
     // Create categorical variables
     let lf = lf.with_column(
@@ -55,6 +63,8 @@ fn main() {
     );
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
+
+    // === block_6
 
     // Change numeric province code to alpha-code
     let lf = lf.with_column(col("prov").replace_strict(

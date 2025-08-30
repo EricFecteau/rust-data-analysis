@@ -16,6 +16,8 @@ fn main() {
         (cloud::AmazonS3ConfigKey::Endpoint, "http://127.0.0.1:9000"),
     ]);
 
+    // === block_2
+
     // Connect to LazyFrame (no data is brought into memory)
     let lf = LazyCsvReader::new(PlPath::from_str("s3://lfs/lfs.csv"))
         .with_cloud_options(Some(cloud_options.clone()))
@@ -23,6 +25,8 @@ fn main() {
         .unwrap();
 
     println!("{:?}", println!("{}", lf.limit(5).collect().unwrap()));
+
+    // === block_3
 
     // Connect to LazyFrame (no data is brought into memory)
     let args = ScanArgsParquet {

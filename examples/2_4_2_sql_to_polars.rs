@@ -24,6 +24,8 @@ fn main() {
     // Print table
     println!("{df}");
 
+    // === block_2
+
     // Prepare query
     let query = &[CXQuery::from(
         "SELECT survmnth, avg(hrlyearn / 100)::float as avg_hourly FROM lfs WHERE survyear = 2024 group by survmnth",

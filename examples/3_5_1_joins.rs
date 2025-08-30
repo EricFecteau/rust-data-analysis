@@ -23,6 +23,8 @@ fn main() {
         lfs_month.push(lf);
     }
 
+    // === block_2
+
     // Concatenate vertically two (or more) datasets
     let lf_jan_to_apr = concat(
         [
@@ -35,8 +37,12 @@ fn main() {
     )
     .unwrap();
 
+    // === block_3
+
     // See `survmnth` going from 1 to 4 for 2023
     println!("{}", lf_jan_to_apr.collect().unwrap());
+
+    // === block_4
 
     // Update the lfs_month vector to remove variables and update values
     for m in 1..5 {
@@ -51,6 +57,8 @@ fn main() {
                 col("hrlyearn").alias(format!("earn_{mm}")),
             ]);
     }
+
+    // === block_5
 
     // Left join (creating a cohort)
     let jan_cohort = lfs_month[0]
@@ -80,6 +88,8 @@ fn main() {
 
     println!("{}", jan_cohort.collect().unwrap());
 
+    // === block_6
+
     // Inner join (creating a "always earning" cohort)
     let longitudinal_all = lfs_month[0]
         .clone()
@@ -107,6 +117,8 @@ fn main() {
         );
 
     println!("{}", longitudinal_all.collect().unwrap());
+
+    // === block_7
 
     // More complex types of joins (e.g. join on multiple variables)
     let fix_full_join_vars = [
