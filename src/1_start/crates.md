@@ -72,6 +72,8 @@ For the book, the following features are enabled:
 * "regex": Allows for the use of regex to select columns
 * "fmt": Allows to format the output of Polars (e.g. format tables as markdown)
 
+You can find all the available features in the [Polars documentation](https://docs.rs/crate/polars/latest/features).
+
 ## PostgreSQL
 
 The [postgres](https://docs.rs/postgres/latest/postgres/) crates is a synchronous library to read and write data to a PostgreSQL database. Postgres, being simple to install and use, is used as an example in this book. It could be replaced by various other crates used to read other databases: [MySql](https://docs.rs/mysql_common/latest/mysql_common/), [Sqlite](https://docs.rs/rusqlite/0.32.1/rusqlite/), [MSSQL](https://crates.io/crates/tiberius), [Oracle](https://docs.rs/tiberius/0.12.3/tiberius/). Other databases should also be available through these crates, such as Mariadb (MySql), ClickHouse (MySql), Redshift (PostgreSQL), Azure SQL Database (MSSql).
@@ -82,7 +84,7 @@ The [connectorx](https://github.com/sfu-db/connector-x) crate enables you to loa
 
 ## DataFrame Interchange
 
-The [df_interchange](https://docs.rs/df-interchange/latest/df_interchange/) allows for seamless interoperability between any version of Polars (>=0.40) and any version of Arrow (>=54), including between versions of the same crate (e.g. Polars 0.40 to Polars 0.46), using the Arrow C Data Interchange format.
+The [df_interchange](https://docs.rs/df-interchange/latest/df_interchange/) crate allows for seamless interoperability between any version of Polars (>=0.40) and any version of Arrow (>=54), including between versions of the same crate (e.g. Polars 0.40 to Polars 0.46), using the Arrow C Data Interchange format.
 
 ## HypoRS
 
@@ -94,7 +96,7 @@ The [polars_excel_writer](https://docs.rs/polars_excel_writer/latest/polars_exce
 
 ## Plotlars
 
-The [plotlars](https://docs.rs/plotlars/latest/plotlars/) crate is a wrapper around the [plotly]() crate, bridging the gap between the powerful Polars data analysis library and Plotly. Similar to [ggplot2](https://ggplot2.tidyverse.org/) it follows the [grammar of graphics](https://ggplot2-book.org/mastery.html) approach to creating plots. 
+The [plotlars](https://docs.rs/plotlars/latest/plotlars/) crate is a wrapper around the [plotly](https://docs.rs/plotly/latest/plotly/) crate, bridging the gap between the powerful Polars data analysis library and Plotly. Similar to [ggplot2](https://ggplot2.tidyverse.org/) in R, it follows the [grammar of graphics](https://ggplot2-book.org/mastery.html) approach to creating plots. 
 
 ## Markdown
 

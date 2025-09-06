@@ -38,7 +38,7 @@ fn main() {
         file.write_all(&csv_buf).unwrap();
     }
 
-    // Create directory
+    // Create directories used throughout the book
     let _ = std::fs::remove_dir_all("./data");
     std::fs::create_dir("./data").unwrap();
     std::fs::create_dir("./data/lfs_csv").unwrap();
@@ -48,8 +48,10 @@ fn main() {
     std::fs::create_dir("./data/minio").unwrap();
     std::fs::create_dir("./data/output").unwrap();
 
-    // For the full-year files (prior to current year)
+    // Download full year ZIP and extract
     for y in years {
+        println!("Downloading and extracting {y} LFS data");
+
         let url = format!("https://www150.statcan.gc.ca/n1/pub/71m0001x/2021001/hist/{y}-CSV.zip");
 
         let mut zip = download_zip(&url);

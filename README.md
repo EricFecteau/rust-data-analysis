@@ -1,6 +1,6 @@
 # Data analysis in Rust
 
- The [Data analysis in Rust]() book is a "learn by example" guide to data analysis in Rust. It assumes minimal knowledge of data analysis and minimal familiarity with Rust and its tooling. One of the goals of this book is to demonstrates that Rust is data analysis ready.
+ The [Data analysis in Rust]() book is a "learn by example" guide to data analysis in Rust. It assumes minimal knowledge of data analysis and minimal familiarity with Rust and its tooling.
 
 # Overview of the book
 
@@ -20,7 +20,7 @@ This repository works both as the repository for this `mdBook` and a runnable co
 
 # Specification
 
-While this book uses larger-than-memory data (at least larger than 16 GB of RAM), at no point does the example bring all the data into memory at the same time. The memory spikes at a maximum of around 5 GB or so on some processes.
+While this book uses larger-than-memory data (at least larger than 16 GB of RAM), at no point does the example bring all the data into memory at the same time. The memory spikes at a maximum of around 5 GB or so on some processes. Therefore, these examples can be run on pretty much any modern computer.
 
 # Contributing
 

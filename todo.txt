@@ -7,3 +7,5 @@
 * Review entire document
 * Finish moving examples into text (with script)
 * Verify correct number for all "cargo run -r --example"
+* Monitor RAM useage
+* Finish justfile
