@@ -53,7 +53,7 @@ This section will convert each CSV into individual Parquet files. It will create
 
 ## Large file
 
-This section will create a large CSV file and a large Parquet file. This will become a "larger-than-memory" dataset. At no point will all the data be in memory at the same time. It will use approximately 5 GB of RAM. You can run this script using `cargo run -r --example 1_2_4_large`. 
+This section will create a large CSV file and a large Parquet file. This will become a "larger-than-memory" dataset. At no point will all the data be in memory at the same time. It will use approximately  GB of RAM. You can run this script using `cargo run -r --example 1_2_4_large`. 
 
 ```rust
 === Rust 1_2_4_large evcxr

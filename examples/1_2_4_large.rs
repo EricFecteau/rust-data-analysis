@@ -1,10 +1,9 @@
 // === evcxr
-// :dep polars = { version = "0.49", features = ["lazy", "parquet"] }
-
-use std::fs::File;
+// :dep polars = { version = "0.50", features = ["lazy", "parquet"] }
 
 // === imports
 use polars::prelude::*;
+use std::fs::File;
 
 // === main
 fn main() {
@@ -42,16 +41,17 @@ fn main() {
 
     // Ready write large parquet file by batch
     let file = File::create("./data/lfs_large/lfs.parquet").unwrap();
-    let schema = lf.clone().collect_schema().unwrap();
-    let mut pq_writer = ParquetWriter::new(file)
+    let schema: Arc<Schema> = lf.clone().collect_schema().unwrap();
+    let mut pq_writer: polars::io::parquet::write::BatchedWriter<File> = ParquetWriter::new(file)
         .set_parallel(true)
         .batched(&schema)
         .unwrap();
 
     // Ready write large csv file by batch
     let file = File::create("./data/lfs_large/lfs.csv").unwrap();
-    let schema = lf.clone().collect_schema().unwrap();
-    let mut csv_writer = CsvWriter::new(file).batched(&schema).unwrap();
+    let schema: Arc<Schema> = lf.clone().collect_schema().unwrap();
+    let mut csv_writer: polars::io::csv::write::BatchedWriter<File> =
+        CsvWriter::new(file).batched(&schema).unwrap();
 
     for y in years {
         // Collect one year of data

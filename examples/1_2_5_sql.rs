@@ -1,5 +1,5 @@
 // === evcxr
-// :dep polars = { version = "0.49", features = ["lazy"] }
+// :dep polars = { version = "0.50", features = ["lazy", "parquet"] }
 // :dep postgres = "0.19"
 
 // === imports

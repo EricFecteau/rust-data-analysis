@@ -1519,7 +1519,8 @@ dependencies = [
 [[package]]
 name = "connectorx"
 version = "0.4.4"
-source = "git+https://github.com/sfu-db/connector-x.git#e4542d4d8954116b04fc22763cf0617e529ec2c0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d9e66a4a88deaf45a8da6ee5b59f5444fcf714984122c5ba8f3817b2f9d18d07"
 dependencies = [
  "anyhow",
  "arrow",

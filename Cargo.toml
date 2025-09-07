@@ -30,7 +30,7 @@ polars = { version = "0.50", features = [
 postgres = "0.19"
 
 # Move data from SQL to Polars (through Arrow)
-connectorx = { git = "https://github.com/sfu-db/connector-x.git", features = ["src_postgres", "dst_polars"] }
+connectorx = { version = "0.4.4", features = ["src_postgres", "dst_polars"] }
 
 # Hypothesis testing
 hypors = "0.3.0"
