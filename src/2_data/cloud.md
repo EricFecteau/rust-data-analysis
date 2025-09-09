@@ -1,6 +1,6 @@
 # Cloud
 
-Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage and Google Cloud Storage. This methods allows for lazy evaluation. In this example, we will show how to connect to AWS S3, set up in the optional `s3 bucket` section of the [data](../1_start/data.md#s3-bucket-optional) chapter. 
+Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage and Google Cloud Storage. This methods allows for lazy evaluation of cloud objects. In this example, we will show how to connect to AWS S3, set up in the optional `s3 bucket` section of the [data](../1_start/data.md#s3-bucket-optional) chapter. 
 
 > [!IMPORTANT]  
 > Reminder: make sure that the minio server is running (`minio server ./data/minio`) before running these examples.
@@ -38,7 +38,7 @@ shape: (5, 60)
 └─────────┴──────────┴──────────┴─────────┴───┴─────────┴──────────┴─────────┴─────────┘
 ```
 
-For `.parquet` files, in the same way as was shown for the [Parquet](parquet.md) data stored locally, you can get a `LazyFrame` from `scan_parquet` with data on the cloud, by adding `cloud_options` to the `ScanArgsParquet`. This works for both individual parquet files, or as shown below, for partitioned parquet files. 
+For `.parquet` files, in the same way as was shown for the [Parquet](parquet.md) data stored locally, you can get a `LazyFrame` from `scan_parquet` with data on the cloud, by adding `cloud_options` to the `ScanArgsParquet`. This works for both individual parquet files or partitioned parquet files. 
 
 > [!NOTE]
 > For partitioned parquet files on the cloud, the `/` at the end of `s3://lfs/part/` is required (unlike on local data).
@@ -67,6 +67,8 @@ shape: (5, 60)
 Writing to the cloud is similar to writing to local data. Instead of providing a `std::fs::File` writer, you provide a `CloudWriter` from polars. To write, you must have `DataFrame` in memory:
 
 ```rust
+=== Rust 2_5_2_write_cloud evcxr
+=== Rust 2_5_2_write_cloud imports
 === Rust 2_5_2_write_cloud block_2
 ```
 

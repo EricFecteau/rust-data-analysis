@@ -86,4 +86,4 @@ folder/
 ├─ prov=59/
 ```
 
-The [filter](../3_manipulate/select.md) chapter will go into more detail about the advantages of doing this.
+The [filter](../3_transformation/select.md) chapter will go into more detail about the advantages of doing this.

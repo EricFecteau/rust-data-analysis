@@ -2,7 +2,7 @@
 
 Creating a DataFrame from data stored in code is generally not very useful. Data is more frequently stored in csv files, parquet files or databases. It is still very useful to know how to create these small DataFrames for sharing reproducible examples, showcasing a feature or identifying a bug. 
 
-To create a DataFrame, you first have to create `Columns`. You can create columns with `Column::new()` and passing a name and an vector of values. Here we create the "year" (i32), "month" (str) and value (f64) variables.
+To create a DataFrame, you first have to create `Columns`. You can create columns with `Column::new()` and passing a name and an vector of values. Here we create the "year" (`i32`), "month" (`str`) and value (`f64`) variables.
 
 Run this script using `cargo run -r --example 2_1_1_dataframe`.
 
@@ -36,7 +36,7 @@ shape: (6, 3)
 └──────┴──────────┴───────┘
 ```
 
-The `df!()` macro can simplify this! Instead of creating a DataFrame from `Columns`, you can do it all in one step. Here we create the "year" (i32), "month" (str) and value (f64) variables.
+The `df!()` macro can simplify this! Instead of creating a DataFrame from `Columns`, you can do it all in one step. Here we create the "year" (`i32`), "month" (`str`) and value (`f64`) variables.
 
 ```Rust
 === Rust 2_1_1_dataframe block_3

@@ -1,4 +1,5 @@
 // === evcxr
+// :dep polars = { version = "0.50", features = ["lazy", "parquet"] }
 
 // === imports
 use connectorx::prelude::*;

@@ -22,7 +22,7 @@ fn main() {
     // This functionality is unstable according to the docs
     write_partitioned_dataset(
         &mut df,
-        PlPath::from_str("./data/temp_data/_temp/").as_ref(),
+        PlPath::from_str("./data/temp_data/partitioned/").as_ref(),
         vec!["prov".into(), "gender".into()],
         &ParquetWriteOptions::default(),
         None,

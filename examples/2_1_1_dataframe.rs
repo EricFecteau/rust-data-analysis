@@ -1,5 +1,5 @@
 // === evcxr
-// :dep polars = "0.49"
+// :dep polars = "0.50"
 
 // === imports
 use polars::prelude::*;
@@ -27,8 +27,8 @@ fn main() {
 
     // Use the df! macro to create DataFrame
     let df = df!("year" => [2008, 2008, 2008, 2008, 2009, 2009],
-                            "month" => ["September", "October", "November", "December", "January", "February"],
-                            "value" => [0.21, 0.22, 0.23, 0.25, 0.24, 0.25])
+                "month" => ["September", "October", "November", "December", "January", "February"],
+                "value" => [0.21, 0.22, 0.23, 0.25, 0.24, 0.25])
     .unwrap();
 
     println!("{df}");
