@@ -14,7 +14,7 @@ reqwest = { version = "0.12", features = ["blocking"] }
 zip = "4"
 
 # Polars - open-source library for data manipulation
-polars = { version = "0.50", features = [
+polars = { version = "0.51", features = [
     "lazy", # LazyFrame
     "parquet", # Parquet files
     "round_series", # Round values

@@ -1,7 +1,6 @@
 // === evcxr
 
 // === imports
-use df_interchange::Interchange;
 use polars::prelude::pivot::pivot_stable;
 use polars::prelude::*;
 use polars_excel_writer::PolarsExcelWriter;
@@ -11,7 +10,7 @@ use rust_xlsxwriter::{Chart, ChartLegendPosition, ChartType, Workbook};
 fn main() {
     // === block_1
 
-    // Connect to LazyFrame (no data is brought into memory)
+    // Connect to LazyFrame
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
@@ -58,16 +57,6 @@ fn main() {
     println!("Wide:\n{df_wide}");
 
     // === block_2
-
-    // Convert from Polars 0.50 to Polars 0.49
-    let df_long = Interchange::from_polars_0_50(df_long)
-        .unwrap()
-        .to_polars_0_49()
-        .unwrap();
-    let df_wide = Interchange::from_polars_0_50(df_wide)
-        .unwrap()
-        .to_polars_0_49()
-        .unwrap();
 
     // Create a new Excel writer.
     let mut excel_writer = PolarsExcelWriter::new();

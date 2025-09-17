@@ -1,5 +1,5 @@
 // === evcxr
-// :dep polars = { version = "0.50", features = ["lazy", "parquet", "regex"] }
+// :dep polars = { version = "0.51", features = ["lazy", "parquet", "regex"] }
 
 // === imports
 use polars::prelude::*;
@@ -8,7 +8,7 @@ use polars::prelude::*;
 fn main() {
     // === block_1
 
-    // Connect to LazyFrame (no data is brought into memory)
+    // Connect to LazyFrame
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
@@ -17,7 +17,7 @@ fn main() {
     // Add new variables from literals
     let lf = lf.select([
         col("^surv.*$"),                         // keep survyear, survmnth
-        col("prov"),                             // Province of residence
+        col("prov"),                             // keep province
         col("hrlyearn").alias("hourly_wages"),   // keep hrlyearn as hourly_wages
         lit(5).alias("five"),                    // add single value literal
         (lit(5) + lit(7) - lit(2)).alias("ten"), // add single value from two or more literals

@@ -1,5 +1,5 @@
 // === evcxr
-// :dep polars = { version = "0.50", features = ["lazy", "parquet", "regex"] }
+// :dep polars = { version = "0.51", features = ["lazy", "parquet", "regex"] }
 
 // === imports
 use polars::prelude::*;
@@ -8,7 +8,7 @@ use polars::prelude::*;
 fn main() {
     // === block_1
 
-    // Connect to LazyFrame (no data is brought into memory)
+    // Connect to LazyFrame
     let args = ScanArgsParquet::default();
     let mut lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 

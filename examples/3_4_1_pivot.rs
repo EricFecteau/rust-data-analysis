@@ -1,5 +1,5 @@
 // === evcxr
-// :dep polars = { version = "0.50", features = ["lazy", "parquet", "regex", "replace"] }
+// :dep polars = { version = "0.51", features = ["lazy", "parquet", "regex", "replace"] }
 
 // === imports
 use polars::prelude::pivot::pivot_stable;
@@ -9,7 +9,7 @@ use polars::prelude::*;
 fn main() {
     // === block_1
 
-    // Connect to parquet (no data is brought into memory)
+    // Connect to parquet
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 

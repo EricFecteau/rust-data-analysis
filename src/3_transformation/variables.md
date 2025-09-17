@@ -4,7 +4,7 @@ This section will explore how to create new variables, derived from other variab
 
 ## Literals
 
-First, lets connect to the partitioned parquet file:
+To have access to data, lets connect to the parquet LFS data:
 
 ```rust
 === Rust 3_3_1_variables evcxr
@@ -12,8 +12,7 @@ First, lets connect to the partitioned parquet file:
 === Rust 3_3_1_variables block_1
 ```
 
-In the same way as you can select existing columns with `select()`, you can create variables from literals using `lit()` by giving them a name with `alias()`. As you can see in this example, you can create a new column from a literal with `lit(5).alias("five")` or a new variable from a formula of a mix of literals (e.g. `(lit(5) + lit(7) - lit(2)).alias("ten")`). You can use any of the arithmetic expressions (`-`, `+`, `*`, `/`, `%`).
-
+In the same way as selecting existing columns with `select()`, you can create variables from literals using `lit()` by giving them a name with `alias()`. As you can see in this example, you can create a new column from a literal with `lit(5).alias("five")` or a new variable from a formula of a mix of literals (e.g. `(lit(5) + lit(7) - lit(2)).alias("ten")`). You can use any of the arithmetic expressions (`-`, `+`, `*`, `/`, `%`).
 
 ```rust
 === Rust 3_3_1_variables block_2
@@ -60,7 +59,7 @@ shape: (5, 7)
 └──────────┴──────────┴──────┴──────────────┴──────┴─────┴─────────┘
 ```
 
-Now lets look at the real data and how to modify this. As we can see, `hourly_wages` is an `i64` in cents. We might want to convert it to dollars and cents (e.g. from `2462` to `24.62`). Tto do this, we have to convert he column to a `f64` using `.cast(DataType::Float64)`:
+Now lets look at real data and how to modify it. As we can see, `hourly_wages` is an `i64` in cents. We might want to convert it to dollars and cents (e.g. from `2462` to `24.62`). To do this, we have to convert he column to a `f64` using `.cast(DataType::Float64)`:
 
 ```rust
 === Rust 3_3_1_variables block_4

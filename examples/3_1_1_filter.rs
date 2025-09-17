@@ -1,5 +1,5 @@
 // === evcxr
-// :dep polars = { version = "0.50", features = ["lazy", "parquet", "is_in"] }
+// :dep polars = { version = "0.51", features = ["lazy", "parquet", "is_in"] }
 
 // === imports
 use polars::prelude::*;
@@ -8,7 +8,7 @@ use polars::prelude::*;
 fn main() {
     // === block_1
 
-    // Connect to LazyFrame (no data is brought into memory)
+    // Connect to LazyFrame
     let args = ScanArgsParquet::default();
     let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
 
@@ -52,9 +52,17 @@ fn main() {
 
     // Using `is_in` crate feature with literals
     let lf_filt_is_in = lf.clone().filter(col("survyear").is_in(
-        lit(Series::from_iter(vec![2022, 2023, 2024])).implode(),
+        lit(Series::from_iter(vec![2021, 2022, 2023, 2024])).implode(),
         false,
     ));
+
+    // === block_7
+
+    // Using `is_in` crate feature with literals
+    let year_vec: Vec<i32> = (2022..=2024).collect();
+    let lf_filt_is_in_vec = lf
+        .clone()
+        .filter(col("survyear").is_in(lit(Series::from_iter(year_vec)).implode(), false));
 
     // === end
 
@@ -62,4 +70,5 @@ fn main() {
     println!("{}", lf_filt_one.limit(5).collect().unwrap());
     println!("{}", lf_filt_complex.limit(5).collect().unwrap());
     println!("{}", lf_filt_is_in.limit(5).collect().unwrap());
+    println!("{}", lf_filt_is_in_vec.limit(5).collect().unwrap());
 }

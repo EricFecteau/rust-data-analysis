@@ -1,5 +1,5 @@
 // === evcxr
-// :dep polars = "0.50"
+// :dep polars = "0.51"
 
 // === imports
 use polars::prelude::*;
