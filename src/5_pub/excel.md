@@ -7,7 +7,6 @@ In the data analysis world, Excel is still the universal aggregate statistics ex
 First, lets create some summary statistics to throw into the excel file. We will create a table of mean hourly earnings by year and province, in a long format (e.g. 3 columns: "survyear", "prov" and "hourly_wages") and wide format (e.g. "survyear" as row and "prov" as column). Both `df_long` and `df_wide` are brought into memory as data frames.
 
 ```rust
-=== Rust 5_1_0_excel evcxr
 === Rust 5_1_0_excel imports
 === Rust 5_1_0_excel block_1
 ```

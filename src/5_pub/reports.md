@@ -9,7 +9,6 @@ For longer and more in-depth reports, this book is, itself, the a good example e
 The output of the report will be an HTML file that can be opened in a browser. Therefore, the first step is to create an HTML file as output:
 
 ```rust
-=== Rust 5_3_0_reports evcxr
 === Rust 5_3_0_reports imports
 === Rust 5_3_0_reports block_1
 ```

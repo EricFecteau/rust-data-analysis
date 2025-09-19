@@ -1,7 +1,3 @@
-// === evcxr
-// :dep reqwest = { version = "0.12", features = ["blocking"] }
-// :dep zip = "2"
-
 // === imports
 use std::io::{Read, Write};
 

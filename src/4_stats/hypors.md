@@ -12,7 +12,6 @@ With `Hypors`, you can perform a [Chi-Square Test for Independence](https://docs
 We first must create some summary statistics for the contingency table needed for the Chi-Square test. We will create a count of individuals (unweighted) with paid overtime, by gender and marital status.
 
 ```rust
-=== Rust 4_2_1_chi_square evcxr
 === Rust 4_2_1_chi_square imports
 === Rust 4_2_1_chi_square block_1
 ```
@@ -88,7 +87,6 @@ With `Hypors`, you can perform a [one-way Analysis of Variance (ANOVA)](https://
 We first must subset our data for the analysis. The data we will use for the ANOVA will be the (unweighted) hourly earnings by immigration status (from January 2020).
 
 ```rust
-=== Rust 4_2_2_anova evcxr
 === Rust 4_2_2_anova imports
 === Rust 4_2_2_anova block_1
 ```
@@ -169,7 +167,6 @@ With `Hypors`, you can perform a [Mann-Whitney U Test](https://docs.rs/hypors/la
 We first must subset our data for the analysis. The data we will use for the Mann-Whitney U test will be the (unweighted) hourly earnings by gender (from January 2020).
 
 ```rust
-=== Rust 4_2_3_mwu evcxr
 === Rust 4_2_3_mwu imports
 === Rust 4_2_3_mwu block_1
 ```

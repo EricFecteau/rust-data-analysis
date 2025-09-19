@@ -1,5 +1,3 @@
-// === evcxr
-
 // === imports
 use polars::prelude::{pivot::pivot_stable, *};
 

@@ -1,6 +1,3 @@
-// === evcxr
-// :dep polars = { version = "0.51", features = ["lazy", "parquet", "is_in"] }
-
 // === imports
 use polars::prelude::*;
 

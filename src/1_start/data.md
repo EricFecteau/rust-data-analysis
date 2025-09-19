@@ -26,7 +26,6 @@ Here is a Rust script to download all data necessary for this book. It creates a
 You can run this script using `cargo run -r --example 1_2_1_download`.
 
 ```rust
-=== Rust 1_2_1_download evcxr
 === Rust 1_2_1_download imports
 === Rust 1_2_1_download program
 ```
@@ -36,7 +35,6 @@ You can run this script using `cargo run -r --example 1_2_1_download`.
 Since there does not seem to exist a style guide for Polars, this book will use the [R Tidyverse style guide](https://style.tidyverse.org/), when appropriate. Since all variables on the LFS CSV files are uppercase, this script will modify the variables to be lowercase. You can run this code with `cargo run -r --example 1_2_2_styling`.
 
 ```rust
-=== Rust 1_2_2_styling evcxr
 === Rust 1_2_2_styling imports
 === Rust 1_2_2_styling program
 ```
@@ -46,7 +44,6 @@ Since there does not seem to exist a style guide for Polars, this book will use 
 This section will convert each CSV into individual Parquet files. It will create approximately 300 MB of Parquet file form the 2 GB of CSV files. You can run this code with `cargo run -r --example 1_2_3_parquet`.
 
 ```rust
-=== Rust 1_2_3_parquet evcxr
 === Rust 1_2_3_parquet imports
 === Rust 1_2_3_parquet program
 ```
@@ -56,7 +53,6 @@ This section will convert each CSV into individual Parquet files. It will create
 This section will create a large CSV file and a large Parquet file. This will become a "larger-than-memory" dataset. At no point will all the data be in memory at the same time. It will use approximately  GB of RAM. You can run this script using `cargo run -r --example 1_2_4_large`. 
 
 ```rust
-=== Rust 1_2_4_large evcxr
 === Rust 1_2_4_large imports
 === Rust 1_2_4_large program
 ```
@@ -74,7 +70,6 @@ The following example, using Arch Linux, will show the general process:
 Once set up, you can use Rust to load he data into the database. You can run this script using `cargo run -r --example 1_2_5_sql`.
 
 ```Rust
-=== Rust 1_2_5_sql evcxr
 === Rust 1_2_5_sql imports
 === Rust 1_2_5_sql program
 ```
@@ -88,4 +83,4 @@ Start the minio server and point it to the `./data/minio` folder with `minio ser
 The following code creates a bucket called `lfs` and load the `./data/lfs_large/lfs.csv` CSV file, the `./data/lfs_large/lfs.parquet` parquet file and the partitioned parquet folder `./data/lfs_large/part/` with Rust. Run this script using `cargo run -r --example 1_2_6_minio`.
 
 > [!NOTE]
-> This code can't be run with `evcxr` REPL or with Jupyter notebook. YOu must run it with `cargo run -r --example 1_2_6_minio`.
+> Due to the length of this code, because of the multi-part upload S3 code, it was omited from this section. Yoiu must run it with `cargo run -r --example 1_2_6_minio`.

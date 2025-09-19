@@ -9,7 +9,6 @@ Plots are the langauge of data analysts. There are mutiple dozens of types of pl
 Lets get some summary statistics to output as a bar graph. Here is a table of the mean hourly wage by gender and province:
 
 ```rust
-=== Rust 5_2_0_plots evcxr
 === Rust 5_2_0_plots imports
 === Rust 5_2_0_plots block_1
 ```
@@ -128,5 +127,3 @@ await Plotly.newPlot(graph_div, {"data":[{"type":"scatter","name":"Men+","x":[1.
 </div>
 
 Instead of the `to_html()`, you can also write an image using this syntax: `.write_image("./data/output/out.png", 800, 600, 1.0).unwrap()`
-
-## EVCXR / Jupyter!

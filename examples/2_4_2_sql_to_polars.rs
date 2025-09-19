@@ -1,6 +1,3 @@
-// === evcxr
-// :dep polars = { version = "0.51", features = ["lazy", "parquet"] }
-
 // === imports
 use connectorx::prelude::*;
 use std::convert::TryFrom;

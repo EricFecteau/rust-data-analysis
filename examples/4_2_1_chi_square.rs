@@ -1,7 +1,3 @@
-// === evcxr
-// :dep polars = { version = "0.51", features = ["lazy", "parquet", "pivot"] }
-// :dep hypors = "0.2"
-
 // === imports
 use hypors::chi_square::independence;
 use polars::prelude::*;

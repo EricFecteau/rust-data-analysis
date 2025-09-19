@@ -13,24 +13,22 @@ To build the crates required for this book, you will also need to install [cmake
 > [!IMPORTANT]
 > This book assumes a minimal amount of familiarity with Rust and it's toolkit. The [Rust Book](https://doc.rust-lang.org/stable/book/) (free) and [Programming Rust, 2nd Edition](https://www.oreilly.com/library/view/programming-rust-2nd/9781492052586/) (paid) are really great resources to learn Rust.
 
-All examples in this book are accompanied with [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). These scripts can be run with `cargo run -r --example 0_0_0_name_of_example`. The first time an example is run, it will take a long time to build all the dependencies, but subsequent runs, including of other examples, will be very quick.
+All examples in this book are accompanied with [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). These scripts can be run with `cargo run -r --example 0_0_0_name_of_example`. The first time an example is run, it will take a long time to build all the dependencies, but subsequent runs, including of other examples, will be very quick. **This book recommends writing examples and running them with `cargo run`.**
 
 ## Data analysis environment
 
-Rust is a compiled programming language, which has significant advantages, at the disadvantage of quick data exploration (e.g. quickly querying the data multiple times to build the final query for your analysis). Thankfully, the [evcxr](https://github.com/evcxr/evcxr/blob/main/evcxr/README.md) evaluation context crate has created a [Rust REPL](https://github.com/evcxr/evcxr/blob/main/evcxr_repl/README.md) (Read-Eval-Print loop) and a [Kernel for Jupyter Notebooks]((https://github.com/evcxr/evcxr/blob/main/evcxr_jupyter/README.md)). This removes the need for the `main` function.
+The [evcxr](https://github.com/evcxr/evcxr/blob/main/evcxr/README.md) evaluation context crate has created a [Rust REPL](https://github.com/evcxr/evcxr/blob/main/evcxr_repl/README.md) (Read-Eval-Print loop) and a [Kernel for Jupyter Notebooks]((https://github.com/evcxr/evcxr/blob/main/evcxr_jupyter/README.md)). This removes the need for the `main` function. Like R and Python, this allows you to run code in chunks, or re-run a peice of analysis quickly with different options.
 
-> [!NOTE]
-> To import a dependency in either the REPL or the Jupyter Notebook, you submit a `Cargo.toml` dependency line starting with `:dep` (e.g. `:dep polars = { version = "0.51", features = ["lazy"] }` for `Polars 0.49` with the `lazy` feature). 
->
-> All [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples) in this book start with a `:dep` block that can be uncommented to run the script in the Rust REPL.
+To import a dependency in either the REPL or the Jupyter Notebook, you submit a `Cargo.toml` dependency line starting with `:dep` (e.g. `:dep polars = { version = "0.51", features = ["lazy"] }` for `Polars 0.51` with the `lazy` feature). 
 
-The `REPL` and the `Jupyter Kernel` have multiple quirks that make complex pipelines hard to run in chunks (e.g. failure to infer types without knowing the future code). It is recommended that anything more complex than data queries and exploration be done through the typical Rust setup (e.g. `cargo run`).
+> [!WARNING]
+> The `evcxr` REPL and the `Jupyter Kernel` have multiple quirks that make multi-step analysis impossible to run in chunks (e.g. failure to infer types without knowing the future code). The original goal for this book was to include `evcxr` and `jupyter kernel` code for each examples (e.g. add a `:dep` line for each script example in the book), but so many of the examples failed to run that it was removed. Caution should be used when using this analysis method. The following was kept in the event that someone was interested. 
 
 ### REPL
 
-Like with R, Python and Julia, the Rust REPL allows you to query your data over and over, changing your parameters, analysis type and variables, without having the re-run the whole script. You can install the Rust REPL from [the pre-built binary](https://github.com/evcxr/evcxr/blob/main/evcxr_repl/README.md).
+Like with R, Python and Julia, the Rust REPL allows you to run code in chunks, without having the re-run the whole script. You can install the Rust REPL from [the pre-built binary](https://github.com/evcxr/evcxr/blob/main/evcxr_repl/README.md).
 
-To make it work in VSCode, in a similar way as R, Python and Julia, you have to install the [multi-command](https://marketplace.visualstudio.com/items?itemName=ryuta46.multi-command) VSCode extension and edit the [keybindings.json](https://code.visualstudio.com/docs/configure/keybindings) with the following code. This will make it possible to highlight code and submit it to the Rust REPL with `ctrl + enter`.
+To make it work in VSCode, you have to install the [multi-command](https://marketplace.visualstudio.com/items?itemName=ryuta46.multi-command) VSCode extension and edit the [keybindings.json](https://code.visualstudio.com/docs/configure/keybindings) with the following code. This will make it possible to highlight code and submit it to the Rust REPL with `ctrl + enter`.
 
 ```json
 [
@@ -58,6 +56,6 @@ To submit code, start `evcxr` in the terminal window.
 
 ### Jupyter Notebooks
 
-Like with R, Python and Julia, the Rust Jupyter Kernel allows you to run Rust in a Jupyter Notebook. This allows you to do quick development by running similar code multiple time and also to create and share interactive notebook that contains code, visualizations, and outputs.
+Like with R, Python and Julia, the Rust Jupyter Kernel allows you to run Rust in a Jupyter Notebook. This allows you to share interactive notebook that contains code, visualizations, and outputs.
 
 To start with Rust in a Jupyter notebook, install [Jupyter notebook](https://jupyter.org/install) and the [Evcxr Jupyter Kernel](https://github.com/evcxr/evcxr/blob/main/evcxr_jupyter/README.md). Start Jupyter Notebook with `jupyter notebook`. It will open up in your browser. Once started, look for the "New" menu on the right and select "Rust". You will then be able to submit blocks Rust code. 

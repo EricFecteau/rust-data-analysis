@@ -7,7 +7,6 @@ This section will explore how to work with SQL databases in Rust. It relies on t
 You can direct query the data using the appropriate crate: [PostgreSQL](https://docs.rs/postgres/latest/postgres/), [MySql](https://docs.rs/mysql_common/latest/mysql_common/), [Sqlite](https://docs.rs/rusqlite/0.32.1/rusqlite/), [MSSQL](https://crates.io/crates/tiberius), [Oracle](https://docs.rs/tiberius/0.12.3/tiberius/). Other databases should also be available through these crates, such as Mariadb (MySql), ClickHouse (MySql), Redshift (PostgreSQL), Azure SQL Database (MSSql). You can run this section using `cargo run -r --example 2_4_1_postgresql`. 
 
 ```rust
-=== Rust 2_4_1_postgresql evcxr
 === Rust 2_4_1_postgresql imports
 === Rust 2_4_1_postgresql block_1
 ```
@@ -22,7 +21,6 @@ Using this method, each type of databases will have their own special connection
 Using [ConnectorX](https://docs.rs/connectorx/latest/connectorx/), you can move data from SQL servers to Polars with `get_arrow().polars()`. It will return a `DataFrame` (that can be converted to the latest version of Polars with `df-interchange` as explained in the [concepts](../1_start/concepts.md#polars-and-arrow-versions) section of the setup). You can run this section using `cargo run -r --example 2_4_2_sql_to_polars`.
 
 ```rust
-=== Rust 2_4_2_sql_to_polars evcxr
 === Rust 2_4_2_sql_to_polars imports
 === Rust 2_4_2_sql_to_polars block_1
 ```

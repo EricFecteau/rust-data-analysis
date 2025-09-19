@@ -7,7 +7,6 @@ This section will explore how to create new variables, derived from other variab
 To have access to data, lets connect to the parquet LFS data:
 
 ```rust
-=== Rust 3_3_1_variables evcxr
 === Rust 3_3_1_variables imports
 === Rust 3_3_1_variables block_1
 ```

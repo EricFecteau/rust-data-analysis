@@ -7,7 +7,6 @@ To create a DataFrame, you first have to create `Columns`. You can create column
 Run this script using `cargo run -r --example 2_1_1_dataframe`.
 
 ```Rust
-=== Rust 2_1_1_dataframe evcxr
 === Rust 2_1_1_dataframe imports
 === Rust 2_1_1_dataframe block_1
 ```

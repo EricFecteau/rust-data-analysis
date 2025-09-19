@@ -1,6 +1,3 @@
-// === evcxr
-// :dep postgres = "0.19"
-
 // === imports
 use postgres::{Client, NoTls};
 

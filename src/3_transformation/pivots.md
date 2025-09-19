@@ -12,7 +12,6 @@ Since the data has to be materialized (i.e. in-memory) to be pivoted, lets first
 In this example, we connect to the Parquet file, summarize the hourly wage data (unweighted) by year and province.
 
 ```rust
-=== Rust 3_4_1_pivot evcxr
 === Rust 3_4_1_pivot imports
 === Rust 3_4_1_pivot block_1
 ```

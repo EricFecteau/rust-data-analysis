@@ -7,7 +7,6 @@ This chapter will explore how to keep or drop columns from your data. You can ru
 To have access to data, lets connect to the parquet LFS data:
 
 ```rust
-=== Rust 3_2_1_select evcxr
 === Rust 3_2_1_select imports
 === Rust 3_2_1_select block_1
 ```

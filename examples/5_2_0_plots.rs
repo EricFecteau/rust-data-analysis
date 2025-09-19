@@ -1,5 +1,3 @@
-// === evcxr
-
 use df_interchange::Interchange;
 // === imports
 use plotlars::{BarPlot, Legend, LinePlot, Orientation, Plot, Rgb, Text};

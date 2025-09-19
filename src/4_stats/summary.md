@@ -7,7 +7,6 @@
 First, lets connect to the partitioned parquet files and modify the hourly earnings variable by dividing it by 100 (converting it from cents to dollars and cents) and providing a 2-letter label for the "province" variable and a label for the gender:
 
 ```rust
-=== Rust 4_1_1_summary evcxr
 === Rust 4_1_1_summary imports
 === Rust 4_1_1_summary block_1
 ```

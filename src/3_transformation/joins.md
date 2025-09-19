@@ -7,7 +7,6 @@ This section explore how to join two datasets, either by stacking them one on to
 Lets first create a vector containing four months (Jan to April) of LFS data, pulled form the single-month versions of the Parquet files.
 
 ```rust
-=== Rust 3_5_1_joins evcxr
 === Rust 3_5_1_joins imports
 === Rust 3_5_1_joins block_1
 ```

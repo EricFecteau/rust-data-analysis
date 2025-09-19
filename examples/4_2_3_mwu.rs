@@ -1,7 +1,3 @@
-// === evcxr
-// :dep polars = { version = "0.51", features = ["lazy", "parquet", "pivot"] }
-// :dep hypors = "0.2"
-
 // === imports
 use hypors::common::types::TailType;
 use hypors::mann_whitney::u_test;

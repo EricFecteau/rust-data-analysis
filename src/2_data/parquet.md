@@ -7,7 +7,6 @@ You can read and write from Parquet using Polars.
 You can connect to a Parquet file, like the large `./data/lfs_large/lfs.parquet`, without bringing it in memory, with the `LazyCsvReader`. You can run this section using `cargo run -r --example 2_3_1_read_parquet`.
 
 ```rust
-=== Rust 2_3_1_read_parquet evcxr
 === Rust 2_3_1_read_parquet imports
 === Rust 2_3_1_read_parquet block_1
 ```
@@ -44,7 +43,6 @@ shape: (5, 60)
 You can write to Parquet any `DataFrame` you have in memory. For this example, we will bring one month of the LFS into memory:
 
 ```rust
-=== Rust 2_3_2_write_parquet evcxr
 === Rust 2_3_2_write_parquet imports
 === Rust 2_3_2_write_parquet block_1
 ```

@@ -1,7 +1,3 @@
-// === evcxr
-// :dep polars = { version = "0.51", features = ["lazy", "parquet"] }
-// :dep postgres = "0.19"
-
 // === imports
 use polars::prelude::*;
 use std::io::{Read, Write};

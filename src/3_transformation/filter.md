@@ -9,7 +9,6 @@ This chapter will explore how to filter rows from your data. You can run these e
 To have access to data, lets connect to the parquet LFS data:
 
 ```Rust
-=== Rust 3_1_1_filter evcxr
 === Rust 3_1_1_filter imports
 === Rust 3_1_1_filter block_1
 ```

@@ -1,5 +1,3 @@
-// === evcxr
-
 // === imports
 use std::env;
 use std::fs::File;
