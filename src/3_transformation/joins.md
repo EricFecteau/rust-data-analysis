@@ -4,14 +4,14 @@ This section explore how to join two datasets, either by stacking them one on to
 
 ## Concatenate
 
-Lets first create a vector containing four months (Jan to April) of LFS data, pulled form the single-month versions of the Parquet files.
+First, we create a vector containing four months (Jan to April) of LFS data, pulled form the single-month versions of the Parquet files.
 
 ```rust
 === Rust 3_5_1_joins imports
 === Rust 3_5_1_joins block_1
 ```
 
-To concatenate data of the same row-shape on top of each other, we can use the `concat` function by listing the LazyFrames we want to stack. Here, we can concatenate all four months of the LFS found in the `lfs_month` vector.
+To concatenate data of the same row-shape on top of each other, we can use the `concat` function by listing the LazyFrames we want to stack tegether. Here, we can concatenate all four months of the LFS found in the `lfs_month` vector.
 
 ```rust
 === Rust 3_5_1_joins block_2
@@ -46,16 +46,43 @@ shape: (413_982, 60)
 
 ## Joins
 
-Polars has multiple options for joining data by row. To make the data visualization simpler, the below code processes the data found in the `lfs_month` vector to keep only a few variables, remove those without any hourly earnings and renames the `hrlyearn` to reflect the month of the data. Note that `rec_num` is a row number, but will be used as linkage key in this example.
+Polars has multiple options for joining data by row. To make the data visualization simpler, the below code processes the data found in the `lfs_month` vector, keeps only a few variables, removes those without any hourly earnings and renames the `hrlyearn` to reflect the month of the data. Note that `rec_num` is a row number, but will be used as linkage key in this example.
 
 ```rust
 === Rust 3_5_1_joins block_4
 ```
 
-Now that we have simpler data, we can join these. In this example, we are doing multiple left joins in a row with the `left_join` function, always keeping the original population (akin to creating a cohort). To do these joins, all we need is the data and the left and right key (`rec_num` in this example).
+Here is what each month of data looks like at this point:
 
 ```rust
 === Rust 3_5_1_joins block_5
+```
+
+```
+shape: (54_207, 3)
+┌─────────┬──────────┬─────────┐
+│ rec_num ┆ survyear ┆ earn_01 │
+│ ---     ┆ ---      ┆ ---     │
+│ i64     ┆ i64      ┆ i64     │
+╞═════════╪══════════╪═════════╡
+│ 3       ┆ 2023     ┆ 2900    │
+│ 4       ┆ 2023     ┆ 2000    │
+│ 6       ┆ 2023     ┆ 4238    │
+│ 10      ┆ 2023     ┆ 3590    │
+│ 12      ┆ 2023     ┆ 1900    │
+│ …       ┆ …        ┆ …       │
+│ 108056  ┆ 2023     ┆ 1827    │
+│ 108058  ┆ 2023     ┆ 2897    │
+│ 108059  ┆ 2023     ┆ 3300    │
+│ 108062  ┆ 2023     ┆ 1825    │
+│ 108063  ┆ 2023     ┆ 1750    │
+└─────────┴──────────┴─────────┘
+```
+
+Now that we have simpler data, we can join these. In this example, we are doing multiple left joins in a row with the `left_join` function, always keeping the original population (akin to creating a cohort). To do these joins, all we need is the data and the left and right key (`rec_num` in this example).
+
+```rust
+=== Rust 3_5_1_joins block_6
 ```
 
 This gives us a longitudinal cohort, keeping the population from the first dataset (january):
@@ -83,7 +110,7 @@ shape: (54_207, 5)
 In the same way, we can also use other types of joins, like the `inner_join`:
 
 ```rust
-=== Rust 3_5_1_joins block_6
+=== Rust 3_5_1_joins block_7
 ```
 
 This creates a cohort of those who are in every dataset.
@@ -112,10 +139,10 @@ shape: (6_494, 5)
 Polars has multiple of these "simple" joins, including `left_join`, `semi_join`, `full_join`, `inner_join`, `anti_join` and `cross_join`. But you can create significantly more complex joins by building the `join` yourself with the `join` function and all of it's options. For example, here is a `full join` on multiple variables:
 
 > [!NOTE]
-> For some reason, Polars does not reconcile the values of the keys in a `full join`, both in the `join` and `full_join` functions. This means that any keys not found in the left create `nulls` in the original key name and any key not found in the right creates `nulls` in the key with an `_right` suffix (e.g. rec_num_right). I fix this in the example below with an expression that applies to all four joins.
+> For some reason, Polars does not reconcile the values of the keys in a `full join`, both in the `join` and `full_join` functions. This means that any keys not found in the left create `nulls` in the original key name and any key not found in the right creates `nulls` in the key with an `_right` suffix (e.g. rec_num_right). This can be fixed with an expression that applies to all four joins (called `fix_full_join_vars` below).
 
 ```rust
-=== Rust 3_5_1_joins block_7
+=== Rust 3_5_1_joins block_8
 ```
 
 This full join keeps a superpopulation of all the four datasets:

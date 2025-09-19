@@ -57,6 +57,10 @@ fn main() {
 
     // === block_5
 
+    println!("{}", lfs_month[0].clone().collect().unwrap());
+
+    // === block_6
+
     // Left join (creating a cohort)
     let jan_cohort = lfs_month[0]
         .clone()
@@ -85,7 +89,7 @@ fn main() {
 
     println!("{}", jan_cohort.collect().unwrap());
 
-    // === block_6
+    // === block_7
 
     // Inner join (creating a "always earning" cohort)
     let longitudinal_all = lfs_month[0]
@@ -115,7 +119,7 @@ fn main() {
 
     println!("{}", longitudinal_all.collect().unwrap());
 
-    // === block_7
+    // === block_8
 
     // More complex types of joins (e.g. join on multiple variables)
     let fix_full_join_vars = [

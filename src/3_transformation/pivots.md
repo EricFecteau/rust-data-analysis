@@ -2,12 +2,11 @@
 
 Pivoting a dataframe allows you to make wide data longer or long data wider. This is done by increasing the number of columns and decreasing the number of rows, or vice versa. 
 
-With Polars, pivots have to be done in-memory. As explained by Polars, "lazy does not implement a pivot because it is impossible to know the schema without materializing the whole dataset". In other words, if, for example, you wanted to pivot wider on the province variable (e.g. make a column for each province), until Polars reads every single row in your dataset it can not know how many columns it would create. Therefore, it can not move forward lazily and continue optimizing the query, without materializing the dataframe. Polars does not allow you to provide a schema to solve this issue lazily. 
-Caution should be taken when pivoting large dataframes as it will have to be done eagerly.
+With Polars, pivots have to be done in-memory. As explained by Polars, "lazy does not implement a pivot because it is impossible to know the schema without materializing the whole dataset". In other words, if, for example, you wanted to pivot wider on the province variable (e.g. make a column for each province), until Polars reads every single row in your dataset it can not know how many columns it would create. Therefore, it can not move forward lazily and continue optimizing the query, without materializing the dataframe. Polars does not allow you to provide a schema to solve this issue lazily. Caution should be taken when pivoting large dataframes as it will have to be done eagerly.
 
 ## Setup
 
-Since the data has to be materialized (i.e. in-memory) to be pivoted, lets first create some summary data to get a manageable `DataFrame`. To learn how to do summary statistics, see the [summary chapter](../4_stats/summary.md).
+Since the data has to be materialized (i.e. in-memory) to be pivoted, this section will first create some summary data to get a manageable `DataFrame`. To learn how to do summary statistics, see the [summary chapter](../4_stats/summary.md). For now, you can simply run the code below.
 
 In this example, we connect to the Parquet file, summarize the hourly wage data (unweighted) by year and province.
 
@@ -15,6 +14,9 @@ In this example, we connect to the Parquet file, summarize the hourly wage data 
 === Rust 3_4_1_pivot imports
 === Rust 3_4_1_pivot block_1
 ```
+
+This provides an in-memory `DataFrame` that's fairly long (10 provinces per year, for multiple years (2011 to 2024)).
+
 
 ```
 shape: (140, 3)
@@ -37,15 +39,16 @@ shape: (140, 3)
 └──────────┴──────┴───────────────┘
 ```
 
-We now have a fairly long `DataFrame` in memory (10 provinces per year, for multiple years (2011 to 2024)).
-
 ## Pivot wider
 
-To pivot this long `DataFrame` wider (also simply known as "pivot"), we can take either the year column or the province column and make them individual columns, using the data found in `mean_hrlyearn`. In this example, we will take the 10 provinces and make them columns.
+To pivot this "long" `DataFrame` "wider" (also simply known as a "pivot"), we can take either the year column or the province column and make them individual columns, using the data found in `mean_hrlyearn`. This example will take the 10 provinces and distribute their `mean_hrlyearn` as columns.
 
 ```rust
 === Rust 3_4_1_pivot block_2
 ```
+
+This `DataFrame` is now simpler to display and analyze.
+
 
 ```
 shape: (14, 11)
@@ -68,15 +71,15 @@ shape: (14, 11)
 └──────────┴───────┴───────┴───────┴───┴───────┴───────┴───────┴───────┘
 ```
 
-This `DataFrame` is simpler to display and analyze.
-
 ## Pivot longer
 
-We can do the inverse, by pivoting this wide `DataFrame` to longer (also known as "unpivot"). This will move the 10 province column into one province row. 
+We can do the inverse, by pivoting this "wide" `DataFrame` to "longer" (also known as "unpivot"). This will move the 10 province column into one province row. 
 
 ```rust
 === Rust 3_4_1_pivot block_3
 ```
+
+This brings the `DataFrame` back to it's shape as prior to the pivot wider.
 
 ```
 shape: (140, 3)
@@ -98,4 +101,3 @@ shape: (140, 3)
 │ 2024     ┆ BC       ┆ 36.37 │
 └──────────┴──────────┴───────┘
 ```
-We are back to the same shape as prior to the pivot longer.
