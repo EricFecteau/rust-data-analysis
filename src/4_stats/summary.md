@@ -4,7 +4,7 @@
 
 ## Setup
 
-First, lets connect to the partitioned parquet files and modify the hourly earnings variable by dividing it by 100 (converting it from cents to dollars and cents) and providing a 2-letter label for the "province" variable and a label for the gender:
+First, lets connect to the partitioned parquet files and modify the hourly earnings variable by dividing it by 100 (converting it from cents (2375) to dollars and cents (23.75)) and providing a 2-letter label for the "province" variable and a label for the gender:
 
 ```rust
 === Rust 4_1_1_summary imports
@@ -13,7 +13,7 @@ First, lets connect to the partitioned parquet files and modify the hourly earni
 
 ## Simple statistics
 
-You can do simple statistics functions like `mean()`, `sum()` or `median()` by limiting the `LazyFrame` to one variable. Here is how you would get a median of `hourly_wages`:
+You can do simple statistics functions like `mean()`, `sum()` or `median()` by limiting the `LazyFrame` to one variable and calling the appropreate function. Here is how you would get a median of `hourly_wages`:
 
 ```rust
 === Rust 4_1_1_summary block_2
@@ -30,7 +30,7 @@ shape: (1, 1)
 └──────────────┘
 ```
 
-You can get a lot more different statistics with other functions like `min()`, `quantile()` or `max()`. For the quantiles, you have to provide a `QuantileMethod`.
+You can get =different statistics with other functions like `min()`, `quantile()` or `max()`. For the quantiles, you have to provide a `QuantileMethod`.
 
 ```rust
 === Rust 4_1_1_summary block_3
@@ -86,7 +86,7 @@ shape: (10, 2)
 
 ## Weighted statistics
 
-If you have survey weights, like the `finalwt` variable on the Labour Force Survey (LFS), you can create statistics by that weight, wight formulas. In this example, a custom function called `weighted_quantile` is create the provide quantiles that respect the survey weights:
+If you have survey weights, like the `finalwt` variable on the Labour Force Survey (LFS), you can create statistics by that weight, with formulas. In this example, a custom function called `weighted_quantile` is create the provide quantiles that respect the survey weights:
 
 ```rust
 === Rust 4_1_1_summary block_5

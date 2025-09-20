@@ -2,14 +2,11 @@
 
 You can perform various hypothesis tests in Rust using [hypors](https://docs.rs/hypors/latest/hypors/). This crate allows you to do t-tests, z-tests, proportion tests, ANOVA, Chi-square tests, and Mann-Whitney tests, using `polars` for data manipulations and `statrs` for statistical distributions. This section will give examples for a `Chi-square` test, an `ANOVA` and a `Mann-Whitney` test, focusing on modifying the `Polars` data used throughout the book to match the input necessary by the crate.
 
-> [!IMPORTANT]
-> `Hypors 0.2` uses `Polars 0.43`, while the rest of this book uses `Polars 0.49`. You will have to use [df-interchange](https://github.com/EricFecteau/df-interchange) as explained in the [concepts](../1_start/concepts.md) section of the book.
-
 ## Chi-square test
 
 With `Hypors`, you can perform a [Chi-Square Test for Independence](https://docs.rs/hypors/latest/hypors/chi_square/categorical/fn.independence.html). You can run the following code with `cargo run --example 4_2_1_chi_square`.
 
-We first must create some summary statistics for the contingency table needed for the Chi-Square test. We will create a count of individuals (unweighted) with paid overtime, by gender and marital status.
+We must first create some summary statistics for the contingency table needed for the Chi-Square test. We will create a count of individuals (unweighted) with paid overtime, by gender and marital status.
 
 ```rust
 === Rust 4_2_1_chi_square imports
@@ -61,7 +58,7 @@ shape: (6, 2)
 └────────┴────────┘
 ```
 
-And then convert the `Polars` data into the `Vec<Vec<f64>>`:
+And then convert the `Polars` data into the `Vec<Vec<f64>>` by materializing the series as `f64`:
 
 ```rust
 === Rust 4_2_1_chi_square block_3
@@ -112,7 +109,7 @@ shape: (49_391, 3)
 └───────┴──────────┴─────────────────────────┘
 ```
 
-To get Polars `Series`, as needed by `Hypors` as the input, we will have to first pivot the data:
+To provide the data as `Vec<Vec<f64>>`, as required by the `anova()` function of `Hypors` the data will first have to be pivoted:
 
 ```rust
 === Rust 4_2_2_anova block_2
@@ -138,16 +135,13 @@ shape: (49_391, 3)
 │ null                    ┆ null                   ┆ 21.74         │
 └─────────────────────────┴────────────────────────┴───────────────┘
 ```
-
-Now that we have the data from each immigration category, we can convert the `DataFrame` into `Series` with `get_columns()`. But first, `Hypors` assumes `Polars 0.43` `Series`, not `Polars 0.49` `Series`. So we must first pass the `DataFrame` through [df-interchange](https://github.com/EricFecteau/df-interchange) to convert it.
-
-TODO: NOT RELEVANT ANYMORE?
+And then convert the `Polars` data into the `Vec<Vec<f64>>` by materializing the series as `f64`:
 
 ```rust
 === Rust 4_2_2_anova block_3
 ```
 
-We can now pass each `Series` to the `anova()` function from `Hypors`. Because of the way the data was pivoted, we must deal with null values with `drop_null()`.
+We can now pass these columns to `Hypors`.
 
 ```rust
 === Rust 4_2_2_anova block_4
@@ -192,7 +186,7 @@ shape: (49_391, 3)
 └───────┴────────┴──────────┘
 ```
 
-To get Polars `Series`, as needed by `Hypors` as the input, we will have to first pivot the data:
+To get the required `Vec<Vec<f64>>`, the data will first be pivoted:
 
 ```rust
 === Rust 4_2_3_mwu block_2
@@ -219,13 +213,13 @@ shape: (49_391, 2)
 └────────┴───────┘
 ```
 
-Now that we have the data from each gender, we can convert the `DataFrame` into `Series` with `get_columns()`. But first, `Hypors` assumes `Polars 0.43` `Series`, not `Polars 0.49` `Series`. So we must first pass the `DataFrame` through [df-interchange](https://github.com/EricFecteau/df-interchange) to convert it.
+And then convert the `Polars` data into the `Vec<Vec<f64>>` by materializing the series as `f64`:
 
 ```rust
 === Rust 4_2_3_mwu block_3
 ```
 
-We can now pass each `Series` to the `u_test()` function from `Hypors`. Because of the way the data was pivoted, we must deal with null values with `drop_null()`.
+We can now pass each column to the `u_test()` function from `Hypors`. 
 
 ```rust
 === Rust 4_2_3_mwu block_4
