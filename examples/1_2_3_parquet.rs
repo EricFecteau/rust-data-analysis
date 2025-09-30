@@ -5,7 +5,7 @@ use polars::prelude::*;
 fn main() {
     // === program
     // Get all files in path
-    let paths = std::fs::read_dir("./data/lfs_csv").unwrap();
+    let paths = std::fs::read_dir("./data/csv").unwrap();
 
     // For each file, save as Parquet
     for path in paths {
@@ -15,7 +15,7 @@ fn main() {
             .unwrap()
             .to_str()
             .unwrap();
-        let path_parquet = format!("./data/lfs_parquet/{file_name}.parquet");
+        let path_parquet = format!("./data/parquet/{file_name}.parquet");
         let path_csv_string = path_csv.into_os_string().into_string().unwrap();
 
         // Read CSV

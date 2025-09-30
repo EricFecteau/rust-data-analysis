@@ -1,47 +1,36 @@
 
 # Data
 
-This section downloads and processes the data that is used in the examples in this book. You do not have to fully understand these code blocks at this point to run them, but they are commented. The rest of the examples in this book assumes you have run all of these code blocks. The `SQL` and the `s3 bucket` sections can be skipped if you do not want to install these dependencies (you will have to skip the [databases](../2_data/databases.md) and [cloud](../2_data/cloud.md) sections of the book).
+This section processes the data that is used in the examples in this book. You do not have to fully understand these code blocks at this point to run them, but they are commented. The rest of the examples in this book assumes you have run all of these code blocks. The `SQL` and the `s3 bucket` sections can be skipped if you do not want to install these dependencies (you will have to skip the [databases](../2_data/databases.md) and [cloud](../2_data/cloud.md) sections of the book).
 
-This book uses Statistics Canada's Labour Force Survey (LFS) Public Use Microdata File (PUMF) as data source. These CSVs contains non-aggregated data for a wide variety of variables collected from the LFS. The LFS collects monthly information on the labour market activities of Canada's working age population.
-
-There are multiple advantages to using this file:
-* Licensed under [Statistics Canada Open License](https://www.statcan.gc.ca/en/reference/licence);
-* Contains real world data, collected for a survey;
-* Contains weights to reproduce the Canadian population;
-* Each month of data contains a relatively small number of records (~100,000 records), but multiple years of data can be concatenated to create a fairly sizable dataset;
-* Each month contains over 50 variables.
-
-You can manually download the CSVs from [Statistics Canada's website](https://www150.statcan.gc.ca/n1/en/catalogue/71M0001X).
-
-**Source**: Statistics Canada, *Labour Force Survey: Public Use Microdata File*, January 2011 to present. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
+This book uses the [Public microdata teaching sample, England and Wales: Census 2021](https://www.ons.gov.uk/releases/publicmicrodatateachingsampleenglandandwalescensus2021), a 1% sample of individual records from Census 2021 for teaching of statistics and social sciences. It can be downloaded [here](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/publicmicrodatateachingsampleenglandandwalescensus2021). This CSV contains non-aggregated data for a wide variety of variables collected from the UK population. The codeset (i.e. the values for the variables in the dataset), can be downloaded from [here](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/microdatasamplecodescensus2021) and the userguide from [here](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/methodologies/userguidetocensus2021microdatasamplesenglandandwales).
 
 > [!CAUTION]
-> The goal of this book is to show the power of data analysis using Rust, not analyze the LFS data. Some examples will use this data in a way that does not produce valid results (e.g. incorrect population, unweighted statistics, longitudinal analysis). **No results in this book should be interpreted as being valid.**
+> The goal of this book is to show the power of data analysis using Rust, not analyze the UK Census data. Some examples will use this data in a way that does not produce valid results (e.g. incorrect population, unweighted statistics, longitudinal analysis). **No results in this book should be interpreted as being valid.**
 
-## Downloading
+## Extracting
 
-Here is a Rust script to download all data necessary for this book. It creates approximately 2 GB of CSV data. A `bash` version of this script [can also be found here](https://github.com/EricFecteau/rust-data-analysis/blob/main/examples/1_2_1_download.sh).
+A compressed version of the UK Census is available in this crate [here](). It can also be downloaded [here](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/publicmicrodatateachingsampleenglandandwalescensus2021). If you downloaded your own version of the UK Census, place it under `./data/raw`, call it `census.csv` and skip this code. Make sure to also create the other sub-folders for future data storage locations.
 
-You can run this script using `cargo run -r --example 1_2_1_download`.
+You can run this script using `cargo run -r --example 1_2_1_extract`.
 
 ```rust
-=== Rust 1_2_1_download imports
-=== Rust 1_2_1_download program
+=== Rust 1_2_1_extract imports
+=== Rust 1_2_1_extract program
 ```
 
-## Styling
+## Expand
 
-Since there does not seem to exist a style guide for Polars, this book will use the [R Tidyverse style guide](https://style.tidyverse.org/), when appropriate. Since all variables on the LFS CSV files are uppercase, this script will modify the variables to be lowercase. You can run this code with `cargo run -r --example 1_2_2_styling`.
+This code will multiply the CSVs 100 times to pseudo-convert the 1% sample into a 100% sample. It will also add a variable called "chunk" that will contain the values 0 to 99. This script will create approximately 4 GB of CSV data. You can run this code with `cargo run -r --example 1_2_2_expand`. 
 
 ```rust
-=== Rust 1_2_2_styling imports
-=== Rust 1_2_2_styling program
+=== Rust 1_2_2_expand imports
+=== Rust 1_2_2_expand program
 ```
 
 ## Parquet
 
-This section will convert each CSV into individual Parquet files. It will create approximately 300 MB of Parquet file form the 2 GB of CSV files. You can run this code with `cargo run -r --example 1_2_3_parquet`.
+This section will convert each CSV into individual Parquet files. It will create approximately 500 MB of Parquet file form the 4 GB of CSV files. You can run this code with `cargo run -r --example 1_2_3_parquet`.
 
 ```rust
 === Rust 1_2_3_parquet imports
@@ -50,7 +39,7 @@ This section will convert each CSV into individual Parquet files. It will create
 
 ## Large file
 
-This section will create a large CSV file and a large Parquet file. This will become a "larger-than-memory" dataset. At no point will all the data be in memory at the same time. It will use approximately  GB of RAM. You can run this script using `cargo run -r --example 1_2_4_large`. 
+This section will create a large CSV file and a large Parquet file. This will become a "larger-than-memory" dataset. At no point will all the data be in memory at the same time. It will use approximately 2 GB of RAM. You can run this script using `cargo run -r --example 1_2_4_large`. 
 
 ```rust
 === Rust 1_2_4_large imports
@@ -59,7 +48,7 @@ This section will create a large CSV file and a large Parquet file. This will be
 
 # SQL (optional)
 
-This example will create a PostgreSQL server, in which the LFS data will be loaded. Since this is just a test server, we will keep keep all the default configurations. To set it up, follow one of these guides: [Windows](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql), Linux ([Ubuntu](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql-linux), [Arch Linux](https://wiki.archlinux.org/title/PostgreSQL#Require_password_for_login)) and [macOS](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql-macos).
+This example will create a PostgreSQL server, in which the Census data will be loaded. Since this is just a test server, we will keep keep all the default configurations. To set it up, follow one of these guides: [Windows](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql), Linux ([Ubuntu](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql-linux), [Arch Linux](https://wiki.archlinux.org/title/PostgreSQL#Require_password_for_login)) and [macOS](https://neon.tech/postgresql/postgresql-getting-started/install-postgresql-macos).
 
 The following example, using Arch Linux, will show the general process:
 
@@ -80,7 +69,7 @@ Install [MinIO](https://github.com/minio/minio) and the [minio-client](https://m
 
 Start the minio server and point it to the `./data/minio` folder with `minio server ./data/minio`.
 
-The following code creates a bucket called `lfs` and load the `./data/lfs_large/lfs.csv` CSV file, the `./data/lfs_large/lfs.parquet` parquet file and the partitioned parquet folder `./data/lfs_large/part/` with Rust. Run this script using `cargo run -r --example 1_2_6_minio`.
+The following code creates a bucket called `census` and load the `./data/large/census.csv` CSV file, the `./data/large/census.parquet` parquet file and the partitioned parquet folder `./data/large/partitioned/` with Rust. Run this script using `cargo run -r --example 1_2_6_minio`.
 
 > [!NOTE]
 > Due to the length of this code, because of the multi-part upload S3 code, it was omited from this section. Yoiu must run it with `cargo run -r --example 1_2_6_minio`.

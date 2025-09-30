@@ -6495,7 +6495,6 @@ dependencies = [
  "polars 0.51.0",
  "polars_excel_writer",
  "postgres",
- "reqwest 0.12.23",
  "rust_xlsxwriter",
  "tokio",
  "zip 5.1.1",

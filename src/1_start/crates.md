@@ -7,9 +7,6 @@ You will need to add these to your [Cargo.toml](https://github.com/EricFecteau/r
 ```toml
 [dependencies]
 
-# Download files from the internet
-reqwest = { version = "0.12", features = ["blocking"] }
-
 # Extract ZIP files
 zip = "4"
 

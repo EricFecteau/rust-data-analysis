@@ -8,3 +8,6 @@
 * Verify correct number for all "cargo run -r --example"
 * Monitor RAM useage
 * Finish justfile
+
+* A compressed version of the UK Census is available in this crate [here]().
+* It will use approximately  GB of RAM. 

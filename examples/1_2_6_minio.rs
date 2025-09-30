@@ -3,7 +3,7 @@ async fn main() {
     // https://docs.aws.amazon.com/sdk-for-rust/latest/dg/rust_s3_code_examples.html
 
     let region = "us-east-1";
-    let bucket = "lfs";
+    let bucket = "census";
     let url = "http://127.0.0.1:9000";
     let minio_username = "minioadmin";
     let minio_password = "minioadmin";
@@ -27,7 +27,7 @@ async fn main() {
     // Create client from config
     let client = aws_sdk_s3::Client::from_conf(s3_config);
 
-    // Does "lfs" exists
+    // Does "census" exists
     let bucket_exists = client
         .list_buckets()
         .send()
@@ -71,7 +71,7 @@ async fn main() {
         let _ = client.delete_bucket().bucket(bucket).send().await.unwrap();
     }
 
-    // Create "lfs" bucket
+    // Create "census" bucket
     let constraint = aws_sdk_s3::types::BucketLocationConstraint::from(region);
     let cfg = aws_sdk_s3::types::CreateBucketConfiguration::builder()
         .location_constraint(constraint)
@@ -88,14 +88,14 @@ async fn main() {
     // Copy large Parquet
     upload_multipart(
         &client,
-        "./data/lfs_large/lfs.parquet",
-        "lfs.parquet",
+        "./data/large/census.parquet",
+        "census.parquet",
         bucket,
     )
     .await;
 
     // Copy large CSV
-    upload_multipart(&client, "./data/lfs_large/lfs.csv", "lfs.csv", bucket).await;
+    upload_multipart(&client, "./data/large/census.csv", "census.csv", bucket).await;
 
     // Get all the path of files in a folder (recursive)
     fn get_file_path(path: std::path::PathBuf) -> Vec<String> {
@@ -115,8 +115,8 @@ async fn main() {
     }
 
     // Upload files to bucket
-    for path in get_file_path(std::path::PathBuf::from("./data/lfs_large/part")) {
-        let key = path.strip_prefix("./data/lfs_large/").unwrap().to_string();
+    for path in get_file_path(std::path::PathBuf::from("./data/large/partitioned")) {
+        let key = path.strip_prefix("./data/large/").unwrap().to_string();
 
         upload_multipart(&client, &path, &key, bucket).await;
     }

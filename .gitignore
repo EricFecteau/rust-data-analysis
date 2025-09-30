@@ -1,5 +1,6 @@
 book
 target
-data
+data/*
 *.ipynb
 src_processed
+!data/zip

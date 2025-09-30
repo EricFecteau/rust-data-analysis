@@ -6,7 +6,7 @@ use std::fs::File;
 fn main() {
     // === program
     // Get all files in path
-    let paths = std::fs::read_dir("./data/lfs_parquet").unwrap();
+    let paths = std::fs::read_dir("./data/parquet").unwrap();
 
     let mut lf_vec = vec![];
 
@@ -22,13 +22,28 @@ fn main() {
     let union_args = UnionArgs::default();
     let lf = concat(lf_vec, union_args).unwrap();
 
-    // Get latest year available in the data
-    let years = lf
+    // Get regions
+    let regions = lf
         .clone()
-        .select([col("survyear").unique()])
+        .select([col("region").unique()])
         .collect()
         .unwrap()
-        .column("survyear")
+        .column("region")
+        .unwrap()
+        .str()
+        .unwrap()
+        .drop_nulls()
+        .into_no_null_iter()
+        .map(|s| s.to_string())
+        .collect::<Vec<String>>();
+
+    // Get regions
+    let ages = lf
+        .clone()
+        .select([col("resident_age_7d").unique()])
+        .collect()
+        .unwrap()
+        .column("resident_age_7d")
         .unwrap()
         .i64()
         .unwrap()
@@ -37,7 +52,7 @@ fn main() {
         .unwrap();
 
     // Ready write large parquet file by batch
-    let file = File::create("./data/lfs_large/lfs.parquet").unwrap();
+    let file = File::create("./data/large/census.parquet").unwrap();
     let schema: Arc<Schema> = lf.clone().collect_schema().unwrap();
     let mut pq_writer: polars::io::parquet::write::BatchedWriter<File> = ParquetWriter::new(file)
         .set_parallel(true)
@@ -45,33 +60,36 @@ fn main() {
         .unwrap();
 
     // Ready write large csv file by batch
-    let file = File::create("./data/lfs_large/lfs.csv").unwrap();
+    let file = File::create("./data/large/census.csv").unwrap();
     let schema: Arc<Schema> = lf.clone().collect_schema().unwrap();
     let mut csv_writer: polars::io::csv::write::BatchedWriter<File> =
         CsvWriter::new(file).batched(&schema).unwrap();
 
-    for y in years {
-        // Collect one year of data
-        let mut year_df = lf
-            .clone()
-            .filter(col("survyear").eq(lit(y)))
-            .collect()
+    // By region
+    for region in regions {
+        for age in ages.clone() {
+            let mut chunk_df = lf
+                .clone()
+                .filter(col("region").eq(lit(region.clone())))
+                .filter(col("resident_age_7d").eq(lit(age)))
+                .collect()
+                .unwrap();
+
+            // Write Partitioned Parquet (by region and age) - unstable according to the docs
+            write_partitioned_dataset(
+                &mut chunk_df,
+                PlPath::from_str("./data/large/partitioned/").as_ref(),
+                vec!["region".into(), "resident_age_7d".into()],
+                &ParquetWriteOptions::default(),
+                None,
+                4294967296,
+            )
             .unwrap();
 
-        // Write Partitioned Parquet (by survyear, survmnth) - unstable according to the docs
-        write_partitioned_dataset(
-            &mut year_df,
-            PlPath::from_str("./data/lfs_large/part/").as_ref(),
-            vec!["survyear".into(), "survmnth".into()],
-            &ParquetWriteOptions::default(),
-            None,
-            4294967296,
-        )
-        .unwrap();
-
-        // Write 1 year to a large parquet file
-        pq_writer.write_batch(&year_df).unwrap();
-        csv_writer.write_batch(&year_df).unwrap();
+            // Write chunk to a large parquet file
+            pq_writer.write_batch(&chunk_df).unwrap();
+            csv_writer.write_batch(&chunk_df).unwrap();
+        }
     }
 
     pq_writer.finish().unwrap();
