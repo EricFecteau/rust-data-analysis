@@ -7,7 +7,7 @@ fn main() {
     // Connect to LazyFrame (no data is brought into memory)
     let args = ScanArgsParquet::default();
     let lf =
-        LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/lfs.parquet"), args).unwrap();
+        LazyFrame::scan_parquet(PlPath::from_str("./data/large/census.parquet"), args).unwrap();
 
     // === block_end
 
@@ -17,7 +17,7 @@ fn main() {
 
     // Connect to LazyFrame (no data is brought into memory)
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
     // === block_3
 

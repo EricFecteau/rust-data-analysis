@@ -8,6 +8,10 @@ edition = "2024"
 # Extract ZIP files
 zip = "5"
 
+# Create random values
+rand = "0.9" 
+rand_chacha = "0.9"
+
 # Polars - open-source library for data manipulation
 polars = { version = "0.51", features = [
     "lazy", # LazyFrame

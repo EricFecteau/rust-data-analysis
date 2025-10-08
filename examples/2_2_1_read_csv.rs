@@ -5,7 +5,7 @@ use polars::prelude::*;
 fn main() {
     // === block_1
     // Connect to LazyFrame (no data is brought into memory)
-    let lf = LazyCsvReader::new(PlPath::from_str("./data/lfs_csv/pub0124.csv"))
+    let lf = LazyCsvReader::new(PlPath::from_str("./data/large/census.csv"))
         .with_has_header(true)
         .finish()
         .unwrap();

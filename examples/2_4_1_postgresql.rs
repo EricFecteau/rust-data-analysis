@@ -10,7 +10,7 @@ fn main() {
 
     // Query the database, returns a vector of rows
     let data = client
-        .query("select count(*) as count from lfs", &[])
+        .query("select count(*) as count from census", &[])
         .unwrap();
 
     // Get the first data point from the first row

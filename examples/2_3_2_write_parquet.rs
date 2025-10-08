@@ -5,8 +5,8 @@ use polars::prelude::*;
 fn main() {
     // === block_1
 
-    // Read `pub0124.csv` as LazyFrame
-    let lf = LazyCsvReader::new(PlPath::from_str("./data/lfs_csv/pub0124.csv"))
+    // Read `census_0.csv` as LazyFrame
+    let lf = LazyCsvReader::new(PlPath::from_str("./data/csv/census_0.csv"))
         .with_has_header(true)
         .finish()
         .unwrap();
@@ -17,7 +17,7 @@ fn main() {
     // === block_2
 
     // Write `pub0124.parquet`
-    let mut file = std::fs::File::create("./data/temp_data/pub0124.parquet").unwrap();
+    let mut file = std::fs::File::create("./data/temp_data/census_0.parquet").unwrap();
     ParquetWriter::new(&mut file).finish(&mut df).unwrap();
 
     // === end

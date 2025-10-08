@@ -4,7 +4,7 @@ You can read and write from CSVs using Polars.
 
 ## Reading
 
-You can connect to a CSV file, like the Jan 2024 LFS file `./data/lfs_csv/pub0124.csv`, without bringing it in memory, with the `LazyCsvReader`. You can run this section using `cargo run -r --example 2_2_1_read_csv`.
+You can connect to a CSV file, like the UK Census file `./data/large/census.csv`, without bringing it in memory, with the `LazyCsvReader`. You can run this section using `cargo run -r --example 2_2_1_read_csv`.
 
 ```rust
 === Rust 2_2_1_read_csv imports
@@ -18,23 +18,23 @@ None of the data is brought into memory. You can't even visualize any of it, sin
 ```
 
 ```
-shape: (5, 60)
-┌─────────┬──────────┬──────────┬─────────┬───┬─────────┬──────────┬─────────┬─────────┐
-│ rec_num ┆ survyear ┆ survmnth ┆ lfsstat ┆ … ┆ schooln ┆ efamtype ┆ agyownk ┆ finalwt │
-│ ---     ┆ ---      ┆ ---      ┆ ---     ┆   ┆ ---     ┆ ---      ┆ ---     ┆ ---     │
-│ i64     ┆ i64      ┆ i64      ┆ i64     ┆   ┆ i64     ┆ i64      ┆ i64     ┆ i64     │
-╞═════════╪══════════╪══════════╪═════════╪═══╪═════════╪══════════╪═════════╪═════════╡
-│ 1       ┆ 2024     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 3        ┆ 1       ┆ 403     │
-│ 2       ┆ 2024     ┆ 1        ┆ 4       ┆ … ┆ null    ┆ 11       ┆ null    ┆ 140     │
-│ 3       ┆ 2024     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 1        ┆ null    ┆ 378     │
-│ 4       ┆ 2024     ┆ 1        ┆ 4       ┆ … ┆ 1       ┆ 18       ┆ null    ┆ 222     │
-│ 5       ┆ 2024     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 4        ┆ null    ┆ 34      │
-└─────────┴──────────┴──────────┴─────────┴───┴─────────┴──────────┴─────────┴─────────┘
+shape: (5, 20)
+┌─────────────────┬────────┬───────┬──────┬───┬───────────┬─────┬───────────┬───────┐
+│ id              ┆ social ┆ birth ┆ econ ┆ … ┆ age_group ┆ sex ┆ keep_type ┆ chunk │
+│ ---             ┆ ---    ┆ ---   ┆ ---  ┆   ┆ ---       ┆ --- ┆ ---       ┆ ---   │
+│ str             ┆ i64    ┆ i64   ┆ i64  ┆   ┆ i64       ┆ i64 ┆ i64       ┆ i64   │
+╞═════════════════╪════════╪═══════╪══════╪═══╪═══════════╪═════╪═══════════╪═══════╡
+│ PTS000000023050 ┆ 3      ┆ 1     ┆ -8   ┆ … ┆ 1         ┆ 2   ┆ 1         ┆ 47    │
+│ PTS000000023084 ┆ 1      ┆ 1     ┆ -8   ┆ … ┆ 1         ┆ 1   ┆ 1         ┆ 47    │
+│ PTS000000019894 ┆ 4      ┆ 1     ┆ -8   ┆ … ┆ 1         ┆ 1   ┆ 1         ┆ 47    │
+│ PTS000000021151 ┆ 4      ┆ 1     ┆ -8   ┆ … ┆ 1         ┆ 2   ┆ 1         ┆ 47    │
+│ PTS000000023994 ┆ 4      ┆ 2     ┆ -8   ┆ … ┆ 1         ┆ 2   ┆ 1         ┆ 47    │
+└─────────────────┴────────┴───────┴──────┴───┴───────────┴─────┴───────────┴───────┘
 ```
 
 ## Writing
 
-You can write to CSV any `DataFrame` you have in memory. For this example, we will bring one month of the LFS into memory. You can run this section using `cargo run -r --example 2_2_2_write_csv`.
+You can write to CSV any `DataFrame` you have in memory. For this example, we will bring one percent of the UK Census into memory. You can run this section using `cargo run -r --example 2_2_2_write_csv`.
 
 ```Rust
 === Rust 2_2_2_write_csv imports

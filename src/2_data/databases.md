@@ -1,6 +1,6 @@
 # Database
 
-This section will explore how to work with SQL databases in Rust. It relies on the optional `SQL` section in the [Data](../1_start/data.md#sql-optional) section of the setup, where a PostgreSQL server was set up and the LFS data was loaded.
+This section will explore how to work with SQL databases in Rust. It relies on the optional `SQL` section in the [Data](../1_start/data.md#sql-optional) section of the setup, where a PostgreSQL server was set up and the Census data was loaded.
 
 ## Direct queries
 

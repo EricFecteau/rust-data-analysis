@@ -4,14 +4,14 @@ You can read and write from Parquet using Polars.
 
 ## Reading
 
-You can connect to a Parquet file, like the large `./data/lfs_large/lfs.parquet`, without bringing it in memory, with the `LazyCsvReader`. You can run this section using `cargo run -r --example 2_3_1_read_parquet`.
+You can connect to a Parquet file, like the large `./data/large/census.parquet`, without bringing it in memory, with the `LazyCsvReader`. You can run this section using `cargo run -r --example 2_3_1_read_parquet`.
 
 ```rust
 === Rust 2_3_1_read_parquet imports
 === Rust 2_3_1_read_parquet block_1
 ```
 
-You can also connect to a partitioned parquet folder (`./data/lfs_large/part`) in the same exact way:
+You can also connect to a partitioned parquet folder (`./data/large/partititoned`) in the same exact way:
 
 ```rust
 === Rust 2_3_1_read_parquet block_2
@@ -24,23 +24,23 @@ In both cases, in the same way as with `LazyFrame` with CSV, the data is not bro
 ```
 
 ```
-shape: (5, 60)
-┌─────────┬──────────┬──────────┬─────────┬───┬─────────┬──────────┬─────────┬─────────┐
-│ rec_num ┆ survyear ┆ survmnth ┆ lfsstat ┆ … ┆ schooln ┆ efamtype ┆ agyownk ┆ finalwt │
-│ ---     ┆ ---      ┆ ---      ┆ ---     ┆   ┆ ---     ┆ ---      ┆ ---     ┆ ---     │
-│ i64     ┆ i64      ┆ i64      ┆ i64     ┆   ┆ i64     ┆ i64      ┆ i64     ┆ i64     │
-╞═════════╪══════════╪══════════╪═════════╪═══╪═════════╪══════════╪═════════╪═════════╡
-│ 1       ┆ 2011     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 14       ┆ 3       ┆ 109     │
-│ 2       ┆ 2011     ┆ 1        ┆ 1       ┆ … ┆ null    ┆ 18       ┆ null    ┆ 62      │
-│ 3       ┆ 2011     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 3        ┆ 2       ┆ 71      │
-│ 4       ┆ 2011     ┆ 1        ┆ 4       ┆ … ┆ null    ┆ 14       ┆ null    ┆ 345     │
-│ 5       ┆ 2011     ┆ 1        ┆ 1       ┆ … ┆ 1       ┆ 3        ┆ 2       ┆ 105     │
-└─────────┴──────────┴──────────┴─────────┴───┴─────────┴──────────┴─────────┴─────────┘
+shape: (5, 20)
+┌─────────────────┬────────┬───────┬──────┬───┬───────────┬─────┬───────────┬───────┐
+│ id              ┆ social ┆ birth ┆ econ ┆ … ┆ age_group ┆ sex ┆ keep_type ┆ chunk │
+│ ---             ┆ ---    ┆ ---   ┆ ---  ┆   ┆ ---       ┆ --- ┆ ---       ┆ ---   │
+│ str             ┆ i64    ┆ i64   ┆ i64  ┆   ┆ i64       ┆ i64 ┆ i64       ┆ i64   │
+╞═════════════════╪════════╪═══════╪══════╪═══╪═══════════╪═════╪═══════════╪═══════╡
+│ PTS000000067966 ┆ 2      ┆ 1     ┆ -8   ┆ … ┆ 1         ┆ 1   ┆ 1         ┆ 47    │
+│ PTS000000068645 ┆ 3      ┆ 1     ┆ -8   ┆ … ┆ 1         ┆ 1   ┆ 1         ┆ 47    │
+│ PTS000000067503 ┆ 3      ┆ 1     ┆ -8   ┆ … ┆ 1         ┆ 2   ┆ 1         ┆ 47    │
+│ PTS000000501140 ┆ 3      ┆ 1     ┆ -8   ┆ … ┆ 1         ┆ 2   ┆ 1         ┆ 47    │
+│ PTS000000501337 ┆ 3      ┆ 1     ┆ -8   ┆ … ┆ 1         ┆ 1   ┆ 1         ┆ 47    │
+└─────────────────┴────────┴───────┴──────┴───┴───────────┴─────┴───────────┴───────┘
 ```
 
 ## Writing
 
-You can write to Parquet any `DataFrame` you have in memory. For this example, we will bring one month of the LFS into memory:
+You can write to Parquet any `DataFrame` you have in memory. For this example, we will bring one percent of the UK Census into memory:
 
 ```rust
 === Rust 2_3_2_write_parquet imports
@@ -59,7 +59,7 @@ This saves the data into one `.parquet` file. The `write_partitioned_dataset` fu
 > [!WARNING]
 > The [write_partitioned_dataset](https://docs.pola.rs/api/rust/dev/polars_io/partition/fn.write_partitioned_dataset.html) function is unstable and undocumented in Rust. 
 
-For example, you can write one month of LFS data by `prov` and `gender` using `write_partitioned_dataset`:
+For example, you can write one percent of the UK Census data by `region` and `age_group` using `write_partitioned_dataset`:
 
 > [!NOTE]
 > The value of `4294967296` bytes (4 GB) was selected for the `chunk_size` as it is the default for the partitioned parquet files in [Polars for Python](https://docs.pola.rs/api/python/dev/reference/api/polars.DataFrame.write_parquet.html). This will be the approximate maximum size of each `.parquet` file created. 
@@ -68,20 +68,30 @@ For example, you can write one month of LFS data by `prov` and `gender` using `w
 === Rust 2_3_3_write_partitioned_parquet block_2
 ```
 
-This will create a hive partitioned Parquet file based on `prov` and `gender`:
+This will create a hive partitioned Parquet file based on `region` and `age_group`:
 
 ```
 folder/
-├─ prov=10/
-├─ prov=11/
-├─ prov=12/
-│  ├─ gender=1/
+├─ region=E12000001/
+├─ region=E12000002/
+├─ region=E12000003/
+│  ├─ age_group=1/
 │  │  ├─ 00000000.parquet
-│  ├─ gender=2/
+│  ├─ age_group=2/
 │  │  ├─ 00000000.parquet
-├─ prov=13/
+│  ├─ age_group=3/
+│  │  ├─ 00000000.parquet
+│  ├─ age_group=4/
+│  │  ├─ 00000000.parquet
+│  ├─ age_group=5/
+│  │  ├─ 00000000.parquet
+│  ├─ age_group=6/
+│  │  ├─ 00000000.parquet
+│  ├─ age_group=7/
+│  │  ├─ 00000000.parquet
+├─ region=E12000004/
 ├─ ...
-├─ prov=59/
+├─ region=W92000004/
 ```
 
 The [filter](../3_transformation/select.md) chapter will go into more detail about the advantages of doing this.

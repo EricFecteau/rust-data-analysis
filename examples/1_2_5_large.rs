@@ -37,13 +37,13 @@ fn main() {
         .map(|s| s.to_string())
         .collect::<Vec<String>>();
 
-    // Get regions
+    // Get age_group
     let ages = lf
         .clone()
-        .select([col("resident_age_7d").unique()])
+        .select([col("age_group").unique()])
         .collect()
         .unwrap()
-        .column("resident_age_7d")
+        .column("age_group")
         .unwrap()
         .i64()
         .unwrap()
@@ -71,15 +71,15 @@ fn main() {
             let mut chunk_df = lf
                 .clone()
                 .filter(col("region").eq(lit(region.clone())))
-                .filter(col("resident_age_7d").eq(lit(age)))
+                .filter(col("age_group").eq(lit(age)))
                 .collect()
                 .unwrap();
 
-            // Write Partitioned Parquet (by region and age) - unstable according to the docs
+            // Write Partitioned Parquet (by region and age_group) - unstable according to the docs
             write_partitioned_dataset(
                 &mut chunk_df,
                 PlPath::from_str("./data/large/partitioned/").as_ref(),
-                vec!["region".into(), "resident_age_7d".into()],
+                vec!["region".into(), "age_group".into()],
                 &ParquetWriteOptions::default(),
                 None,
                 4294967296,

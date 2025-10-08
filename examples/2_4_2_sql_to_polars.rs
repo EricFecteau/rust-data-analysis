@@ -11,7 +11,7 @@ fn main() {
         SourceConn::try_from("postgresql://postgres:postgres@localhost:5432").unwrap();
 
     // Prepare query
-    let query = &[CXQuery::from("SELECT * FROM lfs WHERE survyear = 2024")];
+    let query = &[CXQuery::from("SELECT * FROM census WHERE survyear = 2024")];
 
     // ConnectorX query PostgreSQL and return Polars object
     let df = get_arrow(&source_conn, None, query, None)
@@ -26,7 +26,7 @@ fn main() {
 
     // Prepare query
     let query = &[CXQuery::from(
-        "SELECT survmnth, avg(hrlyearn / 100)::float as avg_hourly FROM lfs WHERE survyear = 2024 group by survmnth",
+        "SELECT survmnth, avg(hrlyearn / 100)::float as avg_hourly FROM census WHERE survyear = 2024 group by survmnth",
     )];
 
     // ConnectorX query PostgreSQL and return Polars object

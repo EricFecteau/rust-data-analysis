@@ -11,3 +11,6 @@
 
 * A compressed version of the UK Census is available in this crate [here]().
 * It will use approximately  GB of RAM. 
+* Verify if any data is called pub*
+* Verify if anything is called LFS
+* Add   rand = "0.9" docs 

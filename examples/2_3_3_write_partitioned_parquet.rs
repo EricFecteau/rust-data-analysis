@@ -5,8 +5,8 @@ use polars::prelude::*;
 fn main() {
     // === block_1
 
-    // Read `pub0124.csv` as LazyFrame
-    let lf = LazyCsvReader::new(PlPath::from_str("./data/lfs_csv/pub0124.csv"))
+    // Read `census_0.csv` as LazyFrame
+    let lf = LazyCsvReader::new(PlPath::from_str("./data/csv/census_0.csv"))
         .with_has_header(true)
         .finish()
         .unwrap();
@@ -20,7 +20,7 @@ fn main() {
     write_partitioned_dataset(
         &mut df,
         PlPath::from_str("./data/temp_data/partitioned/").as_ref(),
-        vec!["prov".into(), "gender".into()],
+        vec!["region".into(), "age_group".into()],
         &ParquetWriteOptions::default(),
         None,
         4294967296,

@@ -19,31 +19,51 @@ You can run this script using `cargo run -r --example 1_2_1_extract`.
 === Rust 1_2_1_extract program
 ```
 
-## Expand
+## Rename
 
-This code will multiply the CSVs 100 times to pseudo-convert the 1% sample into a 100% sample. It will also add a variable called "chunk" that will contain the values 0 to 99. This script will create approximately 4 GB of CSV data. You can run this code with `cargo run -r --example 1_2_2_expand`. 
+This code will rename the long variables names on the UK census to shorter names, for easier display and code in this book. It will also rename the variables in the codeset to match. You can run this code with `cargo run -r --example 1_2_2_rename`. 
+
 
 ```rust
-=== Rust 1_2_2_expand imports
-=== Rust 1_2_2_expand program
+=== Rust 1_2_2_rename imports
+=== Rust 1_2_2_rename program
+```
+
+## Synthetic data
+
+The UK Census is useful for demographic information, but does not contain any continuous values (e.g. yearly income) or any survey weights. These are useful variables when learning how to code in Polars (for means, medians, etc.). The code below creates a yearly income variable that is randomly set to between £10,000 and £100,000. It also creates a weight variable that has the (very rought) goal of re-creating the 100% sample, from each 1% file, by providing random weights between 75 and 125 for each record. This variable will not be brought on the 100% sample of the file created in the next step. You can run this code with `cargo run -r --example 1_2_3_synthetic`. 
+
+
+```rust
+=== Rust 1_2_3_synthetic imports
+=== Rust 1_2_3_synthetic program
+```
+
+## Expand
+
+This code will multiply the CSVs 100 times to pseudo-convert the 1% sample into a 100% sample. It will also add a variable called "chunk" that will contain the values 0 to 99. This script will create approximately 4 GB of CSV data. You can run this code with `cargo run -r --example 1_2_3_expand`. 
+
+```rust
+=== Rust 1_2_3_expand imports
+=== Rust 1_2_3_expand program
 ```
 
 ## Parquet
 
-This section will convert each CSV into individual Parquet files. It will create approximately 500 MB of Parquet file form the 4 GB of CSV files. You can run this code with `cargo run -r --example 1_2_3_parquet`.
+This section will convert each CSV into individual Parquet files. It will create approximately 500 MB of Parquet file form the 4 GB of CSV files. You can run this code with `cargo run -r --example 1_2_4_parquet`.
 
 ```rust
-=== Rust 1_2_3_parquet imports
-=== Rust 1_2_3_parquet program
+=== Rust 1_2_4_parquet imports
+=== Rust 1_2_4_parquet program
 ```
 
 ## Large file
 
-This section will create a large CSV file and a large Parquet file. This will become a "larger-than-memory" dataset. At no point will all the data be in memory at the same time. It will use approximately 2 GB of RAM. You can run this script using `cargo run -r --example 1_2_4_large`. 
+This section will create a large CSV file and a large Parquet file. This will become a "larger-than-memory" dataset. At no point will all the data be in memory at the same time. It will use approximately 2 GB of RAM. You can run this script using `cargo run -r --example 1_2_5_large`. 
 
 ```rust
-=== Rust 1_2_4_large imports
-=== Rust 1_2_4_large program
+=== Rust 1_2_5_large imports
+=== Rust 1_2_5_large program
 ```
 
 # SQL (optional)
@@ -56,11 +76,11 @@ The following example, using Arch Linux, will show the general process:
 2) Initialize a database, using the `postgres` user: `sudo -u postgres initdb -D /var/lib/postgres/data`
 3) Enable and start the `systemctl` service: `sudo systemctl enable postgresql.service` and `sudo systemctl start postgresql.service`
 
-Once set up, you can use Rust to load he data into the database. You can run this script using `cargo run -r --example 1_2_5_sql`.
+Once set up, you can use Rust to load he data into the database. You can run this script using `cargo run -r --example 1_2_6_sql`.
 
 ```Rust
-=== Rust 1_2_5_sql imports
-=== Rust 1_2_5_sql program
+=== Rust 1_2_6_sql imports
+=== Rust 1_2_6_sql program
 ```
 
 # s3 bucket (optional)
@@ -69,7 +89,7 @@ Install [MinIO](https://github.com/minio/minio) and the [minio-client](https://m
 
 Start the minio server and point it to the `./data/minio` folder with `minio server ./data/minio`.
 
-The following code creates a bucket called `census` and load the `./data/large/census.csv` CSV file, the `./data/large/census.parquet` parquet file and the partitioned parquet folder `./data/large/partitioned/` with Rust. Run this script using `cargo run -r --example 1_2_6_minio`.
+The following code creates a bucket called `census` and load the `./data/large/census.csv` CSV file, the `./data/large/census.parquet` parquet file and the partitioned parquet folder `./data/large/partitioned/` with Rust. Run this script using `cargo run -r --example 1_2_7_minio`.
 
 > [!NOTE]
-> Due to the length of this code, because of the multi-part upload S3 code, it was omited from this section. Yoiu must run it with `cargo run -r --example 1_2_6_minio`.
+> Due to the length of this code, because of the multi-part upload S3 code, it was omited from this section. Yoiu must run it with `cargo run -r --example 1_2_7_minio`.
