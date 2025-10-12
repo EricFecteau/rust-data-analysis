@@ -36,9 +36,25 @@ fn main() {
     // Add them as columns to the data
     let df = df.with_column(income).unwrap().with_column(weight).unwrap();
 
+    // If economically non-active, put income as `Null`
+    let mut df = df
+        .clone()
+        .lazy()
+        .with_column(
+            when(col("econ").is_in(
+                lit(Series::from_iter(vec![-8, 5, 6, 7, 8, 9])).implode(),
+                false,
+            ))
+            .then(Null {}.lit())
+            .otherwise(col("income"))
+            .alias("income"),
+        )
+        .collect()
+        .unwrap();
+
     // Write output to CSV
     let mut file = std::fs::File::create("./data/raw/census.csv").unwrap();
-    CsvWriter::new(&mut file).finish(df).unwrap();
+    CsvWriter::new(&mut file).finish(&mut df).unwrap();
 
     // === end
 }

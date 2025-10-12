@@ -10,8 +10,10 @@ fn main() {
     let source_conn =
         SourceConn::try_from("postgresql://postgres:postgres@localhost:5432").unwrap();
 
-    // Prepare query
-    let query = &[CXQuery::from("SELECT * FROM census WHERE survyear = 2024")];
+    // Prepare query (london, aged 15 years and under)
+    let query = &[CXQuery::from(
+        "SELECT * FROM census WHERE region = 'E12000007' and age_group = 1",
+    )];
 
     // ConnectorX query PostgreSQL and return Polars object
     let df = get_arrow(&source_conn, None, query, None)
@@ -26,13 +28,13 @@ fn main() {
 
     // Prepare query
     let query = &[CXQuery::from(
-        "SELECT survmnth, avg(hrlyearn / 100)::float as avg_hourly FROM census WHERE survyear = 2024 group by survmnth",
+        "SELECT region, avg(income)::float FROM census group by region",
     )];
 
     // ConnectorX query PostgreSQL and return Polars object
     let df = get_arrow(&source_conn, None, query, None)
         .unwrap()
-        .polars() // Polars 0.45
+        .polars()
         .unwrap();
 
     // Print table

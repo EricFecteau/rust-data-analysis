@@ -25,7 +25,7 @@ Using [ConnectorX](https://docs.rs/connectorx/latest/connectorx/), you can move 
 === Rust 2_4_2_sql_to_polars block_1
 ```
 
-This example will move the 2024 data from the SQL server into memory as a `DataFrame`. Further manipulations or analysis can be done on this data using Polars. Loading the entirety of the server data into memory is generally not desired. As in this example, it is possible to pre-filter or to summarize the data using an SQL query. As a more complex example, you can collect the unweighted mean hourly wages for 2024, by month, using the following query: `"SELECT survmnth, avg(hrlyearn / 100) as avg_hourly FROM lfs where survyear = 2024 group by survmnth"`. This can then be converted into a `DataFrame` with `.polars()`.
+This example will move the "London" (region = 'E12000007') 0 to 15 years old (age_group = 1) data from the SQL server into memory as a `DataFrame`. Further manipulations or analysis can be done on this data using Polars. Loading the entirety of the server data into memory is generally not desired. As in this example, it is possible to pre-filter or to summarize the data using an SQL query. As a more complex example, you can collect the average income, by region, using the following query: `"SELECT region, avg(income)::float FROM census group by region"`. This can then be converted into a `DataFrame` with `.polars()`.
 
 ```rust
 === Rust 2_4_2_sql_to_polars block_2
@@ -34,22 +34,21 @@ This example will move the 2024 data from the SQL server into memory as a `DataF
 This will return a `DataFrame`.
 
 ```
-shape: (12, 2)
-┌──────────┬────────────┐
-│ survmnth ┆ avg_hourly │
-│ ---      ┆ ---        │
-│ i64      ┆ f64        │
-╞══════════╪════════════╡
-│ 1        ┆ 33.932579  │
-│ 2        ┆ 34.013028  │
-│ 3        ┆ 34.049152  │
-│ 4        ┆ 34.193399  │
-│ 5        ┆ 34.085427  │
-│ …        ┆ …          │
-│ 8        ┆ 34.23867   │
-│ 9        ┆ 34.738232  │
-│ 10       ┆ 34.846987  │
-│ 11       ┆ 34.791847  │
-│ 12       ┆ 34.872347  │
-└──────────┴────────────┘
+shape: (10, 2)
+┌───────────┬──────────────┐
+│ region    ┆ avg          │
+│ ---       ┆ ---          │
+│ str       ┆ f64          │
+╞═══════════╪══════════════╡
+│ E12000001 ┆ 55032.641723 │
+│ E12000002 ┆ 54990.207499 │
+│ E12000003 ┆ 55114.538138 │
+│ E12000004 ┆ 54806.553317 │
+│ E12000005 ┆ 55269.042885 │
+│ E12000006 ┆ 55091.448925 │
+│ E12000007 ┆ 54888.739957 │
+│ E12000008 ┆ 55153.381614 │
+│ E12000009 ┆ 55028.588204 │
+│ W92000004 ┆ 55042.71009  │
+└───────────┴──────────────┘
 ```

@@ -7,25 +7,27 @@ fn main() {
 
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
     // === block_2
 
     //Filtering the data in multiple steps
     let lf_filt_mult = lf
         .clone()
-        .filter(col("survyear").eq(lit(2023)))
-        .filter(col("survmnth").gt(lit(6)))
-        .filter(col("hrlyearn").is_not_null());
+        .filter(col("keep_type").eq(1)) // Usual resident
+        .filter(col("region").eq(lit("E12000007"))) // London
+        .filter(col("age_group").gt(lit(3))) // Aged 25 to 34 years
+        .filter(col("income").is_not_null());
 
     // === block_3
 
     // Filtering the data in one step
     let lf_filt_one = lf.clone().filter(
-        col("survyear")
-            .eq(lit(2023))
-            .and(col("survmnth").gt(lit(6)))
-            .and(col("hrlyearn").is_not_null()),
+        col("keep_type")
+            .eq(lit(1)) // Usual resident
+            .and(col("region").gt(lit("E12000007"))) // London
+            .and(col("age_group").gt(lit(3))) // Aged 25 to 34 years
+            .and(col("income").is_not_null()),
     );
 
     // === block_4

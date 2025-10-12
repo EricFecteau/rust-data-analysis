@@ -9,14 +9,14 @@ fn main() {
         (cloud::AmazonS3ConfigKey::AccessKeyId, "minioadmin"),
         (cloud::AmazonS3ConfigKey::SecretAccessKey, "minioadmin"),
         (cloud::AmazonS3ConfigKey::Region, "us-east-1"),
-        (cloud::AmazonS3ConfigKey::Bucket, "lfs"),
+        (cloud::AmazonS3ConfigKey::Bucket, "census"),
         (cloud::AmazonS3ConfigKey::Endpoint, "http://127.0.0.1:9000"),
     ]);
 
     // === block_2
 
     // Connect to LazyFrame (no data is brought into memory)
-    let lf = LazyCsvReader::new(PlPath::from_str("s3://lfs/lfs.csv"))
+    let lf = LazyCsvReader::new(PlPath::from_str("s3://census/census.csv"))
         .with_cloud_options(Some(cloud_options.clone()))
         .finish()
         .unwrap();
@@ -30,7 +30,7 @@ fn main() {
         cloud_options: Some(cloud_options.clone()),
         ..Default::default()
     };
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("s3://lfs/part/"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("s3://census/partitioned/"), args).unwrap();
 
     // Print first 5 rows
     println!("{}", lf.limit(5).collect().unwrap());

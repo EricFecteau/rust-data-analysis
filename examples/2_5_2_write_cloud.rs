@@ -10,14 +10,14 @@ fn main() {
         (cloud::AmazonS3ConfigKey::AccessKeyId, "minioadmin"),
         (cloud::AmazonS3ConfigKey::SecretAccessKey, "minioadmin"),
         (cloud::AmazonS3ConfigKey::Region, "us-east-1"),
-        (cloud::AmazonS3ConfigKey::Bucket, "lfs"),
+        (cloud::AmazonS3ConfigKey::Bucket, "census"),
         (cloud::AmazonS3ConfigKey::Endpoint, "http://127.0.0.1:9000"),
     ]);
 
     // === block_2
 
     // Read file form local
-    let lf = LazyCsvReader::new(PlPath::from_str("./data/lfs_csv/pub0124.csv"))
+    let lf = LazyCsvReader::new(PlPath::from_str("./data/csv/census_0.csv"))
         .with_has_header(true)
         .finish()
         .unwrap();
@@ -27,21 +27,21 @@ fn main() {
 
     // === block_3
 
-    // Write `pub0124.csv`
+    // Write `census_0.csv`
     let mut cloudfile = Runtime::new()
         .unwrap()
         .block_on(cloud::BlockingCloudWriter::new(
-            "s3://lfs/pub0124.csv",
+            "s3://census/census_0.csv",
             Some(&cloud_options),
         ))
         .unwrap();
     CsvWriter::new(&mut cloudfile).finish(&mut df).unwrap();
 
-    // Write `pub0124.parquet`
+    // Write `census_0.parquet`
     let mut cloudfile = Runtime::new()
         .unwrap()
         .block_on(cloud::BlockingCloudWriter::new(
-            "s3://lfs/pub0124.parquet",
+            "s3://census/census_0.parquet",
             Some(&cloud_options),
         ))
         .unwrap();
@@ -49,12 +49,12 @@ fn main() {
 
     // === block_4
 
-    // Write partitioned `pub0124.parquet` on "prov" and "gender"
+    // Write partitioned `census_0.parquet` on "region" and "gender"
     // `write_partitioned_dataset` is considered unstable
     write_partitioned_dataset(
         &mut df,
-        PlPath::from_str("s3://lfs/pub0124/").as_ref(),
-        vec!["prov".into(), "gender".into()],
+        PlPath::from_str("s3://census/census_0_part/").as_ref(),
+        vec!["region".into(), "age_group".into()],
         &ParquetWriteOptions::default(),
         Some(&cloud_options),
         4294967296,

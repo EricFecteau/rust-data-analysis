@@ -15,7 +15,7 @@ fn main() {
     // Get all variable names using Polars;
     let args = ScanArgsParquet::default();
     let mut lf =
-        LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
+        LazyFrame::scan_parquet(PlPath::from_str("./data/parquet/census_0.parquet"), args).unwrap();
 
     let cols: Vec<String> = lf
         .collect_schema()

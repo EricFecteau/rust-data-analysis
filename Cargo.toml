@@ -1,12 +1,12 @@
 [package]
 name = "rust-data-analysis"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
 
 # Extract ZIP files
-zip = "5"
+zip = "6"
 
 # Create random values
 rand = "0.9" 

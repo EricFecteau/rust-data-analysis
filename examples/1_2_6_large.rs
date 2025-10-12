@@ -19,8 +19,12 @@ fn main() {
         lf_vec.push(lf);
     }
 
+    // Create one big file
     let union_args = UnionArgs::default();
     let lf = concat(lf_vec, union_args).unwrap();
+
+    // Drop weight for the large file
+    let lf = lf.select([all().exclude_cols(["weight"]).as_expr()]);
 
     // Get regions
     let regions = lf

@@ -16,18 +16,19 @@ kill-minio:
     pkill minio
 
 get-data:
-    rm -r ./data
-    cargo run -r --example 1_2_1_download
+    rm -rf ./data
+    cargo run -r --example 1_2_1_extract
+    cargo run -r --example 1_2_2_rename
+    cargo run -r --example 1_2_3_synthetic
+    cargo run -r --example 1_2_4_expand
+    cargo run -r --example 1_2_5_parquet
+    cargo run -r --example 1_2_6_large
+    cargo run -r --example 1_2_7_sql
     minio server ./data/minio --quiet &
-    cargo run -r --example 1_2_2_styling
-    cargo run -r --example 1_2_3_parquet
-    cargo run -r --example 1_2_4_large
-    cargo run -r --example 1_2_5_sql
-    cargo run -r --example 1_2_6_minio
+    cargo run -r --example 1_2_8_minio
     pkill minio
 
 test-rw:
-    minio server ./data/minio --quiet &
     cargo run -r --example 2_1_1_dataframe
     cargo run -r --example 2_2_1_read_csv
     cargo run -r --example 2_2_2_write_csv
@@ -36,6 +37,7 @@ test-rw:
     cargo run -r --example 2_3_3_write_partitioned_parquet
     cargo run -r --example 2_4_1_postgresql
     cargo run -r --example 2_4_2_sql_to_polars
+    minio server ./data/minio --quiet &
     cargo run -r --example 2_5_1_read_cloud
     cargo run -r --example 2_5_2_write_cloud
     pkill minio
