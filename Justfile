@@ -10,7 +10,7 @@ process-book:
 render: process-book
     mdbook serve --open
 
-test-all: get-data test-rw test-transform
+test-all: get-data test-rw test-trans test-stats test-pub
 
 kill-minio:
     pkill minio
@@ -42,12 +42,13 @@ test-rw:
     cargo run -r --example 2_5_2_write_cloud
     pkill minio
 
-test-transform:
+test-trans:
     cargo run -r --example 3_1_1_filter
     cargo run -r --example 3_1_2_filter_opt
     cargo run -r --example 3_2_1_select
     cargo run -r --example 3_3_1_variables
     cargo run -r --example 3_4_1_pivot
+    cargo run -r --example 3_5_1_joins
 
 test-stats:
     cargo run -r --example 4_1_1_summary
@@ -56,4 +57,6 @@ test-stats:
     cargo run -r --example 4_2_3_mwu
 
 test-pub:
-    cargo run -r --example 5_
+    cargo run -r --example 5_1_1_excel
+    cargo run -r --example 5_2_1_plots
+    cargo run -r --example 5_3_1_repots
