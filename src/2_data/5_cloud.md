@@ -1,6 +1,6 @@
 # Cloud
 
-Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage and Google Cloud Storage. This methods allows for lazy evaluation of cloud objects. In this example, we will show how to connect to AWS S3, set up in the optional `s3 bucket` section of the [data](../1_start/data.md#s3-bucket-optional) chapter. 
+Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage and Google Cloud Storage. This methods allows for lazy evaluation of cloud objects. In this example, we will show how to connect to AWS S3, set up in the optional `s3 bucket` section of the [data](../1_start/3_data.md#s3-bucket-optional) chapter. 
 
 > [!IMPORTANT]  
 > Reminder: make sure that the minio server is running (`minio server ./data/minio`) before running these examples.
@@ -16,7 +16,7 @@ To connect to the cloud of your choice, you have to set up the cloud options: us
 
 ## Reading
 
-For `.csv` files, in the same way as was shown for the [CSV](csv.md) data stored locally, you can get a LazyFrame from `LazyCsvReader` with data on the cloud, by passing the cloud_options created above to `with_cloud_options()`:
+For `.csv` files, in the same way as was shown for the [CSV](2_csv.md) data stored locally, you can get a LazyFrame from `LazyCsvReader` with data on the cloud, by passing the cloud_options created above to `with_cloud_options()`:
 
 ```rust
 === Rust 2_5_1_read_cloud block_2
@@ -37,7 +37,7 @@ shape: (5, 21)
 └─────────────────┴────────┴───────┴──────┴───┴─────┴───────────┴────────┴───────┘
 ```
 
-For `.parquet` files, in the same way as was shown for the [Parquet](parquet.md) data stored locally, you can get a `LazyFrame` from `scan_parquet` with data on the cloud, by adding `cloud_options` to the `ScanArgsParquet`. This works for both individual parquet files or partitioned parquet files. 
+For `.parquet` files, in the same way as was shown for the [Parquet](3_parquet.md) data stored locally, you can get a `LazyFrame` from `scan_parquet` with data on the cloud, by adding `cloud_options` to the `ScanArgsParquet`. This works for both individual parquet files or partitioned parquet files. 
 
 > [!NOTE]
 > For partitioned parquet files on the cloud, the `/` at the end of `s3://census/partitioned/` is required (unlike on local data).

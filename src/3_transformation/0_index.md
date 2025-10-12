@@ -2,8 +2,8 @@
 
 This section demonstrates how to transform data by filtering rows, adding and removing columns, pivoting the data and joining data together.
 
-* [Filter](filter.md)
-* [Select](select.md)
-* [Variables](variables.md)
-* [Pivots](pivots.md)
-* [Joins](joins.md)
+* [Filter](1_filter.md)
+* [Select](2_select.md)
+* [Variables](3_variables.md)
+* [Pivots](4_pivots.md)
+* [Joins](5_joins.md)

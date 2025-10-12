@@ -6,7 +6,7 @@ With Polars, pivots have to be done in-memory. As explained by Polars, "lazy doe
 
 ## Setup
 
-Since the data has to be materialized (i.e. in-memory) to be pivoted, this section will first create some summary data to get a manageable `DataFrame`. To learn how to do summary statistics, see the [summary chapter](../4_stats/summary.md). For now, you can simply run the code below.
+Since the data has to be materialized (i.e. in-memory) to be pivoted, this section will first create some summary data to get a manageable `DataFrame`. To learn how to do summary statistics, see the [summary chapter](../4_stats/1_summary.md). For now, you can simply run the code below.
 
 In this example, we connect to the Parquet file, summarize the hourly wage data (unweighted) by year and province.
 

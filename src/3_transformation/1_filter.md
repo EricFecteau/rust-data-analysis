@@ -77,7 +77,7 @@ You can also simply list the start and end point of a list:
 
 ## Lazy evaluation optimization
 
-Filtering is a perfect example to show how `LazyFrame` use optimized queries, especially when using partitioned parquet files, as created in the [Parquet](../2_data/parquet.md#writing) chapter. This section can be run with `cargo run -r --example 3_1_2_filter_opt` (release mode is important for simple benchmarking).
+Filtering is a perfect example to show how `LazyFrame` use optimized queries, especially when using partitioned parquet files, as created in the [Parquet](../2_data/3_parquet.md#writing) chapter. This section can be run with `cargo run -r --example 3_1_2_filter_opt` (release mode is important for simple benchmarking).
 
 > [!NOTE]
 > Optimization also works when connecting to data on the Cloud.

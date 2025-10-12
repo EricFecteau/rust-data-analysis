@@ -17,7 +17,7 @@ All examples in this book are accompanied with [example scripts](https://github.
 
 ## Data analysis environment
 
-The [evcxr](https://github.com/evcxr/evcxr/blob/main/evcxr/README.md) evaluation context crate has created a [Rust REPL](https://github.com/evcxr/evcxr/blob/main/evcxr_repl/README.md) (Read-Eval-Print loop) and a [Kernel for Jupyter Notebooks]((https://github.com/evcxr/evcxr/blob/main/evcxr_jupyter/README.md)). This removes the need for the `main` function. Like R and Python, this allows you to run code in chunks, or re-run a peice of analysis quickly with different options.
+The [evcxr](https://github.com/evcxr/evcxr/blob/main/evcxr/README.md) evaluation context crate has created a [Rust REPL](https://github.com/evcxr/evcxr/blob/main/evcxr_repl/README.md) (Read-Eval-Print loop) and a [Kernel for Jupyter Notebooks](https://github.com/evcxr/evcxr/blob/main/evcxr_jupyter/README.md). This removes the need for the `main` function. Like R and Python, this allows you to run code in chunks, or re-run a peice of analysis quickly with different options.
 
 To import a dependency in either the REPL or the Jupyter Notebook, you submit a `Cargo.toml` dependency line starting with `:dep` (e.g. `:dep polars = { version = "0.51", features = ["lazy"] }` for `Polars 0.51` with the `lazy` feature). 
 

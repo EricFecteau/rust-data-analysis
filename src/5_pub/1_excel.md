@@ -7,8 +7,8 @@ In the data analysis world, Excel is still the universal aggregate statistics ex
 First, lets create some summary statistics to throw into the excel file. We will create a table of mean hourly earnings by year and province, in a long format (e.g. 3 columns: "survyear", "prov" and "hourly_wages") and wide format (e.g. "survyear" as row and "prov" as column). Both `df_long` and `df_wide` are brought into memory as data frames.
 
 ```rust
-=== Rust 5_1_0_excel imports
-=== Rust 5_1_0_excel block_1
+=== Rust 5_1_1_excel imports
+=== Rust 5_1_1_excel block_1
 ```
 
 Long:
@@ -64,7 +64,7 @@ To write this data to Excel, we can use the [polars_excel_writer](https://docs.r
 First, lets create an Excel workbook and write our `df_long` to the "long" worksheet. Note that nothing has been saved yet, but the screenshots are taken as if it had been saved. The workbook is currently in-memory and will be written at the end of this section.
 
 ```rust
-=== Rust 5_1_0_excel block_2
+=== Rust 5_1_1_excel block_2
 ```
 
 ![Long Excel data](images/excel/long.png)
@@ -72,7 +72,7 @@ First, lets create an Excel workbook and write our `df_long` to the "long" works
 Next, we can add a second worksheet, called "wide" with the wide data from `df_wide`:
 
 ```rust
-=== Rust 5_1_0_excel block_3
+=== Rust 5_1_1_excel block_3
 ```
 
 ![Wide Excel data](images/excel/wide.png)
@@ -80,7 +80,7 @@ Next, we can add a second worksheet, called "wide" with the wide data from `df_w
 Now that we have the data into excel, we can use `rust_xlsxwriter` to manipulate the worksheet and add anything. Here, we add a line chart based on the data from `df_wide`, found in the "wide" worksheet:
 
 ```rust
-=== Rust 5_1_0_excel block_4
+=== Rust 5_1_1_excel block_4
 ```
 
 ![Excel graph based on wide data](images/excel/graph.png)
@@ -88,5 +88,5 @@ Now that we have the data into excel, we can use `rust_xlsxwriter` to manipulate
 Lastly, we can save all of this to the `./data/output/mean_hourly_wages.xlsx` folder:
 
 ```rust
-=== Rust 5_1_0_excel block_5
+=== Rust 5_1_1_excel block_5
 ```

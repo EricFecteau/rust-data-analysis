@@ -4,15 +4,15 @@ This book is a "learn by example" guide to data analysis in Rust. It assumes min
 
 # Overview
 
-The [first section](./1_start/index.md) explores concepts related to data analysis in Rust, the crates (libraries) used in the book and how to collect the data necessary for the examples. It also shows how to run these examples in a Jupyter Notebook with a Rust kernel.
+The [first section](./1_start/0_index.md) explores concepts related to data analysis in Rust, the crates (libraries) used in the book and how to collect the data necessary for the examples. It also shows how to run these examples in a Jupyter Notebook with a Rust kernel.
 
-The [second section](./2_data/index.md) explains how to read and write various types of data (e.g. `.csv` and `.parquet`), including larger-than-memory data. This section also focuses on the various locations data can be read from and written to, including local data, cloud-based data and databases. 
+The [second section](./2_data/0_index.md) explains how to read and write various types of data (e.g. `.csv` and `.parquet`), including larger-than-memory data. This section also focuses on the various locations data can be read from and written to, including local data, cloud-based data and databases. 
 
-The [third section](./3_transformation/index.md) demonstrates how to transform data by adding and removing columns, filtering rows, pivoting the data and joining data together.
+The [third section](./3_transformation/0_index.md) demonstrates how to transform data by adding and removing columns, filtering rows, pivoting the data and joining data together.
 
-The [fourth section](./4_stats/index.md) shows how do summary statistics, such as counts, totals, means and percentiles, with and without survey weights. It also gives some examples of hypothesis testing. 
+The [fourth section](./4_stats/0_index.md) shows how do summary statistics, such as counts, totals, means and percentiles, with and without survey weights. It also gives some examples of hypothesis testing. 
 
-The [fifth and last section](./5_pub/index.md) has examples of publication avenues, such as exporting summary statistics to excel, plotting results and writing markdown reports.
+The [fifth and last section](./5_pub/0_index.md) has examples of publication avenues, such as exporting summary statistics to excel, plotting results and writing markdown reports.
 
 # Running the examples
 

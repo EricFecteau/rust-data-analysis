@@ -9,20 +9,20 @@ For longer and more in-depth reports, this book is, itself, the a good example e
 The output of the report will be an HTML file that can be opened in a browser. Therefore, the first step is to create an HTML file as output:
 
 ```rust
-=== Rust 5_3_0_reports imports
-=== Rust 5_3_0_reports block_1
+=== Rust 5_3_1_reports imports
+=== Rust 5_3_1_reports block_1
 ```
 
 Next, because `comrak` does not provide any styling, we will use [css](https://www.w3schools.com/css/) to give our report some style: 
 
 ```rust
-=== Rust 5_3_0_reports block_2
+=== Rust 5_3_1_reports block_2
 ```
 
 Lastly, we need to modify some of the [config options](https://docs.rs/polars/latest/polars/#config-with-env-vars) of `polars` so that it can output it's table to a nice-looking markdown style:
 
 ```rust
-=== Rust 5_3_0_reports block_3
+=== Rust 5_3_1_reports block_3
 ```
 
 > [!NOTE]
@@ -37,7 +37,7 @@ We have now setup the formats needed to create a nice looking markdown report!
 A markdown document is simply one long peice of text that needs to be rendered. So we start off here with a string called `markdown`. We will continue to append more markdown text to this variable with `push_str`. As you can see, in this section we create a title (starts with a `#`), a sub-title (sstarts with a `##`) and a paragraph (using [placeholder text](https://en.wikipedia.org/wiki/Lorem_ipsum)).
 
 ```rust
-=== Rust 5_3_0_reports block_4
+=== Rust 5_3_1_reports block_4
 ```
 
 ![Screenshot of intro section](images/report/intro.png)
@@ -47,7 +47,7 @@ A markdown document is simply one long peice of text that needs to be rendered. 
 We can add a markdown data table to the html document by calling `.to_string()` on a `DataFrame` (not a `LazyFrame`, don't forget to `.collect()`). To do this, as learned in the [summary statistics chapter]() we connect to the LFS database, create a summary table of the mean hourly wages by province and gender and pivot it for better display. We can then add the table string to the `markdown` variable.
 
 ```rust
-=== Rust 5_3_0_reports block_5
+=== Rust 5_3_1_reports block_5
 ```
 
 ![Screenshot of data section](images/report/data.png)
@@ -57,7 +57,7 @@ We can add a markdown data table to the html document by calling `.to_string()` 
 We can also add images to the markdown document, using the `![alt text](out.png)` format. To do this, as learned in the [plotting chapter](), we can use the data table we just created and pass it to `plotlars`. 
 
 ```rust
-=== Rust 5_3_0_reports block_6
+=== Rust 5_3_1_reports block_6
 ```
 
 ![Screenshot of graphic section](images/report/graphic.png)
@@ -67,7 +67,7 @@ We can also add images to the markdown document, using the `![alt text](out.png)
 Similar to the intro, we can add a conlusion.
 
 ```rust
-=== Rust 5_3_0_reports block_7
+=== Rust 5_3_1_reports block_7
 ```
 
 ![Screenshot of conclusion section](images/report/conclusion.png)
@@ -77,7 +77,7 @@ Similar to the intro, we can add a conlusion.
 Lastly, we must render the markdown to HTML, close up our HTML opened earlier in this chater, and save the HTML to file.
 
 ```rust
-=== Rust 5_3_0_reports block_8
+=== Rust 5_3_1_reports block_8
 ```
 
 With all this done, you can see the final report [here]().

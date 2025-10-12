@@ -1,6 +1,6 @@
 # Database
 
-This section will explore how to work with SQL databases in Rust. It relies on the optional `SQL` section in the [Data](../1_start/data.md#sql-optional) section of the setup, where a PostgreSQL server was set up and the Census data was loaded.
+This section will explore how to work with SQL databases in Rust. It relies on the optional `SQL` section in the [Data](../1_start/3_data.md#sql-optional) section of the setup, where a PostgreSQL server was set up and the Census data was loaded.
 
 ## Direct queries
 
@@ -18,7 +18,7 @@ Using this method, each type of databases will have their own special connection
 
 ## SQL to Polars
 
-Using [ConnectorX](https://docs.rs/connectorx/latest/connectorx/), you can move data from SQL servers to Polars with `get_arrow().polars()`. It will return a `DataFrame` (that can be converted to the latest version of Polars with `df-interchange` as explained in the [concepts](../1_start/concepts.md#polars-and-arrow-versions) section of the setup). You can run this section using `cargo run -r --example 2_4_2_sql_to_polars`.
+Using [ConnectorX](https://docs.rs/connectorx/latest/connectorx/), you can move data from SQL servers to Polars with `get_arrow().polars()`. It will return a `DataFrame` (that can be converted to the latest version of Polars with `df-interchange` as explained in the [concepts](../1_start/4_concepts.md#polars-and-arrow-versions) section of the setup). You can run this section using `cargo run -r --example 2_4_2_sql_to_polars`.
 
 ```rust
 === Rust 2_4_2_sql_to_polars imports

@@ -94,4 +94,4 @@ folder/
 ├─ region=W92000004/
 ```
 
-The [filter](../3_transformation/select.md) chapter will go into more detail about the advantages of doing this.
+The [filter](../3_transformation/2_select.md) chapter will go into more detail about the advantages of doing this.

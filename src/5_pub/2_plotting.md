@@ -9,8 +9,8 @@ Plots are the langauge of data analysts. There are mutiple dozens of types of pl
 Lets get some summary statistics to output as a bar graph. Here is a table of the mean hourly wage by gender and province:
 
 ```rust
-=== Rust 5_2_0_plots imports
-=== Rust 5_2_0_plots block_1
+=== Rust 5_2_1_plots imports
+=== Rust 5_2_1_plots block_1
 ```
 
 ```
@@ -39,13 +39,13 @@ shape: (20, 3)
 To build a graph, you start with the data, you give it an `x` axis and a `y` axis, a `group` if you have groups and then various options, like `x_title`, `y_title`, `plot_title`, `size` for text, etc. Most functions are self-explanatory, but they are described in the documentation of the [bar graph](https://docs.rs/plotlars/latest/plotlars/struct.BarPlot.html).
 
 ```Rust
-=== Rust 5_2_0_plots block_2
+=== Rust 5_2_1_plots block_2
 ```
 
 In this example, `to_html()` was used to imbed in this page to be interactive. You can save it to a `.html` file:
 
 ```Rust
-=== Rust 5_2_0_plots block_3
+=== Rust 5_2_1_plots block_3
 ```
 
 Opening this file, will give you this interactive bar chart:
@@ -73,7 +73,7 @@ Lets also get some summary statistics to output as a scatter plot. Here is a tab
 
 
 ```rust
-=== Rust 5_2_0_plots block_4
+=== Rust 5_2_1_plots block_4
 ```
 
 ```
@@ -102,13 +102,13 @@ shape: (240, 3)
 Similar to the bar graph, for the line plot, you start with the data, you give it an `x` axis and a `y` axis (and here, you add another `y` axis with `additional_lines` to add a new line to the line plot), and then various options, like `x_title`, `y_title`, `plot_title`, `size` for text, etc. Most functions are self-explanatory, but they are described in the documentation of the [line plot](https://docs.rs/plotlars/latest/plotlars/struct.LinePlot.html).
 
 ```Rust
-=== Rust 5_2_0_plots block_5
+=== Rust 5_2_1_plots block_5
 ```
 
 In this example, `to_html()` was used to imbed in this page to be interactive. You can save it to a `.html` file:
 
 ```Rust
-=== Rust 5_2_0_plots block_6
+=== Rust 5_2_1_plots block_6
 ```
 
 Opening this file, will give you this interactive bar chart:
