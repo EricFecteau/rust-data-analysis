@@ -7,7 +7,8 @@ fn main() {
 
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
-    let mut lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let mut lf =
+        LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
     // === block_2
 
@@ -29,10 +30,9 @@ fn main() {
 
     // Select some columns by name & with regex & with rename
     let lf = lf.select([
-        col("^surv.*$"), // survyear, survmnth
-        col("prov"),
-        col("hrlyearn").alias("hourly_wages"),
-        col("finalwt"),
+        col("^age.*$"), // survyear, survmnth
+        col("region"),
+        col("income").alias("yearly_income"),
     ]);
 
     // Print selected column (top 5 values)
@@ -41,7 +41,7 @@ fn main() {
     // === block_4
 
     // Drop variables (better to simply select the columns needed)
-    let lf = lf.select([all().exclude_cols(["prov", "hourly_wages"]).as_expr()]);
+    let lf = lf.select([all().exclude_cols(["region", "yearly_income"]).as_expr()]);
 
     // Print selected column (top 5 values)
     println!("{}", lf.clone().limit(5).collect().unwrap());

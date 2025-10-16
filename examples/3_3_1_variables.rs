@@ -7,15 +7,15 @@ fn main() {
 
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
     // === block_2
 
     // Add new variables from literals
     let lf = lf.select([
-        col("^surv.*$"),                         // keep survyear, survmnth
-        col("prov"),                             // keep province
-        col("hrlyearn").alias("hourly_wages"),   // keep hrlyearn as hourly_wages
+        col("age_group"),
+        col("region"),
+        col("income"),
         lit(5).alias("five"),                    // add single value literal
         (lit(5) + lit(7) - lit(2)).alias("ten"), // add single value from two or more literals
     ]);
@@ -33,13 +33,11 @@ fn main() {
 
     // === block_4
 
-    // Cast the value from an `i64` to a `f64` and modify it (divide by 100)
+    // Cast the value from an `i64` to a `f64` and modify it (dadd a inflation modifier)
     let lf = lf
         .select([all().exclude_cols(["five", "ten", "fifteen"]).as_expr()])
-        .filter(col("hourly_wages").is_not_null())
-        .with_column(
-            (col("hourly_wages").cast(DataType::Float64) / lit(100)).alias("wages_dollars"),
-        );
+        .filter(col("income").is_not_null())
+        .with_column((col("income").cast(DataType::Float64) * lit(1.02)).alias("income_infl"));
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
@@ -47,35 +45,35 @@ fn main() {
 
     // Create categorical variables
     let lf = lf.with_column(
-        when(col("wages_dollars").lt_eq(lit(20.00)))
+        when(col("income_infl").lt_eq(lit(30_000)))
             .then(lit("Low"))
             .when(
-                col("wages_dollars")
-                    .gt(lit(20.00))
-                    .and(col("wages_dollars").lt_eq(lit(50.00))),
+                col("income_infl")
+                    .gt(lit(30000))
+                    .and(col("income_infl").lt_eq(lit(70_000))),
             )
             .then(lit("Medium"))
             .otherwise(lit("High"))
-            .alias("wage_cat"),
+            .alias("income_cat"),
     );
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
-    // === block_6
+    // // === block_6
 
-    // Change numeric province code to alpha-code
-    let lf = lf.with_column(col("prov").replace_strict(
-        lit(Series::from_iter(vec![
-            "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
-        ])),
-        lit(Series::from_iter(vec![
-            "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
-        ])),
-        None,
-        Some(DataType::String),
-    ));
+    // // Change numeric province code to alpha-code
+    // let lf = lf.with_column(col("prov").replace_strict(
+    //     lit(Series::from_iter(vec![
+    //         "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
+    //     ])),
+    //     lit(Series::from_iter(vec![
+    //         "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
+    //     ])),
+    //     None,
+    //     Some(DataType::String),
+    // ));
 
-    println!("{}", lf.clone().limit(5).collect().unwrap());
+    // println!("{}", lf.clone().limit(5).collect().unwrap());
 
     // === end
 }

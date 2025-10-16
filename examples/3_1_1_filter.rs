@@ -16,7 +16,7 @@ fn main() {
         .clone()
         .filter(col("keep_type").eq(1)) // Usual resident
         .filter(col("region").eq(lit("E12000007"))) // London
-        .filter(col("age_group").gt(lit(3))) // Aged 25 to 34 years
+        .filter(col("age_group").gt_eq(lit(5))) // Aged 45+
         .filter(col("income").is_not_null());
 
     // === block_3
@@ -25,49 +25,39 @@ fn main() {
     let lf_filt_one = lf.clone().filter(
         col("keep_type")
             .eq(lit(1)) // Usual resident
-            .and(col("region").gt(lit("E12000007"))) // London
-            .and(col("age_group").gt(lit(3))) // Aged 25 to 34 years
+            .and(col("region").eq(lit("E12000007"))) // London
+            .and(col("age_group").gt_eq(lit(5))) // Aged 45+
             .and(col("income").is_not_null()),
     );
 
     // === block_4
 
-    // ((survyear == 2023 & survmnt > 6) | (survyear == 2024 & survmnt <= 6))
-    let expr = (col("survyear")
-        .eq(lit(2023))
-        .and(col("survmnth").gt(lit(6))))
-    .or(col("survyear")
-        .eq(lit(2024))
-        .and(col("survmnth").lt_eq(lit(6))));
+    // ((region == "E12000001" & age_group >= 6) | (region == "E12000002" & age_group < 6))
+    let expr = (col("region")
+        .eq(lit("E12000001")) // North East
+        .and(col("age_group").gt_eq(lit(6)))) // 55 and over
+    .or(col("region")
+        .eq(lit("E12000002")) // North West
+        .and(col("age_group").lt_eq(lit(6)))); // 54 and under
 
     println!("{expr}"); // You can print it
 
-    // === block_5
+    // // === block_5
 
     // Apply the expression to a LazyFrame
     let lf_filt_complex = lf.clone().filter(expr);
 
-    // === block_6
+    // // === block_6
 
     // Using `is_in` crate feature with literals
-    let lf_filt_is_in = lf.clone().filter(col("survyear").is_in(
-        lit(Series::from_iter(vec![2021, 2022, 2023, 2024])).implode(),
-        false,
-    ));
-
-    // === block_7
-
-    // Using `is_in` crate feature with literals
-    let year_vec: Vec<i32> = (2022..=2024).collect();
-    let lf_filt_is_in_vec = lf
+    let lf_filt_is_in = lf
         .clone()
-        .filter(col("survyear").is_in(lit(Series::from_iter(year_vec)).implode(), false));
+        .filter(col("industry").is_in(lit(Series::from_iter(vec![2, 4, 6, 8])).implode(), false));
 
-    // === end
+    // // === end
 
     println!("{}", lf_filt_mult.limit(5).collect().unwrap());
     println!("{}", lf_filt_one.limit(5).collect().unwrap());
     println!("{}", lf_filt_complex.limit(5).collect().unwrap());
     println!("{}", lf_filt_is_in.limit(5).collect().unwrap());
-    println!("{}", lf_filt_is_in_vec.limit(5).collect().unwrap());
 }

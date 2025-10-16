@@ -4,7 +4,7 @@ This chapter will explore how to keep or drop columns from your data. You can ru
 
 ## Select
 
-To have access to data, lets connect to the parquet LFS data:
+To have access to data, lets connect to the parquet Census data:
 
 ```rust
 === Rust 3_2_1_select imports
@@ -18,28 +18,28 @@ Using `collect_schema`, we can collect the names of the columns in the `LazyFram
 ```
 
 ```
-Vector of the 60 variables in the LazyFrame: ["rec_num", "survyear", "survmnth", "lfsstat", "prov", "cma", "age_12", "age_6", "gender", "marstat", "educ", "mjh", "everwork", "ftptlast", "cowmain", "immig", "naics_21", "noc_10", "noc_43", "yabsent", "wksaway", "payaway", "uhrsmain", "ahrsmain", "ftptmain", "utothrs", "atothrs", "hrsaway", "yaway", "paidot", "unpaidot", "xtrahrs", "whypt", "tenure", "prevten", "hrlyearn", "union", "permtemp", "estsize", "firmsize", "durunemp", "flowunem", "unemftpt", "whylefto", "whyleftn", "durjless", "availabl", "lkpubag", "lkemploy", "lkrels", "lkatads", "lkansads", "lkothern", "prioract", "ynolook", "tlolook", "schooln", "efamtype", "agyownk", "finalwt"]
+Vector of the 21 variables in the LazyFrame: ["id", "social", "birth", "econ", "ethnic", "health", "fam_type", "hours_worked", "education", "industry", "london", "mar_stat", "occupation", "region", "religion", "residence_type", "age_group", "sex", "keep_type", "income", "chunk"]
 ```
 
-Now, using `select()` you can select (i.e. keep) various columns using the `col()` function. With the `regex` Polars crate feature, you can also use regular expressions to identify columns following a pattern. This pattern must start with `^` and end with `$`. In this example, we are keeping `survyear` (Survey year), `survmnth` (Survey month), `prov` (Province), `hrlyearn` (Usual hourly wages) and `finalwt` (Standard final weight). With `alias` we are renaming `hrlyearn` to `hourly_wages`.
+Now, using `select()` you can select (i.e. keep) various columns using the `col()` function. With the `regex` Polars crate feature, you can also use regular expressions to identify columns following a pattern. This pattern must start with `^` and end with `$`. In this example, we are keeping `age_group`, `region` and `income`. With `alias` we are renaming `income` to `yearly_income`.
 
 ```rust
 === Rust 3_2_1_select block_3
 ```
 
 ```
-shape: (5, 5)
-┌──────────┬──────────┬──────┬──────────────┬─────────┐
-│ survyear ┆ survmnth ┆ prov ┆ hourly_wages ┆ finalwt │
-│ ---      ┆ ---      ┆ ---  ┆ ---          ┆ ---     │
-│ i64      ┆ i64      ┆ i64  ┆ i64          ┆ i64     │
-╞══════════╪══════════╪══════╪══════════════╪═════════╡
-│ 2011     ┆ 1        ┆ 59   ┆ null         ┆ 109     │
-│ 2011     ┆ 1        ┆ 48   ┆ null         ┆ 62      │
-│ 2011     ┆ 1        ┆ 47   ┆ null         ┆ 71      │
-│ 2011     ┆ 1        ┆ 35   ┆ null         ┆ 345     │
-│ 2011     ┆ 1        ┆ 12   ┆ 2462         ┆ 105     │
-└──────────┴──────────┴──────┴──────────────┴─────────┘
+shape: (5, 3)
+┌───────────┬───────────┬───────────────┐
+│ age_group ┆ region    ┆ yearly_income │
+│ ---       ┆ ---       ┆ ---           │
+│ i64       ┆ str       ┆ i64           │
+╞═══════════╪═══════════╪═══════════════╡
+│ 1         ┆ E12000001 ┆ null          │
+│ 1         ┆ E12000001 ┆ null          │
+│ 1         ┆ E12000001 ┆ null          │
+│ 1         ┆ E12000001 ┆ null          │
+│ 1         ┆ E12000001 ┆ null          │
+└───────────┴───────────┴───────────────┘
 ```
 
 ## Remove
@@ -51,18 +51,18 @@ You can also drop variables by selecting `all()` variables and providing a vecto
 ```
 
 ```
-shape: (5, 3)
-┌──────────┬──────────┬─────────┐
-│ survyear ┆ survmnth ┆ finalwt │
-│ ---      ┆ ---      ┆ ---     │
-│ i64      ┆ i64      ┆ i64     │
-╞══════════╪══════════╪═════════╡
-│ 2011     ┆ 1        ┆ 109     │
-│ 2011     ┆ 1        ┆ 62      │
-│ 2011     ┆ 1        ┆ 71      │
-│ 2011     ┆ 1        ┆ 345     │
-│ 2011     ┆ 1        ┆ 105     │
-└──────────┴──────────┴─────────┘
+shape: (5, 1)
+┌───────────┐
+│ age_group │
+│ ---       │
+│ i64       │
+╞═══════════╡
+│ 1         │
+│ 1         │
+│ 1         │
+│ 1         │
+│ 1         │
+└───────────┘
 ```
 
 The `exclude_cols()` should be used sparingly by letting your query optimization (e.g. summary of data on requested variables only) do the work for you. In other words, an analytical pipeline will naturally ignore some columns and Polars will automatically drop them when no longer relevant. 

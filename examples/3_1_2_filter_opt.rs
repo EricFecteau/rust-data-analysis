@@ -8,25 +8,26 @@ fn main() {
     // Connect to LazyFrame (one large parquet file)
     let args = ScanArgsParquet::default();
     let lf_one =
-        LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/lfs.parquet"), args).unwrap();
+        LazyFrame::scan_parquet(PlPath::from_str("./data/large/census.parquet"), args).unwrap();
 
     // Filter it
     let lf_one = lf_one
-        .filter(col("survyear").eq(lit(2023)))
-        .filter(col("survmnth").gt(lit(6)))
-        .filter(col("hrlyearn").is_not_null());
+        .filter(col("region").eq(lit("E12000007"))) // London
+        .filter(col("age_group").eq(lit(5))) // Age 45 to 54
+        .filter(col("income").is_not_null());
 
     // === block_2
 
     // Connect to LazyFrame (partitioned parquet file)
     let args = ScanArgsParquet::default();
-    let lf_part = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf_part =
+        LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
     // Filter it
     let lf_part = lf_part
-        .filter(col("survyear").eq(lit(2023)))
-        .filter(col("survmnth").gt(lit(6)))
-        .filter(col("hrlyearn").is_not_null());
+        .filter(col("region").eq(lit("E12000007"))) // London
+        .filter(col("age_group").eq(lit(5))) // Age 45 to 54
+        .filter(col("income").is_not_null());
 
     // === block_3
 
@@ -59,11 +60,11 @@ fn main() {
 
     // === block_7
     let before = std::time::Instant::now();
-    let _ = lf_one.select([col("hrlyearn")]).mean().collect().unwrap();
+    let _ = lf_one.select([col("income")]).mean().collect().unwrap();
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     let before = std::time::Instant::now();
-    let _ = lf_part.select([col("hrlyearn")]).mean().collect().unwrap();
+    let _ = lf_part.select([col("income")]).mean().collect().unwrap();
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     // === end
