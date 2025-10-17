@@ -1,9 +1,17 @@
+use std::env;
+
 // === imports
 use polars::prelude::*;
 
 // === main
 fn main() {
     // === block_1
+
+    unsafe {
+        env::set_var("POLARS_VERBOSE", "1");
+    }
+
+    // === block_2
 
     // Connect to LazyFrame (one large parquet file)
     let args = ScanArgsParquet::default();
@@ -31,40 +39,12 @@ fn main() {
 
     // === block_3
 
-    // Unoptimized
-    println!(
-        "\nUnoptimized single-parquet file:\n\n{}",
-        lf_one.explain(false).unwrap()
-    );
-
-    // === block_4
-
-    println!(
-        "\nUnoptimized multi-parquet file:\n\n{}",
-        lf_part.explain(false).unwrap()
-    );
-
-    // Optimized
-
-    // === block_5
-    println!(
-        "\nOptimized single-parquet file:\n\n{}",
-        lf_one.explain(true).unwrap()
-    );
-
-    // === block_6
-    println!(
-        "\nOptimized multi-parquet file:\n\n{}",
-        lf_part.explain(true).unwrap()
-    );
-
-    // === block_7
     let before = std::time::Instant::now();
-    let _ = lf_one.select([col("income")]).mean().collect().unwrap();
+    let _ = lf_one.collect().unwrap();
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     let before = std::time::Instant::now();
-    let _ = lf_part.select([col("income")]).mean().collect().unwrap();
+    let _ = lf_part.collect().unwrap();
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     // === end

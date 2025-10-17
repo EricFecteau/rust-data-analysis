@@ -26,7 +26,7 @@ Lastly, we need to modify some of the [config options](https://docs.rs/polars/la
 ```
 
 > [!NOTE]
-> Note that this code is wrapped in Rust's `unsafe {}`. This is not uncommon in Rust, as it's a way to explicitly force the user to acknowledge that the code they are using could potentially cause memory issues or not be thread-safe. As explained in the documentation of [set_var](https://doc.rust-lang.org/std/env/fn.set_var.html#safety), "This function is safe to call in a single-threaded program." and "This function is also always safe to call on Windows, in single-threaded and multi-threaded programs.". This function is only unsafe in multi-treaded programs. This program is single threaded, so we are completely fine here! I recommend exploring the [unsafe rust](https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html) documentation a bit to familiarize yourself with safety in Rust. 
+> Note that this code is wrapped in Rust's `unsafe {}`. This is not uncommon in Rust, as it's a way to explicitly force the user to acknowledge that the code they are using could potentially cause memory issues or not be thread-safe. As explained in the documentation of [set_var](https://doc.rust-lang.org/std/env/fn.set_var.html#safety), "This function is safe to call in a single-threaded program." and "This function is also always safe to call on Windows, in single-threaded and multi-threaded programs.". This function is only unsafe in multi-treaded programs. This program is single threaded, so no concerns here! I recommend exploring the [unsafe rust](https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html) documentation a bit to familiarize yourself with safety in Rust. 
 
 We have now setup the formats needed to create a nice looking markdown report!
 

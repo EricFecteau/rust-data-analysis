@@ -63,7 +63,7 @@ You can then apply the expression with `.filter()`:
 
 ### Value is in a list
 
-With the `is_in` crate feature, you can see if a `col()` is within a list of `lit()`. The right side of the expression takes a `Polars::Series`, that can be built using `Series::from_iter(vec![<vals>])`. In this example, we see if `industry` is equal to Manufacturing (2), Construction (4), Transport and communication (6) or Public administration, education and health (8).
+With the `is_in` crate feature, you can see if a `col()` is within a list of `lit()`. The right side of the expression takes a `Polars::Series`, that can be built using `Series::from_iter(vec![<vals>])`. In this example, `industry` is subset to Manufacturing (2), Construction (4), Transport and communication (6) or Public administration, education and health (8).
 
 ```Rust
 === Rust 3_1_1_filter block_6
@@ -76,83 +76,49 @@ Filtering is a perfect example to show how `LazyFrame` use optimized queries, es
 > [!NOTE]
 > Optimization also works when connecting to data on the Cloud.
 
-First, lets connect to the `./data/large/census.parquet` file that contains over 60 million rows of Census data, in one extremely compressed parquet file (approximately 13 MB). Next, lets filter this file to the region of london (region = "E12000007"), for those aged 45 to 54 (age_group = 5), and non-null values for `income`. Remember, this code creates and execution plan, but does not yet execute it.
+First, lets enable verbose output to understand what Polars is doing.
 
 ```Rust
 === Rust 3_1_2_filter_opt block_1
 ```
 
-Second, lets connect to the `./data/large/partitioned` partitioned dataset, that was partitioned by `region` and by `age_group`. Overall, the files in this partitioned dataset folder will contain over 60 million rows of Census data. This data is split among 70 extremely compressed parquet files, equalling a total of approximately 40 MB. Similar to the large parquet file, this file will be filtered to the region of london (region = "E12000007"), for those aged 45 to 54 (age_group = 5), and non-null values for `income`. Again, nothing is executed at this point. 
+> [!NOTE]
+> Note that this code is wrapped in Rust's `unsafe {}`. This is not uncommon in Rust, as it's a way to explicitly force the user to acknowledge that the code they are using could potentially cause memory issues or not be thread-safe. As explained in the documentation of [set_var](https://doc.rust-lang.org/std/env/fn.set_var.html#safety), "This function is safe to call in a single-threaded program." and "This function is also always safe to call on Windows, in single-threaded and multi-threaded programs.". This function is only unsafe in multi-treaded programs. This program is single threaded, so no concerns here! I recommend exploring the [unsafe rust](https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html) documentation a bit to familiarize yourself with safety in Rust. 
+
+Next lets connect to the `./data/large/census.parquet` file that contains over 60 million rows of Census data, in one extremely compressed parquet file (approximately 13 MB). Next, lets filter this file to the region of london (region = "E12000007"), for those aged 45 to 54 (age_group = 5), and non-null values for `income`.Remember, this code creates and execution plan, but does not yet execute it.
+
+```Rust
+=== Rust 3_1_2_filter_opt block_1
+```
+
+Second, lets connect to the `./data/large/partitioned` partitioned dataset, that was partitioned by `region` and by `age_group`. Overall, the files in this partitioned dataset folder will contain over 60 million rows of Census data. This data is split among 70 extremely compressed parquet files, equalling a total of approximately 40 MB. Similar to the large parquet file, this file will be filtered to the region of London (region = "E12000007"), for those aged 45 to 54 (age_group = 5), and non-null values for `income`. Again, nothing is executed at this point. 
 
 ```Rust
 === Rust 3_1_2_filter_opt block_2
 ```
 
-With `LazyFrame`, you can see the execution plan with `.explain()`. Passing `false` gives the unoptimized plan and passing `true` gives the optimized plan. When the plan is executed, it always uses the optimized plan. We can see that the unoptimized execution plan for the single parquet file and partitioned parquet file are similar:
+Now, lets collect both files into memory and get info about execution time:
 
 ```Rust
 === Rust 3_1_2_filter_opt block_3
 ```
 
-```
-FILTER col("income").is_not_null()
-FROM
-  FILTER [(col("age_group")) == (5)]
-  FROM
-    FILTER [(col("region")) == ("E12000007")]
-    FROM
-      Parquet SCAN [./data/large/census.parquet]
-      PROJECT */21 COLUMNS
-```
+This is when the lazy query is executed and, since verbose was enabled, we can understand what steps are being taken.
 
-```Rust
-=== Rust 3_1_2_filter_opt block_4
-```
+For the verbose output of the `./data/large/census.parquet` you will see that there is 1 source, and the entirety of the source needs to be read:
 
 ```
-FILTER col("income").is_not_null()
-FROM
-  FILTER [(col("age_group")) == (5)]
-  FROM
-    FILTER [(col("region")) == ("E12000007")]
-    FROM
-      Parquet SCAN [./data/large/partitioned/region=E12000001/age_group=1/00000000.parquet, ... 69 other sources]
-      PROJECT 19/21 COLUMNS
+[MultiScanTaskInit]: 1 sources, reader name: parquet, ReaderCapabilities(ROW_INDEX | PRE_SLICE | NEGATIVE_PRE_SLICE | PARTIAL_FILTER | FULL_FILTER | MAPPED_COLUMN_PROJECTION), n_readers_pre_init: 1, max_concurrent_scans: 1
+[MultiScanTaskInit]: predicate: Some("<predicate>"), skip files mask: None, predicate to reader: Some("<predicate>")
 ```
 
-In both cases, the filters are the same, and the SCAN in both cases touches all files (the large one or all 70 parquet file for the partitioned parquet file). The single file collects all 21 variables and the partitioned one selects 19 of the 21 variables, since `region` and `age_group` are removed from the file due to the hive partitioning structure.
-
-> [!WARNING]
-> As of Polars 0.46, query optimization on hive partitioned Parquet files is no longer working. You can follow the bug report [here](https://github.com/pola-rs/polars/issues/24909).
-
-On the other hand, the optimized queries are quite different:
-
-```Rust
-=== Rust 3_1_2_filter_opt block_5
-```
+For the verbose output of the `` you will see that while there are 70 files, 69 of them can be skipped before being read:
 
 ```
-Parquet SCAN [./data/large/census.parquet]
-PROJECT */21 COLUMNS
-SELECTION: [([(col("income").is_not_null()) & ([(col("age_group")) == (5)])]) & ([(col("region")) == ("E12000007")])]
+[MultiScanTaskInit]: 70 sources, reader name: parquet, ReaderCapabilities(ROW_INDEX | PRE_SLICE | NEGATIVE_PRE_SLICE | PARTIAL_FILTER | FULL_FILTER | MAPPED_COLUMN_PROJECTION), n_readers_pre_init: 19, max_concurrent_scans: 16
+[MultiScan]: Predicate pushdown allows skipping 69 / 70 files
 ```
 
-```Rust
-=== Rust 3_1_2_filter_opt block_6
-```
+For the large file, the entirety of the file has to be scanned (e.g. each row has to be verified for all filters) but for the partitioned parquet file, only one file is scanned, and the filter is applied only to the rows in that one file. The partitioned parquet file allows for filters that are in the partitioned columns (e.g. `region` and `age_group`) to skip entire files.
 
-```
-Parquet SCAN [./data/large/partitioned/region=E12000007/age_group=5/00000000.parquet]
-PROJECT 19/21 COLUMNS
-SELECTION: [([(col("income").is_not_null()) & ([(col("age_group")) == (5)])]) & ([(col("region")) == ("E12000007")])]
-```
-
-As you can see, the "selection" (filter) is essentially the same in both, but for the large file, the entirety of the file has to be scanned (e.g. each row has to be verified for all filters) but for the partitioned parquet file, only one file is scanned, and the filter is applied only to the rows in that one file. The partitioned parquet file allows for filters that are in the partitioned columns (e.g. `region` and `age_group`) to skip entire files.
-
-This gives really great time improvements for queries that contain filters for those variables. For example, doing a mean of the income for the filtered population gives pretty significant time differences:
-
-```Rust
-=== Rust 3_1_2_filter_opt block_7
-```
-
-While the time differs, the one parquet file (between `20 ms` and `40 ms`) is about an order of magnitude slower than the partitioned parquet file (between `2 ms` and `4 ms`), when run in release mode (4-5 times slower when run in debug mode). For extremly large queries (billions of rows) this can have massive advantages.
+This gives really great time improvements for queries that contain filters for those variables. In the above example, collecting the data can in both files can show some significant time differences. While the time differs, you can see an improvment of between 2x and 5x the speed. For extremly large queries (billions of rows) this can have massive advantages.
