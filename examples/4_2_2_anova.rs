@@ -8,25 +8,23 @@ fn main() {
 
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
-    // Hourly earnings by immigration category (Jan 2020)
+    // Income by economically active type (in London)
     let df = lf
         .clone()
-        .filter(col("survyear").eq(lit(2020)))
-        .filter(col("survmnth").eq(lit(1)))
-        .filter(col("hrlyearn").is_null().not())
-        .select([
-            (col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hrlyearn"),
-            col("immig"),
-        ])
-        .sort(["immig"], Default::default())
-        .with_column(col("immig").replace_strict(
-            lit(Series::from_iter(vec!["1", "2", "3"])),
+        .filter(col("keep_type").eq(lit(1))) // Usual resident
+        .filter(col("region").eq(lit("E12000007"))) // London
+        .filter(col("income").is_null().not())
+        .select([col("income"), col("econ")])
+        .sort(["econ"], Default::default())
+        .with_column(col("econ").replace_strict(
+            lit(Series::from_iter(vec![1, 2, 3, 4])),
             lit(Series::from_iter(vec![
-                "Immigrant (<= 10 years)",
-                "Immigrant (> 10 years)",
-                "Non-immigrant",
+                "Employee",
+                "Self-employed",
+                "Unemployed",
+                "Full-time student",
             ])),
             None,
             Some(DataType::String),
@@ -42,9 +40,9 @@ fn main() {
     // Transpose
     let df = pivot::pivot_stable(
         &df,
-        ["immig"],
+        ["econ"],
         Some(["index"]),
-        Some(["hrlyearn"]),
+        Some(["income"]),
         false,
         None,
         None,
@@ -67,6 +65,7 @@ fn main() {
                 .unwrap()
                 .f64()
                 .unwrap()
+                .drop_nulls()
                 .to_vec_null_aware()
                 .left()
                 .unwrap()

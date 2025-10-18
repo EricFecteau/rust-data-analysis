@@ -9,22 +9,22 @@ fn main() {
 
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
-    // Hourly earnings by gender (Jan 2020)
+    // Income by sex (in London)
     let df = lf
         .clone()
-        .filter(col("survyear").eq(lit(2020)))
-        .filter(col("survmnth").eq(lit(1)))
-        .filter(col("hrlyearn").is_null().not())
+        .filter(col("keep_type").eq(lit(1))) // Usual resident
+        .filter(col("region").eq(lit("E12000007"))) // London
+        .filter(col("income").is_null().not())
         .select([
-            col("gender").replace_strict(
+            col("sex").replace_strict(
                 lit(Series::from_iter(vec!["1", "2"])),
-                lit(Series::from_iter(vec!["Men+", "Women+"])),
+                lit(Series::from_iter(vec!["Female", "Male"])),
                 None,
                 Some(DataType::String),
             ),
-            (col("hrlyearn").cast(DataType::Float64) / lit(100)),
+            col("income"),
         ])
         .with_row_index("index", None)
         .collect()
@@ -37,9 +37,9 @@ fn main() {
     // Transpose
     let df = pivot::pivot_stable(
         &df,
-        ["gender"],
+        ["sex"],
         Some(["index"]),
-        Some(["hrlyearn"]),
+        Some(["income"]),
         false,
         None,
         None,
@@ -62,6 +62,7 @@ fn main() {
                 .unwrap()
                 .f64()
                 .unwrap()
+                .drop_nulls()
                 .to_vec_null_aware()
                 .left()
                 .unwrap()

@@ -16,3 +16,4 @@
 * Verify if anything is called LFS
 * Add   rand = "0.9" docs 
 * Remove the "we"
+* remove gender, province, finalwt

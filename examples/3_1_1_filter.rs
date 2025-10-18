@@ -14,7 +14,7 @@ fn main() {
     //Filtering the data in multiple steps
     let lf_filt_mult = lf
         .clone()
-        .filter(col("keep_type").eq(1)) // Usual resident
+        .filter(col("keep_type").eq(lit(1))) // Usual resident
         .filter(col("region").eq(lit("E12000007"))) // London
         .filter(col("age_group").gt_eq(lit(5))) // Aged 45+
         .filter(col("income").is_not_null());

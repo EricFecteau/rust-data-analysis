@@ -6,36 +6,39 @@ use polars::prelude::*;
 fn main() {
     // === block_1
 
-    // Connect to the parquet LFS data
+    // Connect to the parquet data
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
-    // Count individuals with paid overtime by gender and marital status
+    // === block_2
+
+    // Count individuals with fair or better health by sex and marital status
     let df = lf
-        .clone()
-        .filter(col("paidot").is_null().not())
-        .group_by([col("gender"), col("marstat")])
-        .agg([col("paidot")
-            .gt(0)
+        .filter(col("keep_type").eq(lit(1))) // Usual resident
+        .filter(col("health").neq(lit(-8)))
+        .filter(col("mar_stat").neq(lit(-8)))
+        .filter(col("sex").neq(lit(-8)))
+        .group_by([col("sex"), col("mar_stat")])
+        .agg([col("health")
+            .lt_eq(3)
             .cast(DataType::Int8)
             .sum()
-            .alias("ot_flag")])
-        .sort(["gender", "marstat"], Default::default())
-        .with_column(col("gender").replace_strict(
+            .alias("health_flag")])
+        .sort(["sex", "mar_stat"], Default::default())
+        .with_column(col("sex").replace_strict(
             lit(Series::from_iter(vec!["1", "2"])),
-            lit(Series::from_iter(vec!["Men+", "Women+"])),
+            lit(Series::from_iter(vec!["Female", "Male"])),
             None,
             Some(DataType::String),
         ))
-        .with_column(col("marstat").replace_strict(
-            lit(Series::from_iter(vec!["1", "2", "3", "4", "5", "6"])),
+        .with_column(col("mar_stat").replace_strict(
+            lit(Series::from_iter(vec![1, 2, 3, 4, 5])),
             lit(Series::from_iter(vec![
+                "Never married",
                 "Married",
-                "Common-law",
-                "Widowed",
                 "Separated",
-                "Divorced",
-                "Single",
+                "Divorced ",
+                "Widowed",
             ])),
             None,
             Some(DataType::String),
@@ -50,15 +53,15 @@ fn main() {
     // Transpose
     let df = pivot::pivot_stable(
         &df,
-        ["gender"],
-        Some(["marstat"]),
-        Some(["ot_flag"]),
+        ["sex"],
+        Some(["mar_stat"]),
+        Some(["health_flag"]),
         false,
         None,
         None,
     )
     .unwrap()
-    .drop("marstat")
+    .drop("mar_stat")
     .unwrap();
 
     println!("{}", &df);

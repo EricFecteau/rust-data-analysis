@@ -12,7 +12,7 @@ fn main() {
 
     // Mean income by region and age_group
     let lf = lf
-        .filter(col("keep_type").eq(1))
+        .filter(col("keep_type").eq(lit(1)))
         .filter(col("income").is_not_null())
         .group_by([col("region"), col("age_group")])
         .agg([(col("income"))

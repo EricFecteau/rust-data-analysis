@@ -7,26 +7,37 @@ fn main() {
 
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
     // Modify var
     let lf = lf
-        .filter(col("survyear").eq(2020).and(col("survmnth").eq(1))) // One month only
-        .filter(col("hrlyearn").is_not_null())
-        .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"))
-        .with_column(col("prov").replace_strict(
+        .filter(col("keep_type").eq(lit(1))) // Usual resident
+        .filter(col("income").is_not_null())
+        .with_column(col("region").replace_strict(
             lit(Series::from_iter(vec![
-                "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
+                "E12000001",
+                "E12000002",
+                "E12000003",
+                "E12000004",
+                "E12000005",
+                "E12000006",
+                "E12000007",
+                "E12000008",
+                "E12000009",
+                "W92000004",
             ])),
             lit(Series::from_iter(vec![
-                "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
+                "North East",
+                "North West",
+                "Yorkshire and The Humber",
+                "East Midlands",
+                "West Midlands",
+                "East of England",
+                "London",
+                "South East",
+                "South West",
+                "Wales",
             ])),
-            None,
-            Some(DataType::String),
-        ))
-        .with_column(col("gender").replace_strict(
-            lit(Series::from_iter(vec!["1", "2"])),
-            lit(Series::from_iter(vec!["Men+", "Women+"])),
             None,
             Some(DataType::String),
         ));
@@ -34,38 +45,41 @@ fn main() {
     // === block_2
 
     // Simple statistics (single point)
-    let mean_hourly_wages = lf
+    let mean_income: DataFrame = lf
         .clone()
-        .select([col("hourly_wages")])
+        .select([col("income")])
         .median()
         .collect()
         .unwrap();
 
-    println!("Mean hourly wages:\n\n{mean_hourly_wages}\n");
+    println!("Mean income:\n\n{mean_income}\n");
 
     // === block_3
 
     // Multiple statistics (calculated)
-    let hourly_wages_stats = lf
+    let income_stats = lf
         .clone()
         .select([
-            (len() / lit(1000)).alias("count (x1000)"),
-            col("hourly_wages").mean().alias("mean"),
-            col("hourly_wages").min().alias("min"),
-            col("hourly_wages")
+            (len() / lit(100_000)).alias("count (x100,000)"),
+            col("income")
+                .mean()
+                .round(2, RoundMode::HalfAwayFromZero)
+                .alias("mean"),
+            col("income").min().alias("min"),
+            col("income")
                 .quantile(lit(0.01), QuantileMethod::Nearest)
                 .alias("p01"),
-            col("hourly_wages")
+            col("income")
                 .quantile(lit(0.25), QuantileMethod::Nearest)
                 .alias("p25"),
-            col("hourly_wages").median().alias("median"),
-            col("hourly_wages")
+            col("income").median().alias("median"),
+            col("income")
                 .quantile(lit(0.75), QuantileMethod::Nearest)
                 .alias("p75"),
-            col("hourly_wages")
+            col("income")
                 .quantile(lit(0.99), QuantileMethod::Nearest)
                 .alias("p99"),
-            col("hourly_wages").max().alias("max"),
+            col("income").max().alias("max"),
         ])
         .unpivot(UnpivotArgsDSL {
             on: Selector::Empty,
@@ -76,23 +90,38 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!("Table of summary statistics about hourly wages:\n\n{hourly_wages_stats}\n");
+    println!("Table of summary statistics about income:\n\n{income_stats}\n");
 
     // === block_4
 
     // Simple statistics by category
-    let mean_hourly_wages_by_prov = lf
+    let mean_income_by_region = lf
         .clone()
-        .group_by([col("prov")])
-        .agg([col("hourly_wages")
-            .mean()
-            .round(2, RoundMode::HalfAwayFromZero)])
+        .group_by([col("region")])
+        .agg([col("income").mean().round(2, RoundMode::HalfAwayFromZero)])
         .collect()
         .unwrap();
 
-    println!("Mean hourly wages by province:\n\n{mean_hourly_wages_by_prov}\n");
+    println!("Mean income by region:\n\n{mean_income_by_region}\n");
 
     // === block_5
+
+    // Connect to LazyFrame
+    let args = ScanArgsParquet::default();
+    let lf =
+        LazyFrame::scan_parquet(PlPath::from_str("./data/parquet/census_0.parquet"), args).unwrap();
+
+    // Filter and format
+    let lf = lf
+        .filter(col("keep_type").eq(lit(1))) // Usual resident
+        .filter(col("income").is_not_null())
+        .with_column(col("sex").replace_strict(
+            lit(Series::from_iter(vec!["1", "2"])),
+            lit(Series::from_iter(vec!["Female", "Male"])),
+            None,
+            Some(DataType::String),
+        ))
+        .with_column(col("weight").cast(DataType::Float64));
 
     // Calculate weighted quantile
     fn weighted_quantile(col: Expr, wt: Expr, percentile: Expr) -> Expr {
@@ -108,21 +137,23 @@ fn main() {
     }
 
     // Weighted statistics
-    let hourly_wages_stats_wt = lf
+    let income_stats_wt = lf
         .clone()
-        .sort(["hourly_wages"], SortMultipleOptions::new())
+        .sort(["income"], SortMultipleOptions::new())
         .select([
-            ((col("finalwt").sum()) / lit(1000000)).alias("count (x100,000)"),
-            (((col("hourly_wages") * col("finalwt")).sum()) / col("finalwt").sum())
-                .alias("mean")
-                .round(2, RoundMode::HalfAwayFromZero),
-            col("hourly_wages").min().alias("min"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.01)).alias("p01"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.25)).alias("p25"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.50)).alias("median"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.75)).alias("p75"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.99)).alias("p99"),
-            col("hourly_wages").max().alias("max"),
+            ((col("weight").sum()) / lit(100_000))
+                .round(1, RoundMode::HalfAwayFromZero)
+                .alias("count (x100,000)"),
+            (((col("income") * col("weight")).sum()) / col("weight").sum())
+                .round(2, RoundMode::HalfAwayFromZero)
+                .alias("mean"),
+            col("income").min().alias("min"),
+            weighted_quantile(col("income"), col("weight"), lit(0.01)).alias("p01"),
+            weighted_quantile(col("income"), col("weight"), lit(0.25)).alias("p25"),
+            weighted_quantile(col("income"), col("weight"), lit(0.50)).alias("median"),
+            weighted_quantile(col("income"), col("weight"), lit(0.75)).alias("p75"),
+            weighted_quantile(col("income"), col("weight"), lit(0.99)).alias("p99"),
+            col("income").max().alias("max"),
         ])
         .unpivot(UnpivotArgsDSL {
             on: Selector::Empty,
@@ -133,29 +164,29 @@ fn main() {
         .collect()
         .unwrap();
 
-    println!(
-        "Table of weighted summary statistics about hourly wages:\n\n{hourly_wages_stats_wt}\n"
-    );
+    println!("Table of weighted summary statistics about income:\n\n{income_stats_wt}\n");
 
     // === block_6
 
-    // Weighted statistics (by gender)
-    let hourly_wages_stats_wt_by_gender = lf
+    // Weighted statistics (by sex)
+    let income_stats_wt_by_sex = lf
         .clone()
-        .sort(["gender", "hourly_wages"], SortMultipleOptions::new())
-        .group_by(["gender"])
+        .sort(["sex", "income"], SortMultipleOptions::new())
+        .group_by(["sex"])
         .agg([
-            ((col("finalwt").sum()) / lit(1000000)).alias("count (x100,000)"),
-            (((col("hourly_wages") * col("finalwt")).sum()) / col("finalwt").sum())
-                .alias("mean")
-                .round(2, RoundMode::HalfAwayFromZero),
-            col("hourly_wages").min().alias("min"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.01)).alias("p01"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.25)).alias("p25"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.50)).alias("median"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.75)).alias("p75"),
-            weighted_quantile(col("hourly_wages"), col("finalwt"), lit(0.99)).alias("p99"),
-            col("hourly_wages").max().alias("max"),
+            ((col("weight").sum()) / lit(100_000))
+                .round(1, RoundMode::HalfAwayFromZero)
+                .alias("count (x100,000)"),
+            (((col("income") * col("weight")).sum()) / col("weight").sum())
+                .round(2, RoundMode::HalfAwayFromZero)
+                .alias("mean"),
+            col("income").min().alias("min"),
+            weighted_quantile(col("income"), col("weight"), lit(0.01)).alias("p01"),
+            weighted_quantile(col("income"), col("weight"), lit(0.25)).alias("p25"),
+            weighted_quantile(col("income"), col("weight"), lit(0.50)).alias("median"),
+            weighted_quantile(col("income"), col("weight"), lit(0.75)).alias("p75"),
+            weighted_quantile(col("income"), col("weight"), lit(0.99)).alias("p99"),
+            col("income").max().alias("max"),
         ])
         .collect()
         .unwrap()
@@ -171,13 +202,13 @@ fn main() {
                 "p99",
                 "max",
             ],
-            ["gender"],
+            ["sex"],
         )
         .unwrap();
 
-    let hourly_wages_stats_wt_by_gender = pivot_stable(
-        &hourly_wages_stats_wt_by_gender,
-        ["gender"],
+    let income_stats_wt_by_sex = pivot_stable(
+        &income_stats_wt_by_sex,
+        ["sex"],
         Some(["variable"]),
         Some(["value"]),
         false,
@@ -186,9 +217,7 @@ fn main() {
     )
     .unwrap();
 
-    println!(
-        "Table of weighted summary statistics about hourly wages:\n\n{hourly_wages_stats_wt_by_gender}\n"
-    );
+    println!("Table of weighted summary statistics about income:\n\n{income_stats_wt_by_sex}\n");
 
     // === end
 }
