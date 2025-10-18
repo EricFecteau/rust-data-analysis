@@ -5,169 +5,133 @@ use polars::prelude::*;
 fn main() {
     // === block_1
 
-    // Connect and process multiple monthly parquet file
-    let mut lfs_month = vec![];
-    for m in 1..5 {
-        let mm = format!("{m:02}");
-
+    // Connect and process multiple census chunks
+    let mut census_chunk = vec![];
+    for c in 1..6 {
         let args = ScanArgsParquet::default();
         let lf = LazyFrame::scan_parquet(
-            PlPath::from_string(format!("./data/lfs_parquet/pub{mm}23.parquet")),
+            PlPath::from_string(format!("./data/parquet/census_{c}.parquet")),
             args,
         )
         .unwrap();
 
-        lfs_month.push(lf);
+        census_chunk.push(lf);
     }
 
     // === block_2
 
     // Concatenate vertically two (or more) datasets
-    let lf_jan_to_apr = concat(
+    let five_percent_sample = concat(
         [
-            lfs_month[0].clone(), // Cloned, since we need it later
-            lfs_month[1].clone(),
-            lfs_month[2].clone(),
-            lfs_month[3].clone(),
+            census_chunk[0].clone(), // Cloned, since we need it later
+            census_chunk[1].clone(),
+            census_chunk[2].clone(),
+            census_chunk[3].clone(),
+            census_chunk[4].clone(),
         ],
         UnionArgs::default(),
     )
     .unwrap();
 
-    // === block_3
+    // // === block_3
 
-    // See `survmnth` going from 1 to 4 for 2023
-    println!("{}", lf_jan_to_apr.collect().unwrap());
+    // See `chunk` going from 1 to 5
+    println!(
+        "{}",
+        five_percent_sample
+            .filter(col("chunk").eq(1))
+            .collect()
+            .unwrap()
+    );
 
     // === block_4
 
-    // Update the lfs_month vector to remove variables and update values
-    for m in 1..5 {
-        let mm = format!("{m:02}");
-
-        lfs_month[m - 1] = lfs_month[m - 1]
+    // Update the census_chunk vector to remove variables and update values
+    for c in 1..6 {
+        census_chunk[c - 1] = census_chunk[c - 1]
             .clone()
-            .filter(col("hrlyearn").is_not_null())
-            .select([
-                col("rec_num"),
-                col("survyear"),
-                col("hrlyearn").alias(format!("earn_{mm}")),
-            ]);
+            .filter(col("income").is_not_null())
+            .select([col("id"), col("income").alias(format!("inc_{c}"))])
+            .collect() // Collect necessary for sampling, but small database
+            .unwrap()
+            .sample_n_literal(150_000, false, false, Some(c as u64))
+            .unwrap()
+            .lazy();
     }
 
     // === block_5
 
-    println!("{}", lfs_month[0].clone().collect().unwrap());
+    println!("{}", census_chunk[0].clone().collect().unwrap());
 
-    // === block_6
+    // // === block_6
 
     // Left join (creating a cohort)
-    let jan_cohort = lfs_month[0]
+    let cohort = census_chunk[0]
         .clone()
-        .select([all().exclude_cols(["survyear"]).as_expr()])
-        .left_join(
-            lfs_month[1]
-                .clone()
-                .select([all().exclude_cols(["survyear"]).as_expr()]),
-            col("rec_num"),
-            col("rec_num"),
-        )
-        .left_join(
-            lfs_month[2]
-                .clone()
-                .select([all().exclude_cols(["survyear"]).as_expr()]),
-            col("rec_num"),
-            col("rec_num"),
-        )
-        .left_join(
-            lfs_month[3]
-                .clone()
-                .select([all().exclude_cols(["survyear"]).as_expr()]),
-            col("rec_num"),
-            col("rec_num"),
-        );
+        .left_join(census_chunk[1].clone(), col("id"), col("id"))
+        .left_join(census_chunk[2].clone(), col("id"), col("id"))
+        .left_join(census_chunk[3].clone(), col("id"), col("id"))
+        .left_join(census_chunk[4].clone(), col("id"), col("id"));
 
-    println!("{}", jan_cohort.collect().unwrap());
+    println!("{}", cohort.collect().unwrap());
 
-    // === block_7
+    // // === block_7
 
     // Inner join (creating a "always earning" cohort)
-    let longitudinal_all = lfs_month[0]
+    let longitudinal_all = census_chunk[0]
         .clone()
-        .select([all().exclude_cols(["survyear"]).as_expr()])
-        .inner_join(
-            lfs_month[1]
-                .clone()
-                .select([all().exclude_cols(["survyear"]).as_expr()]),
-            col("rec_num"),
-            col("rec_num"),
-        )
-        .inner_join(
-            lfs_month[2]
-                .clone()
-                .select([all().exclude_cols(["survyear"]).as_expr()]),
-            col("rec_num"),
-            col("rec_num"),
-        )
-        .inner_join(
-            lfs_month[3]
-                .clone()
-                .select([all().exclude_cols(["survyear"]).as_expr()]),
-            col("rec_num"),
-            col("rec_num"),
-        );
+        .inner_join(census_chunk[1].clone(), col("id"), col("id"))
+        .inner_join(census_chunk[2].clone(), col("id"), col("id"))
+        .inner_join(census_chunk[3].clone(), col("id"), col("id"))
+        .inner_join(census_chunk[4].clone(), col("id"), col("id"));
 
     println!("{}", longitudinal_all.collect().unwrap());
 
     // === block_8
 
     // More complex types of joins (e.g. join on multiple variables)
-    let fix_full_join_vars = [
-        when(col("rec_num").is_not_null())
-            .then(col("rec_num"))
-            .otherwise(col("rec_num_right"))
-            .alias("rec_num"),
-        when(col("survyear").is_not_null())
-            .then(col("survyear"))
-            .otherwise(col("survyear_right"))
-            .alias("survyear"),
-    ];
+    let fix_full_join_vars = [when(col("id").is_not_null())
+        .then(col("id"))
+        .otherwise(col("id_right"))
+        .alias("id")];
 
-    let longitudinal_all = lfs_month[0]
+    let longitudinal_any = census_chunk[0]
         .clone()
         .join(
-            lfs_month[1].clone(),
-            [col("rec_num"), col("survyear")],
-            [col("rec_num"), col("survyear")],
+            census_chunk[1].clone(),
+            [col("id")],
+            [col("id")],
             JoinArgs::new(JoinType::Full),
         )
         .with_columns(fix_full_join_vars.clone())
-        .select([all()
-            .exclude_cols(["rec_num_right", "survyear_right"])
-            .as_expr()])
+        .select([all().exclude_cols(["id_right"]).as_expr()])
         .join(
-            lfs_month[2].clone(),
-            [col("rec_num"), col("survyear")],
-            [col("rec_num"), col("survyear")],
+            census_chunk[2].clone(),
+            [col("id")],
+            [col("id")],
             JoinArgs::new(JoinType::Full),
         )
         .with_columns(fix_full_join_vars.clone())
-        .select([all()
-            .exclude_cols(["rec_num_right", "survyear_right"])
-            .as_expr()])
+        .select([all().exclude_cols(["id_right"]).as_expr()])
         .join(
-            lfs_month[3].clone(),
-            [col("rec_num"), col("survyear")],
-            [col("rec_num"), col("survyear")],
+            census_chunk[3].clone(),
+            [col("id")],
+            [col("id")],
             JoinArgs::new(JoinType::Full),
         )
         .with_columns(fix_full_join_vars.clone())
-        .select([all()
-            .exclude_cols(["rec_num_right", "survyear_right"])
-            .as_expr()])
-        .sort(["rec_num", "survyear"], Default::default());
+        .select([all().exclude_cols(["id_right"]).as_expr()])
+        .join(
+            census_chunk[4].clone(),
+            [col("id")],
+            [col("id")],
+            JoinArgs::new(JoinType::Full),
+        )
+        .with_columns(fix_full_join_vars.clone())
+        .select([all().exclude_cols(["id_right"]).as_expr()])
+        .sort(["id"], Default::default());
 
-    println!("{}", longitudinal_all.collect().unwrap());
+    println!("{}", longitudinal_any.collect().unwrap());
 
     // === end
 }

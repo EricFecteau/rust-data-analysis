@@ -1,6 +1,6 @@
 # Summary statistics
 
-
+Summary statistics are the basic tools of data analysts. This chapter will demonstrate how to do all the simple summary statistics using Polars.
 
 ## Setup
 
