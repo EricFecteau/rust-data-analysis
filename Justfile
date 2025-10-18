@@ -59,4 +59,4 @@ test-stats:
 test-pub:
     cargo run -r --example 5_1_1_excel
     cargo run -r --example 5_2_1_plots
-    cargo run -r --example 5_3_1_repots
+    cargo run -r --example 5_3_1_reports

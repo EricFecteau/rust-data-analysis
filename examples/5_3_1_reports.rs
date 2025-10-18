@@ -56,7 +56,7 @@ fn main() {
         env::set_var("POLARS_FMT_TABLE_FORMATTING", "MARKDOWN");
         env::set_var("POLARS_FMT_TABLE_HIDE_COLUMN_DATA_TYPES", "1");
         env::set_var("POLARS_FMT_TABLE_HIDE_DATAFRAME_SHAPE_INFORMATION", "1");
-        env::set_var("POLARS_FMT_MAX_COLS", "11"); // Provinces + Gender
+        env::set_var("POLARS_FMT_MAX_COLS", "11");
     }
 
     // === block_4

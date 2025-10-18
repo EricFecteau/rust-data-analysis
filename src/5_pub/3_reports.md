@@ -4,6 +4,8 @@ Reports are one of the most important ways data analysts can communicate with th
 
 For longer and more in-depth reports, this book is, itself, the a good example example. Instead of writing about data analysis in Rust, it could write about a specific data analysis. This book uses [mdBook](https://rust-lang.github.io/mdBook/), a Rust command line tool to create markdown books. You can find the source code of this book [here](https://github.com/EricFecteau/rust-data-analysis).
 
+You can run this section using `cargo run -r --example 5_3_1_reports`.
+
 ## Setup and formatting
 
 The output of the report will be an HTML file that can be opened in a browser. Therefore, the first step is to create an HTML file as output:

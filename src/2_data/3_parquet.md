@@ -40,7 +40,7 @@ shape: (5, 21)
 
 ## Writing
 
-You can write to Parquet any `DataFrame` you have in memory. For this example, we will bring one percent of the UK Census into memory:
+You can write to Parquet any `DataFrame` you have in memory. For this example, we will bring one percent of the UK Census into memory. You can run this section using `cargo run -r --example 2_3_2_write_parquet`.
 
 ```rust
 === Rust 2_3_2_write_parquet imports
@@ -59,7 +59,7 @@ This saves the data into one `.parquet` file. The `write_partitioned_dataset` fu
 > [!WARNING]
 > The [write_partitioned_dataset](https://docs.pola.rs/api/rust/dev/polars_io/partition/fn.write_partitioned_dataset.html) function is unstable and undocumented in Rust. 
 
-For example, you can write one percent of the UK Census data by `region` and `age_group` using `write_partitioned_dataset`:
+For example, you can write one percent of the UK Census data by `region` and `age_group` using `write_partitioned_dataset`. You can run this section using `cargo run -r --example 2_3_3_write_partitioned_parquet`.
 
 > [!NOTE]
 > The value of `4294967296` bytes (4 GB) was selected for the `chunk_size` as it is the default for the partitioned parquet files in [Polars for Python](https://docs.pola.rs/api/python/dev/reference/api/polars.DataFrame.write_parquet.html). This will be the approximate maximum size of each `.parquet` file created. 

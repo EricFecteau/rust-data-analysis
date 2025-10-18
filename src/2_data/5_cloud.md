@@ -7,7 +7,9 @@ Polars can connect to cloud storage solution such as AWS S3, Azure Blob Storage 
 
 ## Cloud options
 
-To connect to the cloud of your choice, you have to set up the cloud options: use [with_aws](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_aws) and [AmazonS3ConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.AmazonS3ConfigKey.html) for S3 buckets, use [with_gcp](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_gcp) and [GoogleConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.GoogleConfigKey.html) for Google Cloud Storage, and use [with_azure](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_azure) and [AzureConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.AzureConfigKey.html) for vAzure Blob Storage. For example, for the default configuration for the minio serer, connect using `with_aws`: 
+To connect to the cloud of your choice, you have to set up the cloud options: use [with_aws](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_aws) and [AmazonS3ConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.AmazonS3ConfigKey.html) for S3 buckets, use [with_gcp](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_gcp) and [GoogleConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.GoogleConfigKey.html) for Google Cloud Storage, and use [with_azure](https://docs.rs/polars-io/latest/polars_io/cloud/options/struct.CloudOptions.html#method.with_azure) and [AzureConfigKey](https://docs.rs/polars-io/latest/polars_io/cloud/options/enum.AzureConfigKey.html) for Azure Blob Storage. You can run this section using `cargo run -r --example 2_5_1_read_cloud`.
+
+For the default configuration for the minio serer, connect using `with_aws`: 
 
 ```rust
 === Rust 2_5_1_read_cloud imports
@@ -63,7 +65,7 @@ shape: (5, 21)
 
 ## Writing
 
-Writing to the cloud is similar to writing to local data. Instead of providing a `std::fs::File` writer, you provide a `CloudWriter` from polars. To write, you must have `DataFrame` in memory:
+Writing to the cloud is similar to writing to local data. Instead of providing a `std::fs::File` writer, you provide a `CloudWriter` from polars. You can run this section using `cargo run -r --example 2_5_1_read_cloud`. To write, you must have `DataFrame` in memory:
 
 ```rust
 === Rust 2_5_2_write_cloud imports

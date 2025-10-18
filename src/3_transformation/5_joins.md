@@ -1,6 +1,6 @@
 # Joins
 
-This section explore how to join two datasets, either by stacking them one on top of the other (same columns) or by stacking them side by side (same rows).
+This section explore how to join two datasets, either by stacking them one on top of the other (same columns) or by stacking them side by side (same rows). You can run this section using `cargo run -r --example 3_5_1_joins`.
 
 ## Concatenate
 

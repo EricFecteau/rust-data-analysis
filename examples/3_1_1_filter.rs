@@ -42,19 +42,19 @@ fn main() {
 
     println!("{expr}"); // You can print it
 
-    // // === block_5
+    // === block_5
 
     // Apply the expression to a LazyFrame
     let lf_filt_complex = lf.clone().filter(expr);
 
-    // // === block_6
+    // === block_6
 
     // Using `is_in` crate feature with literals
     let lf_filt_is_in = lf
         .clone()
         .filter(col("industry").is_in(lit(Series::from_iter(vec![2, 4, 6, 8])).implode(), false));
 
-    // // === end
+    // === end
 
     println!("{}", lf_filt_mult.limit(5).collect().unwrap());
     println!("{}", lf_filt_one.limit(5).collect().unwrap());

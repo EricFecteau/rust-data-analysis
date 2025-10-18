@@ -33,7 +33,7 @@ fn main() {
     )
     .unwrap();
 
-    // // === block_3
+    // === block_3
 
     // See `chunk` going from 1 to 5
     println!(
@@ -63,7 +63,7 @@ fn main() {
 
     println!("{}", census_chunk[0].clone().collect().unwrap());
 
-    // // === block_6
+    // === block_6
 
     // Left join (creating a cohort)
     let cohort = census_chunk[0]
@@ -75,7 +75,7 @@ fn main() {
 
     println!("{}", cohort.collect().unwrap());
 
-    // // === block_7
+    // === block_7
 
     // Inner join (creating a "always earning" cohort)
     let longitudinal_all = census_chunk[0]

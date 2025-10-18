@@ -59,21 +59,39 @@ fn main() {
 
     println!("{}", lf.clone().limit(5).collect().unwrap());
 
-    // // === block_6
+    // === block_6
 
-    // // Change numeric province code to alpha-code
-    // let lf = lf.with_column(col("prov").replace_strict(
-    //     lit(Series::from_iter(vec![
-    //         "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
-    //     ])),
-    //     lit(Series::from_iter(vec![
-    //         "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
-    //     ])),
-    //     None,
-    //     Some(DataType::String),
-    // ));
+    // Change alpha-numeric region code to the region name
+    let lf = lf.with_column(col("region").replace_strict(
+        lit(Series::from_iter(vec![
+            "E12000001",
+            "E12000002",
+            "E12000003",
+            "E12000004",
+            "E12000005",
+            "E12000006",
+            "E12000007",
+            "E12000008",
+            "E12000009",
+            "W92000004",
+        ])),
+        lit(Series::from_iter(vec![
+            "North East",
+            "North West",
+            "Yorkshire and The Humber",
+            "East Midlands",
+            "West Midlands",
+            "East of England",
+            "London",
+            "South East",
+            "South West",
+            "Wales",
+        ])),
+        None,
+        Some(DataType::String),
+    ));
 
-    // println!("{}", lf.clone().limit(5).collect().unwrap());
+    println!("{}", lf.clone().limit(5).collect().unwrap());
 
     // === end
 }

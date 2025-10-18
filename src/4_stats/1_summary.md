@@ -1,6 +1,6 @@
 # Summary statistics
 
-Summary statistics are the basic tools of data analysts. This chapter will demonstrate how to do all the simple summary statistics using Polars.
+Summary statistics are the basic tools of data analysts. This chapter will demonstrate how to do all the simple summary statistics using Polars. You can run this section using `cargo run -r --example 4_1_1_summary`.
 
 > [!IMPORTANT]
 > **Reminder**: The "income" variable is synthetic (random value between £10,000 and £100,000). This means that the distribution will not provide real-world summary results.

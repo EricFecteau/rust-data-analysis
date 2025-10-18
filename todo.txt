@@ -5,7 +5,6 @@
 * Section / chapter / whatever - be consistant
 * Review entire document
 * Finish moving examples into text (with script)
-* Verify correct number for all "cargo run -r --example"
 * Monitor RAM useage
 * Finish justfile
 * Add CI/CD when public (test + publish)
@@ -13,10 +12,4 @@
 
 * A compressed version of the UK Census is available in this crate [here]().
 * It will use approximately  GB of RAM. 
-* Verify if any data is called pub*
-* Verify if anything is called LFS
-* Add   rand = "0.9" docs 
 * Remove the "we"
-* remove gender, province, finalwt
-* missed 3_3_1_Variables
-* // // ===

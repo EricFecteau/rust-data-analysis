@@ -49,7 +49,7 @@ fn main() {
 
     // === block_4
 
-    // Write partitioned `census_0.parquet` on "region" and "gender"
+    // Write partitioned `census_0.parquet` on "region" and "age_group"
     // `write_partitioned_dataset` is considered unstable
     write_partitioned_dataset(
         &mut df,

@@ -2,6 +2,8 @@
 
 In the data analysis world, Excel is still the universal aggregate statistics exchange format and quick analysis tool. It is much simpler to send a fellow researcher an Excel file with some summary statistics or a few hundred rows of data than it is to send pretty much any other data format. With the following code, you can export any data from Polars to Excel, format it as needed and even add plots.
 
+You can run this section using `cargo run -r --example 5_1_1_excel`.
+
 ## Setup
 
 First, lets create some summary statistics to throw into the excel file. We will create a table of mean income by region and economic activity type, in a long format (e.g. 3 columns: "region", "econ" and "income") and wide format (e.g. "region" as row and "econ" as column). Both `df_long` and `df_wide` are brought into memory as data frames.

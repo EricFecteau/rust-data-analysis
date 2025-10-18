@@ -104,23 +104,23 @@ shape: (5, 5)
 
 ## Replace data
 
-You can replace the values of a column using the `replace_strict()` function. For example, to change the [SGC provincial code to an Alpha code](https://www12.statcan.gc.ca/census-recensement/2021/ref/dict/tab/index-eng.cfm?ID=t1_8) for the provinces in the dataset, you can use a "from" `Series` and a "to" `Series` and the `prov` variable will be replaced with Alpha codes.
+You can replace the values of a column using the `replace_strict()` function. For example, to change the [GCC Geographic Code](https://en.wikipedia.org/wiki/GSS_coding_system) for the regions in the dataset, you can use a "from" `Series` and a "to" `Series` and the `region` variable will be replaced with Alpha codes.
 
 ```rust
 === Rust 3_3_1_variables block_6
 ```
 
 ```
-shape: (5, 6)
-┌──────────┬──────────┬──────┬──────────────┬───────────────┬──────────┐
-│ survyear ┆ survmnth ┆ prov ┆ hourly_wages ┆ wages_dollars ┆ wage_cat │
-│ ---      ┆ ---      ┆ ---  ┆ ---          ┆ ---           ┆ ---      │
-│ i64      ┆ i64      ┆ str  ┆ i64          ┆ f64           ┆ str      │
-╞══════════╪══════════╪══════╪══════════════╪═══════════════╪══════════╡
-│ 2011     ┆ 1        ┆ NS   ┆ 2462         ┆ 24.62         ┆ Medium   │
-│ 2011     ┆ 1        ┆ NB   ┆ 3769         ┆ 37.69         ┆ Medium   │
-│ 2011     ┆ 1        ┆ ON   ┆ 2706         ┆ 27.06         ┆ Medium   │
-│ 2011     ┆ 1        ┆ ON   ┆ 2644         ┆ 26.44         ┆ Medium   │
-│ 2011     ┆ 1        ┆ ON   ┆ 1724         ┆ 17.24         ┆ Low      │
-└──────────┴──────────┴──────┴──────────────┴───────────────┴──────────┘
+shape: (5, 5)
+┌───────────┬────────────┬────────┬─────────────┬────────────┐
+│ age_group ┆ region     ┆ income ┆ income_infl ┆ income_cat │
+│ ---       ┆ ---        ┆ ---    ┆ ---         ┆ ---        │
+│ i64       ┆ str        ┆ i64    ┆ f64         ┆ str        │
+╞═══════════╪════════════╪════════╪═════════════╪════════════╡
+│ 2         ┆ North East ┆ 50811  ┆ 51827.22    ┆ Medium     │
+│ 2         ┆ North East ┆ 70224  ┆ 71628.48    ┆ High       │
+│ 2         ┆ North East ┆ 89534  ┆ 91324.68    ┆ High       │
+│ 2         ┆ North East ┆ 93123  ┆ 94985.46    ┆ High       │
+│ 2         ┆ North East ┆ 82122  ┆ 83764.44    ┆ High       │
+└───────────┴────────────┴────────┴─────────────┴────────────┘
 ```

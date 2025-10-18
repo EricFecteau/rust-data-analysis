@@ -8,7 +8,11 @@ You will need to add these to your [Cargo.toml](https://github.com/EricFecteau/r
 [dependencies]
 
 # Extract ZIP files
-zip = "4"
+zip = "6"
+
+# Create random values
+rand = "0.9" 
+rand_chacha = "0.9"
 
 # Polars - open-source library for data manipulation
 polars = { version = "0.51", features = [
@@ -20,7 +24,7 @@ polars = { version = "0.51", features = [
     "pivot", # Pivot data
     "cum_agg", # Cumulative aggregate statistics
     "abs", # Absolute value
-    "aws", # Read/write to cloud (minio)
+    "aws", # Read/write cloud (minio)
     "regex", # Call columns with regex
     "fmt", # Format tables as markdown
 ] }
@@ -29,7 +33,7 @@ polars = { version = "0.51", features = [
 postgres = "0.19"
 
 # Move data from SQL to Polars (through Arrow)
-connectorx = { git = "https://github.com/sfu-db/connector-x.git", features = ["src_postgres", "dst_polars"] }
+connectorx = { version = "0.4.4", features = ["src_postgres", "dst_polars"] }
 
 # Hypothesis testing
 hypors = "0.3.0"
@@ -39,17 +43,17 @@ aws-sdk-s3 =  { version = "1", features = ["behavior-version-latest"] }
 tokio = "1"
 
 # Convert data from one version of Polars to another version of Polars
-df-interchange = { version = "0.2", features = ["polars_0_48", "polars_0_49", "polars_0_50"] }
+df-interchange = { version = "0.2", features = ["polars_0_50", "polars_0_51"] }
 
 # Manipulating Excel documents
-polars_excel_writer = "0.17"
-rust_xlsxwriter = "0.89"
+polars_excel_writer = "0.21"
+rust_xlsxwriter = "0.90"
 
 # Plots
 plotlars = {version = "0.10", features = ["static_export_geckodriver", "static_export_wd_download"] }
 
 # Markdown documents
-comrak = "0.41"
+comrak = "0.44"
 ```
 
 ## Polars
