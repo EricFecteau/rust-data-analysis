@@ -77,53 +77,69 @@ Maecenas posuere tellus porttitor turpis pulvinar luctus. Nunc lacinia suscipit 
 
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
-    // Modify var
-    let lf = lf
-        .filter(col("hrlyearn").is_not_null())
-        .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"));
+    // Filter
+    let lf: LazyFrame = lf
+        .filter(col("keep_type").eq(lit(1))) // Usual resident
+        .filter(col("income").is_not_null());
 
-    // Mean hourly wage by province and gender
+    // Mean income by sex and region
     let df_bar = lf
         .clone()
-        .group_by([col("gender"), col("prov")])
-        .agg([col("hourly_wages")
-            .mean()
-            .round(2, RoundMode::HalfAwayFromZero)])
-        .sort(["gender", "prov"], SortMultipleOptions::new())
-        .with_column(col("prov").replace_strict(
+        .group_by([col("sex"), col("region")])
+        .agg([col("income").mean().round(2, RoundMode::HalfAwayFromZero)])
+        .sort(["sex", "region"], SortMultipleOptions::new())
+        .with_column(col("region").replace_strict(
             lit(Series::from_iter(vec![
-                "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
+                "E12000001",
+                "E12000002",
+                "E12000003",
+                "E12000004",
+                "E12000005",
+                "E12000006",
+                "E12000007",
+                "E12000008",
+                "E12000009",
+                "W92000004",
             ])),
             lit(Series::from_iter(vec![
-                "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
+                "North East",
+                "North West",
+                "Yorkshire and The Humber",
+                "East Midlands",
+                "West Midlands",
+                "East of England",
+                "London",
+                "South East",
+                "South West",
+                "Wales",
             ])),
             None,
             Some(DataType::String),
         ))
-        .with_column(col("gender").replace_strict(
+        .with_column(col("sex").replace_strict(
             lit(Series::from_iter(vec!["1", "2"])),
-            lit(Series::from_iter(vec!["Men+", "Women+"])),
+            lit(Series::from_iter(vec!["Female", "Male"])),
             None,
             Some(DataType::String),
         ))
         .collect()
         .unwrap();
 
-    // Pivot to make two lines out of gender values
+    // Pivot on region
     let df_bar_trans = pivot_stable(
         &df_bar,
-        ["prov"],
-        Some(["gender"]),
-        Some(["hourly_wages"]),
+        ["region"],
+        Some(["sex"]),
+        Some(["income"]),
         false,
         None,
         None,
     )
     .unwrap();
 
-    markdown.push_str("**Table 1**: Hourly wages by gender and province \n");
+    markdown.push_str("**Table 1**: Income by sex and region \n");
     markdown.push_str(&df_bar_trans.to_string());
     markdown.push_str("\n\n");
 
@@ -141,24 +157,24 @@ Maecenas posuere tellus porttitor turpis pulvinar luctus. Nunc lacinia suscipit 
 
     BarPlot::builder()
         .data(&df_bar)
-        .labels("prov")
-        .values("hourly_wages")
+        .labels("region")
+        .values("income")
         .orientation(Orientation::Vertical)
-        .group("gender")
+        .group("sex")
         .colors(vec![Rgb(255, 127, 80), Rgb(64, 224, 208)])
         .plot_title(
-            Text::from("Chart 1: Hourly wages by gender and province")
+            Text::from("Income by sex and region")
                 .font("Arial")
                 .size(18),
         )
-        .x_title(Text::from("Province").font("Arial").size(15))
-        .y_title(Text::from("Mean hourly wage").font("Arial").size(15))
-        .legend_title(Text::from("Gender").font("Arial").size(15))
+        .x_title(Text::from("Region").font("Arial").size(15))
+        .y_title(Text::from("Mean Income").font("Arial").size(15))
+        .legend_title(Text::from("Sex").font("Arial").size(15))
         .legend(
             &Legend::new()
                 .orientation(Orientation::Horizontal)
-                .y(1.0)
-                .x(0.4),
+                .y(1.03)
+                .x(0.37),
         )
         .build()
         .write_image("./data/output/out.png", 1000, 600, 1.0)

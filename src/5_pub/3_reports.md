@@ -1,6 +1,6 @@
 # Reports
 
-Reports are one of the most important ways data analysts can communicate with their non-technical audience! This chapter will explore how to create a short report in [Markdown](https://www.markdownguide.org/), using [comrak](https://docs.rs/comrak/0.41.0/comrak/), a markdown parser that can output to HTML.
+Reports are one of the most important ways data analysts can communicate with their non-technical audience. This chapter will explore how to create a short report in [Markdown](https://www.markdownguide.org/), using [comrak](https://docs.rs/comrak/latest/comrak/), a markdown parser that can output to HTML.
 
 For longer and more in-depth reports, this book is, itself, the a good example example. Instead of writing about data analysis in Rust, it could write about a specific data analysis. This book uses [mdBook](https://rust-lang.github.io/mdBook/), a Rust command line tool to create markdown books. You can find the source code of this book [here](https://github.com/EricFecteau/rust-data-analysis).
 
@@ -44,7 +44,7 @@ A markdown document is simply one long peice of text that needs to be rendered. 
 
 ### Data table
 
-We can add a markdown data table to the html document by calling `.to_string()` on a `DataFrame` (not a `LazyFrame`, don't forget to `.collect()`). To do this, as learned in the [summary statistics chapter]() we connect to the LFS database, create a summary table of the mean hourly wages by province and gender and pivot it for better display. We can then add the table string to the `markdown` variable.
+We can add a markdown data table to the html document by calling `.to_string()` on a `DataFrame` (not a `LazyFrame`, don't forget to `.collect()`). To do this, as learned in the [summary statistics chapter](../4_stats/1_summary.md) we connect to the census data, create a summary table of the mean income by sex and region and pivot it for better display. We can then add the table string to the `markdown` variable.
 
 ```rust
 === Rust 5_3_1_reports block_5
@@ -54,7 +54,7 @@ We can add a markdown data table to the html document by calling `.to_string()` 
 
 ### Image
 
-We can also add images to the markdown document, using the `![alt text](out.png)` format. To do this, as learned in the [plotting chapter](), we can use the data table we just created and pass it to `plotlars`. 
+We can also add images to the markdown document, using the `![alt text](out.png)` format. To do this, as learned in the [plotting chapter](2_plotting.md), we can use the data table we just created and pass it to `plotlars`. 
 
 ```rust
 === Rust 5_3_1_reports block_6

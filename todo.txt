@@ -9,6 +9,7 @@
 * Monitor RAM useage
 * Finish justfile
 * Add CI/CD when public (test + publish)
+* you can see the final report [here]().
 
 * A compressed version of the UK Census is available in this crate [here]().
 * It will use approximately  GB of RAM. 
@@ -17,3 +18,5 @@
 * Add   rand = "0.9" docs 
 * Remove the "we"
 * remove gender, province, finalwt
+* missed 3_3_1_Variables
+* // // ===

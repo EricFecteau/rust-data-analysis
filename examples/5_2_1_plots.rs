@@ -1,6 +1,6 @@
 use df_interchange::Interchange;
 // === imports
-use plotlars::{BarPlot, Legend, LinePlot, Orientation, Plot, Rgb, Text};
+use plotlars::{Axis, BarPlot, Legend, LinePlot, Orientation, Plot, Rgb, Text};
 use polars::prelude::{pivot::pivot_stable, *};
 
 // === main
@@ -9,34 +9,50 @@ fn main() {
 
     // Connect to LazyFrame
     let args = ScanArgsParquet::default();
-    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/lfs_large/part"), args).unwrap();
+    let lf = LazyFrame::scan_parquet(PlPath::from_str("./data/large/partitioned"), args).unwrap();
 
     // Modify var
     let lf = lf
-        .filter(col("hrlyearn").is_not_null())
-        .with_column((col("hrlyearn").cast(DataType::Float64) / lit(100)).alias("hourly_wages"));
+        .filter(col("keep_type").eq(lit(1))) // Usual resident
+        .filter(col("income").is_not_null());
 
-    // Mean by province and gender
+    // Mean income by region and sex
     let df_bar = lf
         .clone()
-        .group_by([col("gender"), col("prov")])
-        .agg([col("hourly_wages")
-            .mean()
-            .round(2, RoundMode::HalfAwayFromZero)])
-        .sort(["gender", "prov"], SortMultipleOptions::new())
-        .with_column(col("prov").replace_strict(
+        .group_by([col("sex"), col("region")])
+        .agg([col("income").mean().round(2, RoundMode::HalfAwayFromZero)])
+        .sort(["sex", "region"], SortMultipleOptions::new())
+        .with_column(col("region").replace_strict(
             lit(Series::from_iter(vec![
-                "10", "11", "12", "13", "24", "35", "46", "47", "48", "59",
+                "E12000001",
+                "E12000002",
+                "E12000003",
+                "E12000004",
+                "E12000005",
+                "E12000006",
+                "E12000007",
+                "E12000008",
+                "E12000009",
+                "W92000004",
             ])),
             lit(Series::from_iter(vec![
-                "NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC",
+                "North East",
+                "North West",
+                "Yorkshire and The Humber",
+                "East Midlands",
+                "West Midlands",
+                "East of England",
+                "London",
+                "South East",
+                "South West",
+                "Wales",
             ])),
             None,
             Some(DataType::String),
         ))
-        .with_column(col("gender").replace_strict(
+        .with_column(col("sex").replace_strict(
             lit(Series::from_iter(vec!["1", "2"])),
-            lit(Series::from_iter(vec!["Men+", "Women+"])),
+            lit(Series::from_iter(vec!["Female", "Male"])),
             None,
             Some(DataType::String),
         ))
@@ -55,24 +71,24 @@ fn main() {
 
     let html = BarPlot::builder()
         .data(&df_bar)
-        .labels("prov")
-        .values("hourly_wages")
+        .labels("region")
+        .values("income")
         .orientation(Orientation::Vertical)
-        .group("gender")
+        .group("sex")
         .colors(vec![Rgb(255, 127, 80), Rgb(64, 224, 208)])
         .plot_title(
-            Text::from("Hourly wages by gender and province")
+            Text::from("Income by sex and region")
                 .font("Arial")
                 .size(18),
         )
-        .x_title(Text::from("Province").font("Arial").size(15))
-        .y_title(Text::from("Mean hourly wage").font("Arial").size(15))
-        .legend_title(Text::from("Gender").font("Arial").size(15))
+        .x_title(Text::from("Region").font("Arial").size(15))
+        .y_title(Text::from("Mean Income").font("Arial").size(15))
+        .legend_title(Text::from("Sex").font("Arial").size(15))
         .legend(
             &Legend::new()
                 .orientation(Orientation::Horizontal)
-                .y(1.0)
-                .x(0.4),
+                .y(1.1)
+                .x(0.37),
         )
         .build()
         .to_html();
@@ -84,29 +100,28 @@ fn main() {
 
     // === block_4
 
-    // Mean hourly wage by gender and tenure
+    // Mean income by sex and hours worked (groupped)
     let df_line = lf
         .clone()
-        .group_by([col("gender"), col("tenure")])
-        .agg([col("hourly_wages")
-            .mean()
-            .round(2, RoundMode::HalfAwayFromZero)])
-        .sort(["gender", "tenure"], SortMultipleOptions::new())
-        .with_column(col("gender").replace_strict(
+        .filter(col("hours_worked").neq(lit(-8)))
+        .group_by([col("sex"), col("hours_worked")])
+        .agg([col("income").mean().round(2, RoundMode::HalfAwayFromZero)])
+        .sort(["sex", "hours_worked"], SortMultipleOptions::new())
+        .with_column(col("sex").replace_strict(
             lit(Series::from_iter(vec!["1", "2"])),
-            lit(Series::from_iter(vec!["Men+", "Women+"])),
+            lit(Series::from_iter(vec!["Female", "Male"])),
             None,
             Some(DataType::String),
         ))
         .collect()
         .unwrap();
 
-    // Pivot to make two lines out of gender values
+    // Pivot to make two lines out of sex values
     let df_line = pivot_stable(
         &df_line,
-        ["gender"],
-        Some(["tenure"]),
-        Some(["hourly_wages"]),
+        ["sex"],
+        Some(["hours_worked"]),
+        Some(["income"]),
         false,
         None,
         None,
@@ -125,15 +140,25 @@ fn main() {
 
     let html = LinePlot::builder()
         .data(&df_line)
-        .x("tenure")
-        .y("Men+")
-        .additional_lines(vec!["Women+"])
+        .x("hours_worked")
+        .x_axis(
+            &Axis::new()
+                .tick_values(vec![1.0, 2.0, 3.0, 4.0])
+                .tick_labels(vec![
+                    "15 hours or less",
+                    "16 to 30 hours",
+                    "31 to 48 hours",
+                    "49 or more hours",
+                ]),
+        )
+        .y("Female")
+        .additional_lines(vec!["Male"])
         .size(12)
         .colors(vec![Rgb(178, 34, 34), Rgb(65, 105, 225), Rgb(255, 140, 0)])
-        .plot_title("Mean hourly wage by job tenure and gender")
-        .x_title("Mean hourly wage")
-        .y_title("Job tenure (months)")
-        .legend_title("Gender")
+        .plot_title("Mean income by hours worked (groupped) and sex")
+        .y_title("Mean income")
+        .x_title("Hours worked (groupped)")
+        .legend_title("Sex")
         .build()
         .to_html();
 
