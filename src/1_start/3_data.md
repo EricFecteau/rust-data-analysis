@@ -10,7 +10,7 @@ This book uses the [Public microdata teaching sample, England and Wales: Census 
 
 ## Extracting
 
-A compressed version of the UK Census is available in this crate [here](). It can also be downloaded [here](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/publicmicrodatateachingsampleenglandandwalescensus2021). If you downloaded your own version of the UK Census, place it under `./data/raw`, call it `census.csv` and skip this code. Make sure to also create the other sub-folders for future data storage locations.
+A compressed version of the UK Census is available in this crate [here](https://github.com/EricFecteau/rust-data-analysis/tree/main/zip). It can also be downloaded [here](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/publicmicrodatateachingsampleenglandandwalescensus2021). If you downloaded your own version of the UK Census, place it under `./data/raw`, call it `census.csv` and skip this code. Make sure to also create the other sub-folders for future data storage locations.
 
 You can run this script using `cargo run -r --example 1_2_1_extract`.
 
