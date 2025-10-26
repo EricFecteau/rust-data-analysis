@@ -61,7 +61,7 @@ shape: (9, 2)
 
 ## Statistics by category
 
-To get statistics by a variable group, you have to use `group_by()` with `agg()`. This example provides the income by region:
+To get statistics by a variable group, you have to use `group_by()` with `agg()`. This example provides the mean income by region:
 
 ```rust
 === Rust 4_1_1_summary block_4
@@ -89,7 +89,7 @@ shape: (10, 2)
 
 ## Weighted statistics
 
-If you have survey weights, like the synthetic `weight` variable found on the 1% samples of the Census, you can create statistics by that weight, with formulas. In this example, a custom function called `weighted_quantile` is create the provide quantiles that respect the survey weights. It provides an approximation of the 100%, using only the 1% sample.
+If you have survey weights, like the synthetic `weight` variable found on the 1% samples of the Census, you can create statistics by that weight, with formulas. In this example, a custom function called `weighted_quantile` provides quantiles that respect the survey weights. It provides an approximation of the 100%, using only the 1% sample.
 
 ```rust
 === Rust 4_1_1_summary block_5

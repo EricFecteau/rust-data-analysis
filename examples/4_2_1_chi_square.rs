@@ -48,7 +48,7 @@ fn main() {
 
     println!("{}", &df);
 
-    // === block_2
+    // === block_3
 
     // Transpose
     let df = pivot::pivot_stable(
@@ -66,7 +66,7 @@ fn main() {
 
     println!("{}", &df);
 
-    // === block_3
+    // === block_4
 
     // Create an array of arrays of float64
     let cols = df
@@ -84,7 +84,7 @@ fn main() {
         })
         .collect::<Vec<Vec<f64>>>();
 
-    // === block_4
+    // === block_5
 
     // Perform Chi-Square Test for Independence
     let alpha = 0.05;

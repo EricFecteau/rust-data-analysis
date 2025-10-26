@@ -24,7 +24,7 @@ fn main() {
         .filter(col("age_group").eq(lit(5))) // Age 45 to 54
         .filter(col("income").is_not_null());
 
-    // === block_2
+    // === block_3
 
     // Connect to LazyFrame (partitioned parquet file)
     let args = ScanArgsParquet::default();
@@ -37,7 +37,7 @@ fn main() {
         .filter(col("age_group").eq(lit(5))) // Age 45 to 54
         .filter(col("income").is_not_null());
 
-    // === block_3
+    // === block_4
 
     let before = std::time::Instant::now();
     let _ = lf_one.collect().unwrap();

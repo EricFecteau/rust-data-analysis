@@ -104,7 +104,7 @@ shape: (5, 5)
 
 ## Replace data
 
-You can replace the values of a column using the `replace_strict()` function. For example, to change the [GCC Geographic Code](https://en.wikipedia.org/wiki/GSS_coding_system) for the regions in the dataset, you can use a "from" `Series` and a "to" `Series` and the `region` variable will be replaced with Alpha codes.
+You can replace the values of a column using the `replace_strict()` function. For example, to change the [GCC Geographic Code](https://en.wikipedia.org/wiki/GSS_coding_system) for the regions in the dataset, you can use a "from" `Series` and a "to" `Series` and the `region` code variable will be replaced with region names.
 
 ```rust
 === Rust 3_3_1_variables block_6

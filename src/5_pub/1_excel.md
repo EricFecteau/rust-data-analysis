@@ -6,7 +6,7 @@ Run this code using `cargo run -r --example 5_1_1_excel`.
 
 ## Setup
 
-First, lets create some summary statistics to throw into the excel file. We will create a table of mean income by region and economic activity type, in a long format (e.g. 3 columns: "region", "econ" and "income") and wide format (e.g. "region" as row and "econ" as column). Both `df_long` and `df_wide` are brought into memory as data frames.
+First, lets create some summary statistics to throw into the excel file. We will create a table of mean income by region and economic activity type, in a long format (e.g. 3 columns: "region", "econ" and "income") and wide format (e.g. "region" as row and "econ" as column). Both `df_long` and `df_wide` are brought into memory as `DataFrame`.
 
 ```rust
 === Rust 5_1_1_excel imports

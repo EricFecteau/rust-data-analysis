@@ -11,6 +11,7 @@ We must first create some summary statistics for the contingency table needed fo
 ```rust
 === Rust 4_2_1_chi_square imports
 === Rust 4_2_1_chi_square block_1
+=== Rust 4_2_1_chi_square block_2
 ```
 
 We then have this table:
@@ -35,10 +36,10 @@ shape: (10, 3)
 └────────┴───────────────┴─────────────┘
 ```
 
-Now that we have this table, we can convert it to a `Vec<Vec<f64>>`, as required by the `independence()` function of `Hypors`. To do this, we can pivot the table:
+Next, we can pivot the table in preparation for converting it into vectors: 
 
 ```rust
-=== Rust 4_2_1_chi_square block_2
+=== Rust 4_2_1_chi_square block_3
 ```
 
 ```
@@ -56,16 +57,16 @@ shape: (5, 2)
 └──────────┴──────────┘
 ```
 
-And then convert the `Polars` data into the `Vec<Vec<f64>>` by materializing the series as `f64`:
+Now that we have this table, we can convert it to a `Vec<Vec<f64>>`, as required by the `independence()` function of `Hypors`, by materializing the series as `f64`:
 
 ```rust
-=== Rust 4_2_1_chi_square block_3
+=== Rust 4_2_1_chi_square block_4
 ```
 
 Now that the data is ready, we can provide it to `Hypors` and get the results.
 
 ```rust
-=== Rust 4_2_1_chi_square block_4
+=== Rust 4_2_1_chi_square block_5
 ```
 
 ```

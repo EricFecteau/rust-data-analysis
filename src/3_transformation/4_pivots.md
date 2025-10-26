@@ -2,11 +2,11 @@
 
 Pivoting a dataframe allows you to make wide data longer or long data wider. This is done by increasing the number of columns and decreasing the number of rows, or vice versa. 
 
-With Polars, pivots have to be done in-memory. As explained by Polars, "lazy does not implement a pivot because it is impossible to know the schema without materializing the whole dataset". In other words, if, for example, you wanted to pivot wider on the province variable (e.g. make a column for each province), until Polars reads every single row in your dataset it can not know how many columns it would create. Therefore, it can not move forward lazily and continue optimizing the query, without materializing the dataframe. Polars does not allow you to provide a schema to solve this issue lazily. Caution should be taken when pivoting large dataframes as it will have to be done eagerly.
+With Polars, pivots have to be done in-memory. As explained by Polars, "lazy does not implement a pivot because it is impossible to know the schema without materializing the whole dataset". In other words, if, for example, you wanted to pivot wider on the region variable (e.g. make a column for each region), until Polars reads every single row in your dataset it can not know how many columns it would create. Therefore, it can not move forward lazily and continue optimizing the query, without materializing the dataframe. Polars does not allow you to provide a schema to solve this issue lazily. Caution should be taken when pivoting large dataframes as it will have to be done eagerly.
 
 ## Setup
 
-Since the data has to be materialized (i.e. in-memory) to be pivoted, this section will first create some summary data to get a manageable `DataFrame`. To learn how to do summary statistics, see the [summary chapter](../4_stats/1_summary.md). For now, you can simply run the code below. Run this code using `cargo run -r --example 3_4_1_pivot`.
+Since the data has to be materialized (i.e. in-memory) to be pivoted, this section will first create some summary data to get a manageable `DataFrame`. To learn how to do summary statistics, see the [summary chapter](../4_stats/1_summary.md). For now, you can simply run the code below using `cargo run -r --example 3_4_1_pivot`.
 
 In this example, we connect to the Parquet file and summarize the income by region and age group.
 

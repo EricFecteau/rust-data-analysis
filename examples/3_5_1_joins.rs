@@ -89,7 +89,7 @@ fn main() {
 
     // === block_8
 
-    // More complex types of joins (e.g. join on multiple variables)
+    // More complex types of joins
     let fix_full_join_vars = [when(col("id").is_not_null())
         .then(col("id"))
         .otherwise(col("id_right"))

@@ -17,7 +17,7 @@ To concatenate data of the same row-shape on top of each other, we can use the `
 === Rust 3_5_1_joins block_2
 ```
 
-If we print the result, it shows that we have a DataFrame of over 3 million rows (5 x ~600,000 rows per 1% sample). It is also possible to see that `chunk` has multiple monthly values.
+If we print the result, it shows that we have a DataFrame of over 3 million rows (5 x ~600,000 rows per 1% sample). It is also possible to see that `chunk` has multiple values.
 
 ```rust
 === Rust 3_5_1_joins block_3
@@ -46,13 +46,13 @@ shape: (3_021_755, 22)
 
 ## Joins
 
-Polars has multiple options for joining data by row. To make the data visualization simpler, the below code processes the data found in the `census_chunk` vector, keeps only a few variables, removes those without any income and renames the `income` to reflect the chunk number of the data. Note that we will use `id` as a linkage key, but each chunk is identical (the same 1% sample of the UK Census), so we will drop random 50% of the columns from each to better show how joins work.
+Polars has multiple options for joining data by row. To make the data visualization simpler, the below code processes the data found in the `census_chunk` vector, keeps only a few variables, removes those without any income and renames the `income` to reflect the chunk number of the data. Note that we will use `id` as a linkage key, but each chunk is identical (the same 1% sample of the UK Census), so we will drop a random 50% of the rows from each to better show how joins work. This can be done with `DataFrame`'s `sample_n_literal`
 
 ```rust
 === Rust 3_5_1_joins block_4
 ```
 
-Here is what each chunk of data looks like at this point:
+Here is what each chunk of data approximately looks like at this point:
 
 ```rust
 === Rust 3_5_1_joins block_5
@@ -85,7 +85,7 @@ Now that we have simpler data, we can join these. In this example, we are doing 
 === Rust 3_5_1_joins block_6
 ```
 
-This gives us a longitudinal cohort, keeping the population from the first dataset (january):
+This gives us a longitudinal cohort, keeping the population from the first dataset:
 
 ```
 shape: (150_000, 6)
@@ -139,7 +139,7 @@ shape: (9_981, 6)
 Polars has multiple of these "simple" joins, including `left_join`, `semi_join`, `full_join`, `inner_join`, `anti_join` and `cross_join`. But you can create significantly more complex joins by building the `join` yourself with the `join` function and all of it's options. For example, here is a `full join` on multiple variables:
 
 > [!NOTE]
-> For some reason, Polars does not reconcile the values of the keys in a `full join`, both in the `join` and `full_join` functions. This means that any keys not found in the left create `nulls` in the original key name and any key not found in the right creates `nulls` in the key with an `_right` suffix (e.g. rec_num_right). This can be fixed with an expression that applies to all five joins (called `fix_full_join_vars` below).
+> For some reason, Polars does not reconcile the values of the keys in a `full join`, both in the `join` and `full_join` functions. This means that any keys not found in the left creates `nulls` in the original key name and any key not found in the right creates `nulls` in the key with an `_right` suffix (e.g. id_right). This can be fixed with an expression that applies to all five joins (called `fix_full_join_vars` below).
 
 ```rust
 === Rust 3_5_1_joins block_8

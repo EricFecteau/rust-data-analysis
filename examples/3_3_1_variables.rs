@@ -33,7 +33,7 @@ fn main() {
 
     // === block_4
 
-    // Cast the value from an `i64` to a `f64` and modify it (dadd a inflation modifier)
+    // Cast the value from an `i64` to a `f64` and modify it (add a inflation modifier)
     let lf = lf
         .select([all().exclude_cols(["five", "ten", "fifteen"]).as_expr()])
         .filter(col("income").is_not_null())
