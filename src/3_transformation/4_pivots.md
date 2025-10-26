@@ -6,7 +6,7 @@ With Polars, pivots have to be done in-memory. As explained by Polars, "lazy doe
 
 ## Setup
 
-Since the data has to be materialized (i.e. in-memory) to be pivoted, this section will first create some summary data to get a manageable `DataFrame`. To learn how to do summary statistics, see the [summary chapter](../4_stats/1_summary.md). For now, you can simply run the code below. You can run this section using `cargo run -r --example 3_4_1_pivot`.
+Since the data has to be materialized (i.e. in-memory) to be pivoted, this section will first create some summary data to get a manageable `DataFrame`. To learn how to do summary statistics, see the [summary chapter](../4_stats/1_summary.md). For now, you can simply run the code below. Run this code using `cargo run -r --example 3_4_1_pivot`.
 
 In this example, we connect to the Parquet file and summarize the income by region and age group.
 

@@ -4,9 +4,9 @@
 
 # Overview of the book
 
-The [first section](./1_start/index.md) explores concepts related to data analysis in Rust, the crates (libraries) used in the book and how to collect the data necessary for the examples. It also shows how to run these examples in a Jupyter Notebook with a Rust kernel.
+The [first section](./1_start/index.md) explores concepts related to data analysis in Rust, the crates (libraries) used in the book and how to collect the data necessary for the examples.
 
-The [second section](./2_data/index.md) explains how to read and write various types of data (e.g. `.csv` and `.parquet`), including larger-than-memory data. This section also focuses on the various locations data can be read from and written to, including local data, cloud-based data and databases. 
+The [second section](./2_data/index.md) explains how to read and write various types of data (e.g. `.csv` and `.parquet`), including larger-than-memory data. This section also focuses on the various locations that data can be read from and written to, including local data, cloud-based data and databases. 
 
 The [third section](./3_transformation/index.md) demonstrates how to transform data by adding and removing columns, filtering rows, pivoting the data and joining various data together.
 

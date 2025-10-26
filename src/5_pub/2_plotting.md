@@ -2,7 +2,7 @@
 
 Plots are the langauge of data analysts. There are mutiple dozens of types of plots, and the majority of them are possible in Rust. [Plotly](https://plotly.com/javascript/), the very popular JavaScript open source graphing library, has a [Rust interface](https://github.com/plotly/plotly.rs)! This chapter will use the [plotlars](https://github.com/alceal/plotlars) crate, a wrapper around the Plotly library that takes polars dataframes as input. This is a great bridge between Polars and Plotly. Plotlars allows you to build all types of graphs, like bar plots, box plots, line plots, pie charts and sankey diagrams. In addition, similar to [ggplot2](https://ggplot2.tidyverse.org/), it follows the [grammar of graphics](https://ggplot2-book.org/mastery.html) approach to creating plots. Those familiar with `ggplot2` will quickly become proficient at using `plotlars`.
 
-You can run this section using `cargo run -r --example 5_2_1_plots`.
+Run this code using `cargo run -r --example 5_2_1_plots`.
 
 ## Bar Graph
 

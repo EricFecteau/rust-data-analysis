@@ -14,7 +14,7 @@ fn main() {
 
     // Create 100x 1% sample
     for chunk in 0..100 {
-        // Write Parquet
+        // Write csv
         let mut file = std::fs::File::create(format!("./data/csv/census_{chunk}.csv")).unwrap();
 
         let mut df = lf

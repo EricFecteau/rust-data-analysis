@@ -13,7 +13,7 @@ To build the crates required for this book, you will also need to install [cmake
 > [!IMPORTANT]
 > This book assumes a minimal amount of familiarity with Rust and it's toolkit. The [Rust Book](https://doc.rust-lang.org/stable/book/) (free) and [Programming Rust, 2nd Edition](https://www.oreilly.com/library/view/programming-rust-2nd/9781492052586/) (paid) are really great resources to learn Rust.
 
-All examples in this book are accompanied with [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). These scripts can be run with `cargo run -r --example 0_0_0_name_of_example`. The first time an example is run, it will take a long time to build all the dependencies, but subsequent runs, including of other examples, will be very quick. **This book recommends writing examples and running them with `cargo run`.**
+All examples in this book are accompanied with [example scripts](https://github.com/EricFecteau/rust-data-analysis/tree/main/examples). These scripts can be run with `cargo run -r --example 0_0_0_name_of_example`. The first time an example is run, it will take a long time to build all the dependencies, but subsequent runs, including of other examples, will be very quick.
 
 ## Data analysis environment
 

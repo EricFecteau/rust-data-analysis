@@ -1,6 +1,6 @@
 # Crates
 
-Throughout this book, various crates are going to be used in the examples. Here are the creates, their versions at the time of writing and and the features that will be used. The important crates will be explored below. Some crates, such a `zip`, are self-explanatory and are used for very simple parts of the book (e.g. unzipping a file).
+Throughout this book, various crates are going to be used in the examples. Here are the crates, the relevant version for the current book and their features that will be used. The important crates will be explored below. Some crates, such a `zip` and `rand`, are self-explanatory and are used for very simple parts of the book (e.g. unzipping a file).
 
 You will need to add these to your [Cargo.toml](https://github.com/EricFecteau/rust-data-analysis/blob/main/Cargo.toml) file, when relevant.
 
@@ -53,23 +53,23 @@ rust_xlsxwriter = "0.90"
 plotlars = {version = "0.10", features = ["static_export_geckodriver", "static_export_wd_download"] }
 
 # Markdown documents
-comrak = "0.44"
+comrak = "0.45"
 ```
 
 ## Polars
 
-The [Polars](https://docs.rs/polars/latest/polars/) crates is the main data analysis library use in this book. Polars is a DataFrame library for Rust. It is based on Apache Arrow’s memory model. Apache Arrow provides very cache efficient columnar data structures and is becoming the defacto standard for columnar data.
+The [Polars](https://docs.rs/polars/latest/polars/) crate is the main data analysis library use in this book. Polars is a DataFrame library for Rust. It is based on [Apache Arrow](https://arrow.apache.org/)’s memory model. Apache Arrow provides very cache efficient columnar data structures and is becoming the defacto standard for columnar data.
 
 For the book, the following features are enabled:
 * "lazy": Allows for lazy-evaluation of data (recommended)
 * "parquet": Allows for reading and writing [Apache Parquet](https://parquet.apache.org/) files, a column-oriented data file format designed for efficient data storage and retrieval.
 * "round_series": Allows for data rounding (e.g. 0.386738 to 0.39)
-* "replace": Allows for data replacement (e.g. 35 to "Ontario")
+* "replace": Allows for data replacement (e.g. "E12000007" to "London")
 * "is_in": Allows for list-filtering (e.g. value is_in [2020, 2021, 2021])
 * "pivot": Allows for data pivots
 * "cum_agg": Allows for cumulative aggregate statistics
 * "abs": Allows for converting values to absolute values (e.g. -5 to 5)
-* "aws": Allows for reading and writing data to the cloud (minio)
+* "aws": Allows for reading and writing data to the cloud (e.g. minio)
 * "regex": Allows for the use of regex to select columns
 * "fmt": Allows to format the output of Polars (e.g. format tables as markdown)
 

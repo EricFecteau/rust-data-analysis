@@ -4,7 +4,7 @@ You can read and write from Parquet using Polars.
 
 ## Reading
 
-You can connect to a Parquet file, like the large `./data/large/census.parquet`, without bringing it in memory, with the `LazyCsvReader`. You can run this section using `cargo run -r --example 2_3_1_read_parquet`.
+You can connect to a Parquet file, like the large `./data/large/census.parquet`, without bringing it in memory, with the `LazyCsvReader`. Run this code using `cargo run -r --example 2_3_1_read_parquet`.
 
 ```rust
 === Rust 2_3_1_read_parquet imports
@@ -40,7 +40,7 @@ shape: (5, 21)
 
 ## Writing
 
-You can write to Parquet any `DataFrame` you have in memory. For this example, we will bring one percent of the UK Census into memory. You can run this section using `cargo run -r --example 2_3_2_write_parquet`.
+You can write to Parquet any `DataFrame` you have in memory. For this example, we will bring one percent of the UK Census into memory. Run this code using `cargo run -r --example 2_3_2_write_parquet`.
 
 ```rust
 === Rust 2_3_2_write_parquet imports
@@ -57,12 +57,12 @@ In order to save it, you have to create a file and write to it:
 This saves the data into one `.parquet` file. The `write_partitioned_dataset` function can be used to write a partitioned Parquet files, based on the values in one or more columns. 
 
 > [!WARNING]
-> The [write_partitioned_dataset](https://docs.pola.rs/api/rust/dev/polars_io/partition/fn.write_partitioned_dataset.html) function is unstable and undocumented in Rust. 
+> The [write_partitioned_dataset](https://docs.pola.rs/api/rust/dev/polars_io/partition/fn.write_partitioned_dataset.html) function is unstable and undocumented. 
 
-For example, you can write one percent of the UK Census data by `region` and `age_group` using `write_partitioned_dataset`. You can run this section using `cargo run -r --example 2_3_3_write_partitioned_parquet`.
+For example, you can write one percent of the UK Census data by `region` and `age_group` using `write_partitioned_dataset`. Run this code using `cargo run -r --example 2_3_3_write_partitioned_parquet`.
 
 > [!NOTE]
-> The value of `4294967296` bytes (4 GB) was selected for the `chunk_size` as it is the default for the partitioned parquet files in [Polars for Python](https://docs.pola.rs/api/python/dev/reference/api/polars.DataFrame.write_parquet.html). This will be the approximate maximum size of each `.parquet` file created. 
+> The value of `4294967296` bytes (4 GB) was selected for the `chunk_size` as it is the default for the partitioned parquet files in [Polars for Python](https://docs.pola.rs/api/python/dev/reference/api/polars.DataFrame.write_parquet.html). This will be the approximate maximum size of each `.parquet` file created (if it was large enough). 
 
 ```Rust
 === Rust 2_3_3_write_partitioned_parquet block_2

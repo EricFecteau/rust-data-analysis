@@ -4,7 +4,7 @@ You can read and write from CSVs using Polars.
 
 ## Reading
 
-You can connect to a CSV file, like the UK Census file `./data/large/census.csv`, without bringing it in memory, with the `LazyCsvReader`. You can run this section using `cargo run -r --example 2_2_1_read_csv`.
+You can connect to a CSV file, like the UK Census file `./data/large/census.csv`, without bringing it in memory, with the `LazyCsvReader`. Run this code using `cargo run -r --example 2_2_1_read_csv`.
 
 ```rust
 === Rust 2_2_1_read_csv imports
@@ -34,7 +34,7 @@ shape: (5, 21)
 
 ## Writing
 
-You can write to CSV any `DataFrame` you have in memory. For this example, we will bring one percent of the UK Census into memory. You can run this section using `cargo run -r --example 2_2_2_write_csv`.
+You can write to CSV any `DataFrame` you have in memory. For this example, we will bring one percent of the UK Census into memory. Run this code using `cargo run -r --example 2_2_2_write_csv`.
 
 ```Rust
 === Rust 2_2_2_write_csv imports

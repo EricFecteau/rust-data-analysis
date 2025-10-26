@@ -1,7 +1,7 @@
 
 # Data
 
-This section processes the data that is used in the examples in this book. You do not have to fully understand these code blocks at this point to run them, but they are commented. The rest of the examples in this book assumes you have run all of these code blocks. The `SQL` and the `s3 bucket` sections can be skipped if you do not want to install these dependencies (you will have to skip the [databases](../2_data/4_databases.md) and [cloud](../2_data/5_cloud.md) sections of the book).
+This chapter processes the data that is used in the examples in this book. You do not have to fully understand these code blocks at this point to run them, but they are commented. The rest of the examples in this book assumes you have run all of these code blocks. The `SQL` and the `s3 bucket` sections of this chater can be skipped if you do not want to install these dependencies (you will have to skip the [databases](../2_data/4_databases.md) and [cloud](../2_data/5_cloud.md) chapters of the book).
 
 This book uses the [Public microdata teaching sample, England and Wales: Census 2021](https://www.ons.gov.uk/releases/publicmicrodatateachingsampleenglandandwalescensus2021), a 1% sample of individual records from Census 2021 for teaching of statistics and social sciences. It can be downloaded [here](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/publicmicrodatateachingsampleenglandandwalescensus2021). This CSV contains non-aggregated data for a wide variety of variables collected from the UK population. The codeset (i.e. the values for the variables in the dataset), can be downloaded from [here](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/microdatasamplecodescensus2021) and the userguide from [here](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/methodologies/userguidetocensus2021microdatasamplesenglandandwales).
 
@@ -76,7 +76,7 @@ The following example, using Arch Linux, will show the general process:
 2) Initialize a database, using the `postgres` user: `sudo -u postgres initdb -D /var/lib/postgres/data`
 3) Enable and start the `systemctl` service: `sudo systemctl enable postgresql.service` and `sudo systemctl start postgresql.service`
 
-Once set up, you can use Rust to load he data into the database. You can run this script using `cargo run -r --example 1_2_7_sql`.
+Once set up, you can use Rust to load the data into the database. You can run this script using `cargo run -r --example 1_2_7_sql`.
 
 ```Rust
 === Rust 1_2_7_sql imports
@@ -92,4 +92,4 @@ Start the minio server and point it to the `./data/minio` folder with `minio ser
 The following code creates a bucket called `census` and load the `./data/large/census.csv` CSV file, the `./data/large/census.parquet` parquet file and the partitioned parquet folder `./data/large/partitioned/` with Rust. Run this script using `cargo run -r --example 1_2_8_minio`.
 
 > [!NOTE]
-> Due to the length of this code, because of the multi-part upload S3 code, it was omited from this section. Yoiu must run it with `cargo run -r --example 1_2_8_minio`.
+> Due to the length of this code, because of the multi-part upload S3 code, it was omited from the book. You can find the code on [GitHub](https://github.com/EricFecteau/rust-data-analysis/blob/main/examples/1_2_8_minio.rs). It can be run with `cargo run -r --example 1_2_8_minio`.

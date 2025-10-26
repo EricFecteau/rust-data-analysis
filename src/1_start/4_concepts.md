@@ -10,7 +10,7 @@ Like with [arrow](https://arrow.apache.org/), [duckdb](https://duckdb.org/), [db
 * the lazy API allows you to work with larger than memory datasets using streaming
 * the lazy API can catch schema errors before processing the data
 
-Polars uses the `DataFrame` API when using `eager evaluation` (e.g. bringing the data into memory) and uses the `LazyFrame` API when using `lazy evaluation` (e.g. connecting to the data, but not bringing it into memory). The available functions for both APIs are similar, but sufficiently different that code written for one will not work on the other. Generally, as is recommended by [Polar's DataFrame](https://docs.rs/polars/latest/polars/) because of the advantages of lazy evaluation, this book will be giving examples of `lazy evaluation`. In examples, this book will use `lf` for the name of the object (or the `lf_` prefix) when the object is a `LazyFrame` and `df` (or the `df_` prefix) for `DataFrame`.
+Polars uses the `DataFrame` API when using `eager evaluation` (e.g. bringing the data into memory) and uses the `LazyFrame` API when using `lazy evaluation` (e.g. connecting to the data, but not bringing it into memory). The available functions for both APIs are similar, but sufficiently different that code written for one will not work on the other. As is recommended by [Polar's DataFrame](https://docs.rs/polars/latest/polars/), because of the advantages of lazy evaluation, this book will focus on `LazyFrame`. In examples, this book will use `lf` for the name of the object (or the `lf_` prefix) when the object is a `LazyFrame` and `df` (or the `df_` prefix) for `DataFrame`.
 
 To convert a `DataFrame` to a `LazyFrame` you can use `let lf = df.lazy();`. Note that nothing will be evaluated yet. It will only be evaluation once you convert the `LazyFrame` to a `DataFrame` with `collect()`: `let df = lf.collect().unwrap();`.
 
@@ -31,7 +31,7 @@ See the [Polars and Arrow versions](#polars-and-arrow-versions) section for info
 
 Since both Polars (pre-1.0) and Arrow have SemVer breaking API updates in Rust every few months, the Rust ecosystem that depend on these crates update at a different rates and are consistently incompatible with each other (e.g. one crate outputs Polars 0.45 and another crate takes Polars 0.43 as input). For crates who take these as input or provide these as output, updating should be considered an API break, and require a major bump in version. This has a cascading effect over the whole ecosystem.
 
-For example, attempting to pass Polars 0.45 to a crate that uses Polars 0.43, or vice versa, will give a error[E0308]: mismatched types error with the note “‘DataFrame’ and ‘DataFrame’ have similar names, but are actually distinct types”.
+For example, attempting to pass Polars 0.45 to a crate that uses Polars 0.43, or vice versa, will give a `error[E0308]: mismatched types` error with the note “‘DataFrame’ and ‘DataFrame’ have similar names, but are actually distinct types”.
 
 The [df_interchange](https://docs.rs/df-interchange/latest/df_interchange/) crate solves the interoperability issue and prevent the need for the entirety of the ecosystem to update at the same speed. It solves this by allowing for seamless interoperability between any version of Polars (>=0.40) and any version of Arrow (>=54), including between versions of the same crate (e.g. Polars 0.40 to Polars 0.46), using the Arrow C Data Interchange format.
 

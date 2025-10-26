@@ -16,7 +16,7 @@ fn main() {
         .collect()
         .unwrap();
 
-    // Start up RNG
+    // Start up seeded RNG
     let mut rng = ChaCha8Rng::seed_from_u64(1);
 
     // Create random income vector of correct size

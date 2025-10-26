@@ -12,7 +12,7 @@ fn main() {
     // Drop table if exists
     let _ = client.batch_execute("drop TABLE census;");
 
-    // Get all variable names using Polars;
+    // Get all variable names and types using Polars;
     let args = ScanArgsParquet::default();
     let mut lf =
         LazyFrame::scan_parquet(PlPath::from_str("./data/parquet/census_0.parquet"), args).unwrap();

@@ -2,7 +2,7 @@
 
 In the data analysis world, Excel is still the universal aggregate statistics exchange format and quick analysis tool. It is much simpler to send a fellow researcher an Excel file with some summary statistics or a few hundred rows of data than it is to send pretty much any other data format. With the following code, you can export any data from Polars to Excel, format it as needed and even add plots.
 
-You can run this section using `cargo run -r --example 5_1_1_excel`.
+Run this code using `cargo run -r --example 5_1_1_excel`.
 
 ## Setup
 

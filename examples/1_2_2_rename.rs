@@ -5,7 +5,7 @@ use polars::prelude::*;
 fn main() {
     // === program
 
-    // Data File
+    // --- Data File ---
 
     // Read CSV
     let lf = LazyCsvReader::new(PlPath::from_string("./data/raw/census.csv".to_string()))
@@ -42,7 +42,7 @@ fn main() {
     let mut file = std::fs::File::create("./data/raw/census.csv").unwrap();
     CsvWriter::new(&mut file).finish(&mut df).unwrap();
 
-    // Codeset
+    // --- Codeset ---
 
     // Read CSV
     let lf = LazyCsvReader::new(PlPath::from_string(

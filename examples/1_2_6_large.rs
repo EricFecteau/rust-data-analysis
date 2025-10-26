@@ -71,7 +71,9 @@ fn main() {
 
     // By region
     for region in regions {
+        // By age group
         for age in ages.clone() {
+            // Collect chunk in memory
             let mut chunk_df = lf
                 .clone()
                 .filter(col("region").eq(lit(region.clone())))
@@ -90,12 +92,13 @@ fn main() {
             )
             .unwrap();
 
-            // Write chunk to a large parquet file
+            // Write chunk to a large parquet file and large csv file
             pq_writer.write_batch(&chunk_df).unwrap();
             csv_writer.write_batch(&chunk_df).unwrap();
         }
     }
 
+    // Finalize the writing
     pq_writer.finish().unwrap();
     csv_writer.finish().unwrap();
 
