@@ -1,9 +1,6 @@
 name: publish
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
@@ -20,12 +17,7 @@ jobs:
           apt-get update
           apt-get install -y curl jq build-essential
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          components: rustfmt
-          default: true
+      - uses: dtolnay/rust-toolchain@stable
 
       - name: Install latest mdbook
         run: |
@@ -41,3 +33,13 @@ jobs:
 
       - name: Build Book
         run: just build
+
+      - name: Deploy to website
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./book/
+          server-dir: ./data/rust-data-analysis/
+          state-name: ../.ftp-deploy-sync-state.json
