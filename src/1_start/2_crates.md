@@ -97,7 +97,7 @@ The [polars_excel_writer](https://docs.rs/polars_excel_writer/latest/polars_exce
 
 ## Plotlars
 
-The [plotlars](https://docs.rs/plotlars/latest/plotlars/) crate is a wrapper around the [plotly](https://docs.rs/plotly/latest/plotly/) crate, bridging the gap between the powerful Polars data analysis library and Plotly. Similar to [ggplot2](https://ggplot2.tidyverse.org/) in R, it follows the [grammar of graphics](https://ggplot2-book.org/mastery.html) approach to creating plots. 
+The [plotlars](https://docs.rs/plotlars/latest/plotlars/) crate is a wrapper around the [plotly](https://docs.rs/plotly/latest/plotly/) crate, bridging the gap between the powerful Polars data analysis library and Plotly.
 
 ## Markdown
 
