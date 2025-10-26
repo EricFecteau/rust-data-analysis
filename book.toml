@@ -2,8 +2,10 @@
 title = "Data Analysis in Rust"
 authors = ["Eric Fecteau"]
 language = "en"
-multilingual = false
 src = "src_processed"
+
+[output.html]
+git-repository-url = "https://github.com/EricFecteau/rust-data-analysis"
 
 [preprocessor.alerts]
 
