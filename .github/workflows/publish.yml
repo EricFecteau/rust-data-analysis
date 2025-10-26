@@ -18,7 +18,7 @@ jobs:
       - name: Install CI tools
         run: |
           apt-get update
-          apt-get install -y curl jq
+          apt-get install -y curl jq build-essential
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
