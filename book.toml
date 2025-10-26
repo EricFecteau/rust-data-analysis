@@ -1,5 +1,5 @@
 [book]
-title = "Data Analysis with Rust"
+title = "Data Analysis in Rust"
 authors = ["Eric Fecteau"]
 language = "en"
 multilingual = false
