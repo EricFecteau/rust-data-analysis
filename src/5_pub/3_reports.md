@@ -82,4 +82,4 @@ Lastly, we must render the markdown to HTML, close up our HTML opened earlier in
 === Rust 5_3_1_reports block_8
 ```
 
-With all this done, you can see the final report [here]().
+With all this done, you can see the final report [here](https://ericfecteau.ca/data/rust-data-analysis/5_pub/images/report/report.html).

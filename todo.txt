@@ -1,7 +1,0 @@
-* Write website article
-* Verify all examples work and are documented (in code)
-* Tone? We/you vs neutral
-* Section / chapter / whatever - be consistant
-* Review entire document
-* Add CI/CD when public (test + publish)
-* you can see the final report [here]().

@@ -1,18 +1,18 @@
 # Data analysis in Rust
 
- The [Data analysis in Rust]() book is a "learn by example" guide to data analysis in Rust. It assumes minimal knowledge of data analysis and minimal familiarity with Rust and its tooling.
+The [Data analysis in Rust](https://ericfecteau.ca/data/rust-data-analysis/index.html) book is a "learn by example" guide to data analysis in Rust. It assumes minimal knowledge of data analysis and minimal familiarity with Rust and its tooling.
 
 # Overview of the book
 
-The [first section](./1_start/index.md) explores concepts related to data analysis in Rust, the crates (libraries) used in the book and how to collect the data necessary for the examples.
+The [first section](https://ericfecteau.ca/data/rust-data-analysis/1_start/0_index.html) explores concepts related to data analysis in Rust, the crates (libraries) used in the book and how to collect the data necessary for the examples.
 
-The [second section](./2_data/index.md) explains how to read and write various types of data (e.g. `.csv` and `.parquet`), including larger-than-memory data. This section also focuses on the various locations that data can be read from and written to, including local data, cloud-based data and databases. 
+The [second section](https://ericfecteau.ca/data/rust-data-analysis/2_data/0_index.html) explains how to read and write various types of data (e.g. `.csv` and `.parquet`), including larger-than-memory data. This section also focuses on the various locations that data can be read from and written to, including local data, cloud-based data and databases. 
 
-The [third section](./3_transformation/index.md) demonstrates how to transform data by adding and removing columns, filtering rows, pivoting the data and joining various data together.
+The [third section](https://ericfecteau.ca/data/rust-data-analysis/3_transformation/0_index.html) demonstrates how to transform data by adding and removing columns, filtering rows, pivoting the data and joining various data together.
 
-The [fourth section](./4_stats/index.md) shows how do summary statistics, such as counts, totals, means and percentiles, with and without survey weights. It also gives some examples of hypothesis testing. 
+The [fourth section](https://ericfecteau.ca/data/rust-data-analysis/4_stats/0_index.html) shows how do summary statistics, such as counts, totals, means and percentiles, with and without survey weights. It also gives some examples of hypothesis testing. 
 
-The [fifth and last section](./5_pub/index.md) has examples of publication avenues, such as exporting summary statistics to excel, plotting results and writing markdown reports.
+The [fifth and last section](https://ericfecteau.ca/data/rust-data-analysis/5_pub/0_index.html) has examples of publication avenues, such as exporting summary statistics to excel, plotting results and writing markdown reports.
 
 # Running the examples
 
