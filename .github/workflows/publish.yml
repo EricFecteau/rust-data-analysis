@@ -34,6 +34,8 @@ jobs:
           mkdir mdbook
           curl -sSL $url | tar -xz --directory=./mdbook
           echo `pwd`/mdbook >> $GITHUB_PATH
+          cargo install mdbook-linkcheck
+          cargo install mdbook-alerts
 
       - uses: extractions/setup-just@v2
 
