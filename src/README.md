@@ -24,8 +24,8 @@ While this book uses larger-than-memory data (at least larger than 16 GB of RAM)
 
 # Updates
 
-2025-10-01: Original release with Polars 0.51.
-2026-01-30: Updated Polars to 0.52, along with other ecosystem crates (Plotlars, rust_xlsxwriter, etc.).
+* 2025-10-01: Original release with Polars 0.51.
+* 2026-01-30: Updated Polars to 0.52, along with other ecosystem crates (Plotlars, rust_xlsxwriter, etc.).
 
 # Contributing
 
