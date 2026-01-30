@@ -6390,7 +6390,7 @@ dependencies = [
 
 [[package]]
 name = "rust-data-analysis"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "aws-sdk-s3",
  "comrak",

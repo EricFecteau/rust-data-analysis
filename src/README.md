@@ -22,6 +22,11 @@ This [repository](https://github.com/EricFecteau/rust-data-analysis) works both 
 
 While this book uses larger-than-memory data (at least larger than 16 GB of RAM), at no point does the example bring all the data into memory at the same time. The memory spikes at a maximum of around 5 GB or so on some processes.
 
+# Updates
+
+2025-10-01: Original release with Polars 0.51.
+2026-01-30: Updated Polars to 0.52, along with other ecosystem crates (Plotlars, rust_xlsxwriter, etc.).
+
 # Contributing
 
 All contributions are welcome! For any bug, typo or issue, open up an issue on the [GitHub repo](https://github.com/EricFecteau/rust-data-analysis/issues). For any small changes, feel free to do a merge request. For large changes (e.g. a new chapter), please open up an issue first to brainstorm the contribution.
