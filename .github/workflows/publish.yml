@@ -35,6 +35,6 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./book/html/
+          local-dir: /__w/rust-data-analysis/rust-data-analysis/book/html/
           server-dir: ./data/rust-data-analysis/
           state-name: ../.ftp-deploy-sync-state.json
