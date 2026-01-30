@@ -8,14 +8,14 @@ You will need to add these to your [Cargo.toml](https://github.com/EricFecteau/r
 [dependencies]
 
 # Extract ZIP files
-zip = "6"
+zip = "7"
 
 # Create random values
 rand = "0.9" 
 rand_chacha = "0.9"
 
 # Polars - open-source library for data manipulation
-polars = { version = "0.51", features = [
+polars = { version = "0.52", features = [
     "lazy", # LazyFrame
     "parquet", # Parquet files
     "round_series", # Round values
@@ -27,6 +27,7 @@ polars = { version = "0.51", features = [
     "aws", # Read/write cloud (minio)
     "regex", # Call columns with regex
     "fmt", # Format tables as markdown
+    "timezones", # https://github.com/pola-rs/polars/issues/25148
 ] }
 
 # Move data in and out of PostgreSQL
@@ -43,17 +44,17 @@ aws-sdk-s3 =  { version = "1", features = ["behavior-version-latest"] }
 tokio = "1"
 
 # Convert data from one version of Polars to another version of Polars
-df-interchange = { version = "0.2", features = ["polars_0_50", "polars_0_51"] }
+df-interchange = { version = "0.3", features = ["polars_0_50", "polars_0_51"] }
 
 # Manipulating Excel documents
-polars_excel_writer = "0.21"
-rust_xlsxwriter = "0.90"
+polars_excel_writer = "0.24"
+rust_xlsxwriter = "0.93"
 
 # Plots
-plotlars = {version = "0.10", features = ["static_export_geckodriver", "static_export_wd_download"] }
+plotlars = {version = "0.11", features = ["export-firefox", "export-download"] }
 
 # Markdown documents
-comrak = "0.45"
+comrak = "0.50"
 ```
 
 ## Polars
