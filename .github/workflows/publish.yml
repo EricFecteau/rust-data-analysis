@@ -27,7 +27,12 @@ jobs:
       - uses: extractions/setup-just@v2
 
       - name: Build Book
-        run: just build
+        run: just build -d "./book"
+
+      - name: Understanding CI
+        run: |
+          ls -l
+          ls -l ./book
 
       - name: Deploy to website
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
@@ -35,6 +40,6 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: /__w/rust-data-analysis/rust-data-analysis/book/html/
+          local-dir: ./book/html/
           server-dir: ./data/rust-data-analysis/
           state-name: ../.ftp-deploy-sync-state.json
