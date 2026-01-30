@@ -11,7 +11,7 @@ render: process-book
     mdbook serve --open
 
 build: process-book
-    mdbook build -d ./book
+    mdbook build
 
 test-all: get-data test-rw test-trans test-stats test-pub
 
