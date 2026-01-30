@@ -31,7 +31,7 @@ fn main() {
     let mut cloudfile = Runtime::new()
         .unwrap()
         .block_on(cloud::BlockingCloudWriter::new(
-            "s3://census/census_0.csv",
+            PlPathRef::new("s3://census/census_0.csv"),
             Some(&cloud_options),
         ))
         .unwrap();
@@ -41,7 +41,7 @@ fn main() {
     let mut cloudfile = Runtime::new()
         .unwrap()
         .block_on(cloud::BlockingCloudWriter::new(
-            "s3://census/census_0.parquet",
+            PlPathRef::new("s3://census/census_0.parquet"),
             Some(&cloud_options),
         ))
         .unwrap();

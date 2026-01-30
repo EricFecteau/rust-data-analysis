@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::prelude::*;
 
 use comrak::{Options, markdown_to_html};
-use df_interchange::Interchange;
+// use df_interchange::Interchange; (currently unecessary)
 use plotlars::{BarPlot, Legend, Orientation, Plot, Rgb, Text};
 use polars::prelude::{pivot::pivot_stable, *};
 
@@ -149,11 +149,11 @@ Maecenas posuere tellus porttitor turpis pulvinar luctus. Nunc lacinia suscipit 
 
     markdown.push_str("Sed pharetra quis tellus ut porta. Aliquam maximus neque aliquet elit rhoncus feugiat. Fusce scelerisque elit in quam accumsan feugiat. Vivamus et venenatis neque, non congue ligula. In sit amet mollis eros. Quisque justo velit, luctus elementum nisi vel, lobortis eleifend mauris. Curabitur eget posuere augue, et facilisis ipsum.\n\n");
 
-    // Convert from Polars 0.51 to Polars 0.50
-    let df_bar = Interchange::from_polars_0_51(df_bar)
-        .unwrap()
-        .to_polars_0_50()
-        .unwrap();
+    // // Convert from Polars 0.51 to Polars 0.52 (currently unecessary)
+    // let df_bar = Interchange::from_polars_0_51(df_bar)
+    //     .unwrap()
+    //     .to_polars_0_52()
+    //     .unwrap();
 
     BarPlot::builder()
         .data(&df_bar)

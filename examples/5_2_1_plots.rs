@@ -1,4 +1,4 @@
-use df_interchange::Interchange;
+// use df_interchange::Interchange; (Currently unecessary)
 // === imports
 use plotlars::{Axis, BarPlot, Legend, LinePlot, Orientation, Plot, Rgb, Text};
 use polars::prelude::{pivot::pivot_stable, *};
@@ -61,11 +61,11 @@ fn main() {
 
     println!("{df_bar}");
 
-    // Convert from Polars 0.51 to Polars 0.50
-    let df_bar = Interchange::from_polars_0_51(df_bar)
-        .unwrap()
-        .to_polars_0_50()
-        .unwrap();
+    // Convert from Polars 0.51 to Polars 0.52 (currently unecessary)
+    // let df_bar = Interchange::from_polars_0_51(df_bar)
+    //     .unwrap()
+    //     .to_polars_0_52()
+    //     .unwrap();
 
     // === block_2
 
@@ -130,11 +130,11 @@ fn main() {
 
     println!("{df_line}");
 
-    // Convert from Polars 0.51 to Polars 0.50
-    let df_line = Interchange::from_polars_0_51(df_line)
-        .unwrap()
-        .to_polars_0_50()
-        .unwrap();
+    // Convert from Polars 0.51 to Polars 0.53 (currently unecessary)
+    // let df_line = Interchange::from_polars_0_51(df_line)
+    //     .unwrap()
+    //     .to_polars_0_52()
+    //     .unwrap();
 
     // === block_5
 
