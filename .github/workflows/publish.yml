@@ -28,17 +28,12 @@ jobs:
       - name: Build Book
         run: just build
 
-      - name: Understanding CI
-        run: |
-          ls -l
-          ls -l ./book
-
       - name: Deploy to website
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./book/html/
+          local-dir: ./book/
           server-dir: ./data/rust-data-analysis/
           state-name: ../.ftp-deploy-sync-state.json
