@@ -22,12 +22,11 @@ jobs:
       - name: Install latest mdbook
         run: |
           cargo install mdbook
-          cargo install mdbook-linkcheck
 
       - uses: extractions/setup-just@v2
 
       - name: Build Book
-        run: just build -d "./book"
+        run: just build
 
       - name: Understanding CI
         run: |
