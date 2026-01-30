@@ -7,11 +7,5 @@ src = "src_processed"
 [output.html]
 git-repository-url = "https://github.com/EricFecteau/rust-data-analysis"
 
-[preprocessor.alerts]
-
 [output.html.playground]
 runnable = false
-
-[output.linkcheck]
-# follow-web-links = true
-warning-policy = "ignore"
