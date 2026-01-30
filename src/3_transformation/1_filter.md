@@ -19,7 +19,7 @@ To filter this data, you can use `filter()` with expressions. In this example, `
 === Rust 3_1_1_filter block_2
 ```
 
-To reference a column in a filter, it must be called with the `col()` function. For values (i.e. literals), they must be referenced with the `lit()` function. They can bed compared using equality comparison such as:
+To reference a column in a filter, it must be called with the `col()` function. For values (i.e. literals), they must be referenced with the `lit()` function. They can be compared using equality comparison such as:
 
 | Equality        | Definition                                               |
 |-----------------|----------------------------------------------------------|
