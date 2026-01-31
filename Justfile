@@ -26,6 +26,8 @@ get-data-ci:
     cargo run -r --example 1_2_4_expand
     cargo run -r --example 1_2_5_parquet
     cargo run -r --example 1_2_6_large
+    minio server ./data/minio --quiet &
+    cargo run -r --example 1_2_8_minio
 
 get-data:
     rm -rf ./data
