@@ -41,4 +41,4 @@ jobs:
 
       - name: Test Examples
         run: |
-          just --shell bash get-data-ci
+          just get-data-ci
