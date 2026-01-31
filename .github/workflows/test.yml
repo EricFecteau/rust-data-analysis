@@ -15,7 +15,7 @@ jobs:
       - name: Install CI tools
         run: |
           apt-get update
-          apt-get install -y curl jq build-essential
+          apt-get install -y curl jq build-essential libssl-dev openssl
 
       - uses: dtolnay/rust-toolchain@stable
 
