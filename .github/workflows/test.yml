@@ -15,7 +15,7 @@ jobs:
       - name: Install CI tools
         run: |
           apt-get update
-          apt-get install -y curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2
+          apt-get install -y curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2t64
 
       - uses: dtolnay/rust-toolchain@stable
 
