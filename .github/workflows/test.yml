@@ -38,6 +38,7 @@ jobs:
 
       - name: Build Book
         run: |
+          shopt -s expand_aliases
           alias minio="/tmp/minio -C /tmp/minio-config"
           just build
 
