@@ -40,6 +40,5 @@ jobs:
       #   run: just build
 
       - name: Test Examples
-        shell: bash
         run: |
           just get-data-ci
