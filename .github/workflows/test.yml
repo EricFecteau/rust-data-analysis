@@ -44,4 +44,5 @@ jobs:
         run: |
           shopt -s expand_aliases
           alias minio="/tmp/minio -C /tmp/minio-config"
-          just get-data-ci
+          minio -v
+      # just get-data-ci
