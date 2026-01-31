@@ -15,7 +15,7 @@ jobs:
       - name: Install CI tools
         run: |
           apt-get update
-          apt-get install -y curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2t64 golang-go
+          apt-get install -y curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2t64 wget
 
       - name: Setup Firefox (for plotly)
         uses: browser-actions/setup-firefox@v1
@@ -24,8 +24,9 @@ jobs:
 
       - name: Install Minio
         run: |
-          go install -v github.com/minio/minio@latest
-          minio -v
+          wget --quiet -O /tmp/minio https://dl.min.io/server/minio/release/linux-amd64/minio
+          chmod +x /tmp/minio
+          /tmp/minio -v
 
       - uses: dtolnay/rust-toolchain@stable
 
@@ -36,7 +37,9 @@ jobs:
       - uses: extractions/setup-just@v2
 
       - name: Build Book
-        run: just build
+        run: |
+          minio = /tmp/minio -C /tmp/minio-config
+          just build
 
       - name: Test Examples
         run: just get-data-ci
