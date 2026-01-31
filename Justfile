@@ -18,6 +18,10 @@ test-all: get-data test-rw test-trans test-stats test-pub
 kill-minio:
     pkill minio
 
+get-data-ci:
+    rm -rf ./data
+    cargo run -r --example 1_2_1_extract
+
 get-data:
     rm -rf ./data
     cargo run -r --example 1_2_1_extract

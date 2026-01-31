@@ -1,0 +1,32 @@
+name: test
+
+on:
+  pull_request:
+    branches:
+      - main # or your target branch name
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    container: ubuntu:24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install CI tools
+        run: |
+          apt-get update
+          apt-get install -y curl jq build-essential
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install latest mdbook
+        run: |
+          cargo install mdbook
+
+      - uses: extractions/setup-just@v2
+
+      - name: Build Book
+        run: just build
+
+      - name: Test Examples
+        run: just get-data-ci
