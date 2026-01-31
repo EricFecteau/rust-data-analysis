@@ -28,5 +28,10 @@ jobs:
       - name: Build Book
         run: just build
 
+      - name: Setup Firefox (for plotly)
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: 'latest'
+
       - name: Test Examples
         run: just get-data-ci
