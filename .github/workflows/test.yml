@@ -25,7 +25,7 @@ jobs:
       - name: Install Minio
         run: |
           wget https://dl.min.io -O minio.deb
-          sudo dpkg -i minio.deb
+          dpkg -i minio.deb
           minio -v
 
       - uses: dtolnay/rust-toolchain@stable
