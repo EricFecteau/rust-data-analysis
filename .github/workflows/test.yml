@@ -38,7 +38,7 @@ jobs:
 
       - name: Build Book
         run: |
-          minio = /tmp/minio -C /tmp/minio-config
+          alias minio="/tmp/minio -C /tmp/minio-config"
           just build
 
       - name: Test Examples
