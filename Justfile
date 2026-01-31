@@ -20,14 +20,15 @@ kill-minio:
 
 get-data-ci:
     rm -rf ./data
-    # cargo run -r --example 1_2_1_extract
-    # cargo run -r --example 1_2_2_rename
-    # cargo run -r --example 1_2_3_synthetic
-    # cargo run -r --example 1_2_4_expand
-    # cargo run -r --example 1_2_5_parquet
-    # cargo run -r --example 1_2_6_large
+    cargo run -r --example 1_2_1_extract
+    cargo run -r --example 1_2_2_rename
+    cargo run -r --example 1_2_3_synthetic
+    cargo run -r --example 1_2_4_expand
+    cargo run -r --example 1_2_5_parquet
+    cargo run -r --example 1_2_6_large
+    cargo run -r --example 1_2_7_sql
     /tmp/minio -C /tmp/minio-config server ./data/minio --quiet &
-    # cargo run -r --example 1_2_8_minio
+    cargo run -r --example 1_2_8_minio
 
 get-data:
     rm -rf ./data

@@ -9,6 +9,18 @@ jobs:
   rust:
     runs-on: ubuntu-latest
     container: ubuntu:24.04
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg18
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
 
@@ -17,10 +29,10 @@ jobs:
           apt-get update
           apt-get install -y curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2t64 wget
 
-      # - name: Setup Firefox (for plotly)
-      #   uses: browser-actions/setup-firefox@v1
-      #   with:
-      #     firefox-version: 'latest'
+      - name: Setup Firefox (for plotly)
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: 'latest'
 
       - name: Install Minio
         run: |
@@ -28,16 +40,16 @@ jobs:
           chmod +x /tmp/minio
           /tmp/minio -v
 
-      # - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@stable
 
-      # - name: Install latest mdbook
-      #   run: |
-      #     cargo install mdbook
+      - name: Install latest mdbook
+        run: |
+          cargo install mdbook
 
       - uses: extractions/setup-just@v2
 
-      # - name: Build Book
-      #   run: just build
+      - name: Build Book
+        run: just build
 
       - name: Test Examples
         run: |
