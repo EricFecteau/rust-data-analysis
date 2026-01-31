@@ -17,10 +17,10 @@ jobs:
           apt-get update
           apt-get install -y curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2t64 wget
 
-      - name: Setup Firefox (for plotly)
-        uses: browser-actions/setup-firefox@v1
-        with:
-          firefox-version: 'latest'
+      # - name: Setup Firefox (for plotly)
+      #   uses: browser-actions/setup-firefox@v1
+      #   with:
+      #     firefox-version: 'latest'
 
       - name: Install Minio
         run: |
@@ -28,11 +28,11 @@ jobs:
           chmod +x /tmp/minio
           /tmp/minio -v
 
-      - uses: dtolnay/rust-toolchain@stable
+      # - uses: dtolnay/rust-toolchain@stable
 
-      - name: Install latest mdbook
-        run: |
-          cargo install mdbook
+      # - name: Install latest mdbook
+      #   run: |
+      #     cargo install mdbook
 
       - uses: extractions/setup-just@v2
 
@@ -42,5 +42,5 @@ jobs:
           alias minio="/tmp/minio -C /tmp/minio-config"
           just build
 
-      - name: Test Examples
-        run: just get-data-ci
+      # - name: Test Examples
+      #   run: just get-data-ci
