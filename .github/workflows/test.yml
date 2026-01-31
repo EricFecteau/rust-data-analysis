@@ -42,7 +42,4 @@ jobs:
       - name: Test Examples
         shell: bash
         run: |
-          shopt -s expand_aliases
-          alias minio="/tmp/minio -C /tmp/minio-config"
-          minio -v
-      # just get-data-ci
+          just get-data-ci

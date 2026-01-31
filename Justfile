@@ -20,6 +20,8 @@ kill-minio:
 
 get-data-ci:
     rm -rf ./data
+    shopt -s expand_aliases
+    alias minio="/tmp/minio -C /tmp/minio-config"
     # cargo run -r --example 1_2_1_extract
     # cargo run -r --example 1_2_2_rename
     # cargo run -r --example 1_2_3_synthetic
