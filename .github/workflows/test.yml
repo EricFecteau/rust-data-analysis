@@ -12,7 +12,10 @@ jobs:
 
     services:
       postgres:
+        hostname: 127.0.0.1
         image: pgvector/pgvector:pg18
+        ports:
+          - 5432:5432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
