@@ -52,6 +52,7 @@ rust_xlsxwriter = "0.93"
 
 # Plots
 plotlars = {version = "0.11", features = ["export-firefox", "export-download"] }
+charton = { version = "0.2.1" }
 
 # Markdown documents
 comrak = "0.50"
