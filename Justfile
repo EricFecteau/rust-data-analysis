@@ -19,15 +19,17 @@ start-minio:
 start-minio-ci:
   /tmp/minio -C /tmp/minio-config server ./data/minio --quiet &
 
-test-all: start-minio get-data test-rw test-trans test-stats test-pub kill-minio
+test-all: delete-data start-minio get-data test-rw test-trans test-stats test-pub kill-minio
 
-test-all-ci: start-minio-ci get-data test-rw test-trans test-stats test-pub kill-minio
+test-all-ci: delete-data start-minio-ci get-data test-rw test-trans test-stats test-pub kill-minio
+
+delete-data:
+    rm -rf ./data
 
 kill-minio:
     pkill minio
 
 get-data:
-    rm -rf ./data
     cargo run -r --example 1_2_1_extract
     cargo run -r --example 1_2_2_rename
     cargo run -r --example 1_2_3_synthetic
