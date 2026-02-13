@@ -43,7 +43,7 @@ jobs:
       #     chmod +x /tmp/minio
       #     /tmp/minio -v
 
-      # - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@stable
 
       # - name: Install latest mdbook
       #   run: |
