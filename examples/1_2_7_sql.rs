@@ -5,12 +5,11 @@ use std::io::{Read, Write};
 // === main
 fn main() {
     // === program
+
+    let postgres_url = "postgresql://postgres:postgres@localhost:5432/postgres";
+
     // Connect to postgresql
-    let mut client = postgres::Client::connect(
-        "postgresql://postgres:postgres@0.0.0.0:5432/postgres",
-        postgres::NoTls,
-    )
-    .unwrap();
+    let mut client = postgres::Client::connect(postgres_url, postgres::NoTls).unwrap();
 
     // Drop table if exists
     let _ = client.batch_execute("drop TABLE census;");
