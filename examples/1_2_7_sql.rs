@@ -7,7 +7,7 @@ fn main() {
     // === program
     // Connect to postgresql
     let mut client = postgres::Client::connect(
-        "postgresql://postgres:postgres@postgres:5432/postgres",
+        "postgresql://postgres:postgres@localhost:5432/postgres",
         postgres::NoTls,
     )
     .unwrap();
