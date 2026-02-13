@@ -13,22 +13,18 @@ render: process-book
 build: process-book
     mdbook build -d "./book"
 
-test-all: get-data test-rw test-trans test-stats test-pub
+start-minio:
+    minio server ./data/minio --quiet &
+
+start-minio-ci:
+  /tmp/minio -C /tmp/minio-config server ./data/minio --quiet &
+
+test-all: start-minio get-data test-rw test-trans test-stats test-pub kill-minio
+
+test-all-ci: start-minio-ci get-data test-rw test-trans test-stats test-pub kill-minio
 
 kill-minio:
     pkill minio
-
-get-data-ci:
-    rm -rf ./data
-    # cargo run -r --example 1_2_1_extract
-    # cargo run -r --example 1_2_2_rename
-    # cargo run -r --example 1_2_3_synthetic
-    # cargo run -r --example 1_2_4_expand
-    # cargo run -r --example 1_2_5_parquet
-    # cargo run -r --example 1_2_6_large
-    cargo run -r --example 1_2_7_sql
-    /tmp/minio -C /tmp/minio-config server ./data/minio --quiet &
-    # cargo run -r --example 1_2_8_minio
 
 get-data:
     rm -rf ./data
@@ -39,9 +35,7 @@ get-data:
     cargo run -r --example 1_2_5_parquet
     cargo run -r --example 1_2_6_large
     cargo run -r --example 1_2_7_sql
-    minio server ./data/minio --quiet &
     cargo run -r --example 1_2_8_minio
-    pkill minio
 
 test-rw:
     cargo run -r --example 2_1_1_dataframe
@@ -52,10 +46,8 @@ test-rw:
     cargo run -r --example 2_3_3_write_partitioned_parquet
     cargo run -r --example 2_4_1_postgresql
     cargo run -r --example 2_4_2_sql_to_polars
-    minio server ./data/minio --quiet &
     cargo run -r --example 2_5_1_read_cloud
     cargo run -r --example 2_5_2_write_cloud
-    pkill minio
 
 test-trans:
     cargo run -r --example 3_1_1_filter

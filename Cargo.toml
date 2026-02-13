@@ -6,50 +6,50 @@ edition = "2024"
 [dependencies]
 
 # Extract ZIP files
-# zip = "7"
+zip = "7"
 
 # Create random values
-# rand = "0.9" 
-# rand_chacha = "0.9"
+rand = "0.9" 
+rand_chacha = "0.9"
 
 # Polars - open-source library for data manipulation
-# polars = { version = "0.52", features = [
-#     "lazy", # LazyFrame
-#     "parquet", # Parquet files
-#     "round_series", # Round values
-#     "replace", # Replace value
-#     "is_in", # List filter
-#     "pivot", # Pivot data
-#     "cum_agg", # Cumulative aggregate statistics
-#     "abs", # Absolute value
-#     "aws", # Read/write cloud (minio)
-#     "regex", # Call columns with regex
-#     "fmt", # Format tables as markdown
-#     "timezones", # https://github.com/pola-rs/polars/issues/25148
-# ] }
+polars = { version = "0.52", features = [
+    "lazy", # LazyFrame
+    "parquet", # Parquet files
+    "round_series", # Round values
+    "replace", # Replace value
+    "is_in", # List filter
+    "pivot", # Pivot data
+    "cum_agg", # Cumulative aggregate statistics
+    "abs", # Absolute value
+    "aws", # Read/write cloud (minio)
+    "regex", # Call columns with regex
+    "fmt", # Format tables as markdown
+    "timezones", # https://github.com/pola-rs/polars/issues/25148
+] }
 
 # Move data in and out of PostgreSQL
 postgres = "0.19"
 
 # Move data from SQL to Polars (through Arrow)
-# connectorx = { version = "0.4.4", features = ["src_postgres", "dst_polars"] }
+connectorx = { version = "0.4.4", features = ["src_postgres", "dst_polars"] }
 
 # Hypothesis testing
-# hypors = "0.3.0"
+hypors = "0.3.0"
 
 # Read from minio / S3 bucket
-# aws-sdk-s3 =  { version = "1", features = ["behavior-version-latest"] }
-# tokio = "1"
+aws-sdk-s3 =  { version = "1", features = ["behavior-version-latest"] }
+tokio = "1"
 
 # Convert data from one version of Polars to another version of Polars
-# df-interchange = { version = "0.3", features = ["polars_0_50", "polars_0_51"] }
+df-interchange = { version = "0.3", features = ["polars_0_50", "polars_0_51"] }
 
 # Manipulating Excel documents
-# polars_excel_writer = "0.24"
-# rust_xlsxwriter = "0.93"
+polars_excel_writer = "0.24"
+rust_xlsxwriter = "0.93"
 
 # Plots
-# plotlars = {version = "0.11", features = ["export-firefox", "export-download"] }
+plotlars = {version = "0.11", features = ["export-firefox", "export-download"] }
 
 # Markdown documents
-# comrak = "0.50"
+comrak = "0.50"
