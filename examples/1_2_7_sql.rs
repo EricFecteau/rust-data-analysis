@@ -1,15 +1,23 @@
 // === imports
 // use polars::prelude::*;
-use std::io::{Read, Write};
+use std::{
+    env,
+    io::{Read, Write},
+};
 
 // === main
 fn main() {
     // === program
-
     let postgres_url = "postgresql://postgres:postgres@localhost:5432/postgres";
 
     // Connect to postgresql
-    let mut client = postgres::Client::connect(postgres_url, postgres::NoTls).unwrap();
+    let mut client = postgres::Client::connect(
+        env::var("POSTGRES_URL")
+            .unwrap_or(postgres_url.to_string())
+            .as_str(),
+        postgres::NoTls,
+    )
+    .unwrap();
 
     // Drop table if exists
     let _ = client.batch_execute("drop TABLE census;");

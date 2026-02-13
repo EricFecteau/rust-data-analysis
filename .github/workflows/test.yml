@@ -12,16 +12,11 @@ jobs:
 
     services:
       postgres:
-        image: pgvector/pgvector:pg17
+        image: postgres:17
         env:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4
@@ -56,3 +51,5 @@ jobs:
       - name: Test Examples
         run: |
           just get-data-ci
+        env:
+          POSTGRES_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
