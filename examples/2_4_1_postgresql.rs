@@ -6,8 +6,7 @@ fn main() {
     // === block_1
 
     // Connect to postgresql
-    let mut client =
-        Client::connect("postgresql://postgres:postgres@localhost:5432", NoTls).unwrap();
+    let mut client = Client::connect("postgresql://postgres:postgres@0.0.0.0:5432", NoTls).unwrap();
 
     // Query the database, returns a vector of rows
     let data = client
