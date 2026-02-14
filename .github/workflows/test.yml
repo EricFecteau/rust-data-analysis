@@ -18,6 +18,15 @@ jobs:
         ports:
           - 5432:5432
 
+      minio:
+        image: minio/minio:latest
+        ports:
+          - 9000:9000
+        command: server ./data/minio --console-address ":9001" # MinIO requires an explicit server command
+        env:
+          MINIO_ROOT_USER: minio
+          MINIO_ROOT_PASSWORD: minio
+
     steps:
 
       - name: Install CI tools
@@ -31,12 +40,6 @@ jobs:
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: 'latest'
-
-      - name: Install Minio
-        run: |
-          wget --quiet -O /tmp/minio https://dl.min.io/server/minio/release/linux-amd64/minio
-          chmod +x /tmp/minio
-          /tmp/minio -v
 
       - uses: dtolnay/rust-toolchain@stable
 

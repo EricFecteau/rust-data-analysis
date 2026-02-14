@@ -16,12 +16,9 @@ build: process-book
 start-minio:
     minio server ./data/minio --quiet &
 
-start-minio-ci:
-  /tmp/minio -C /tmp/minio-config server ./data/minio --quiet &
-
 test-all: delete-data start-minio get-data test-rw test-trans test-stats test-pub kill-minio
 
-test-all-ci: delete-data start-minio-ci get-data test-rw test-trans test-stats test-pub kill-minio
+test-all-ci: delete-data get-data test-rw test-trans test-stats test-pub kill-minio
 
 delete-data:
     rm -rf ./data
@@ -30,23 +27,14 @@ kill-minio:
     pkill minio
 
 get-data:
-    df -h
     cargo run -r --example 1_2_1_extract
-    df -h
     cargo run -r --example 1_2_2_rename
-    df -h
     cargo run -r --example 1_2_3_synthetic
-    df -h
     cargo run -r --example 1_2_4_expand
-    df -h
     cargo run -r --example 1_2_5_parquet
-    df -h
     cargo run -r --example 1_2_6_large
-    df -h
     cargo run -r --example 1_2_7_sql
-    df -h
     cargo run -r --example 1_2_8_minio
-    df -h
 
 test-rw:
     cargo run -r --example 2_1_1_dataframe
