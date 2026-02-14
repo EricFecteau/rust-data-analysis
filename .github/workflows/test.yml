@@ -18,21 +18,6 @@ jobs:
         ports:
           - 5432:5432
 
-      minio:
-        image: minio/minio:latest
-        ports:
-          - "9000:9000"
-          - "9001:9001"
-        env:
-          MINIO_ROOT_USER: minioadmin
-          MINIO_ROOT_PASSWORD: minioadmin
-        options: >-
-          --health-cmd "curl -f http://localhost:9000/minio/health/live"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        args: server ./data/minio
-
     steps:
 
       - name: Install CI tools
@@ -47,11 +32,12 @@ jobs:
         with:
           firefox-version: 'latest'
 
-      # - name: Install Minio
-      #   run: |
-      #     wget --quiet -O /tmp/minio https://dl.min.io/server/minio/release/linux-amd64/minio
-      #     chmod +x /tmp/minio
-      #     /tmp/minio -v
+      - name: Install Minio
+        run: |
+          wget --quiet -O /tmp/minio https://dl.min.io/server/minio/release/linux-amd64/minio
+          chmod +x /tmp/minio
+          /tmp/minio -v
+          /tmp/minio -C /tmp/minio-config server ./data/minio
 
       - uses: dtolnay/rust-toolchain@stable
 
