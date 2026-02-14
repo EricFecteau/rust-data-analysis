@@ -30,14 +30,23 @@ kill-minio:
     pkill minio
 
 get-data:
+    df -h
     cargo run -r --example 1_2_1_extract
+    df -h
     cargo run -r --example 1_2_2_rename
+    df -h
     cargo run -r --example 1_2_3_synthetic
+    df -h
     cargo run -r --example 1_2_4_expand
+    df -h
     cargo run -r --example 1_2_5_parquet
+    df -h
     cargo run -r --example 1_2_6_large
+    df -h
     cargo run -r --example 1_2_7_sql
+    df -h
     cargo run -r --example 1_2_8_minio
+    df -h
 
 test-rw:
     cargo run -r --example 2_1_1_dataframe

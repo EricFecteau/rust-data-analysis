@@ -24,12 +24,6 @@ jobs:
         run: |
           apt-get update
           apt-get install -y sudo curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2t64 wget
-          
-      - name: Free up space
-        run: |
-          df -h
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
-          df -h
         
       - uses: actions/checkout@v4
 
