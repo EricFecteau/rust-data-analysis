@@ -20,17 +20,17 @@ jobs:
 
     steps:
 
+      - name: Install CI tools
+        run: |
+          apt-get update
+          apt-get install -y sudo curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2t64 wget
+          
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
          tool-cache: false
         
       - uses: actions/checkout@v4
-
-      - name: Install CI tools
-        run: |
-          apt-get update
-          apt-get install -y curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2t64 wget
 
       - name: Setup Firefox (for plotly)
         uses: browser-actions/setup-firefox@v1
