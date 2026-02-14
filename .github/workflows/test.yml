@@ -37,7 +37,6 @@ jobs:
           wget --quiet -O /tmp/minio https://dl.min.io/server/minio/release/linux-amd64/minio
           chmod +x /tmp/minio
           /tmp/minio -v
-          /tmp/minio -C /tmp/minio-config server ./data/minio &
 
       - uses: dtolnay/rust-toolchain@stable
 
@@ -52,6 +51,7 @@ jobs:
 
       - name: Test Examples
         run: |
+          /tmp/minio -C /tmp/minio-config server ./data/minio &
           just test-all-ci
         env:
           POSTGRES_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
