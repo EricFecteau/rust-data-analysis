@@ -19,6 +19,12 @@ jobs:
           - 5432:5432
 
     steps:
+
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+         tool-cache: false
+        
       - uses: actions/checkout@v4
 
       - name: Install CI tools
