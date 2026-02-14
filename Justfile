@@ -16,6 +16,9 @@ build: process-book
 start-minio:
     minio server ./data/minio --quiet &
 
+# start-minio-ci:
+#   /tmp/minio -C /tmp/minio-config server ./data/minio --quiet &
+
 test-all: delete-data start-minio get-data test-rw test-trans test-stats test-pub kill-minio
 
 test-all-ci: delete-data get-data test-rw test-trans test-stats test-pub kill-minio
