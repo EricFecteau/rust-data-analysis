@@ -51,7 +51,7 @@ jobs:
 
       - name: Test Examples
         run: |
-          /tmp/minio -C /tmp/minio-config server ./data/minio &
+          /tmp/minio -C /tmp/minio-config server /data &
           just test-all-ci
         env:
           POSTGRES_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
