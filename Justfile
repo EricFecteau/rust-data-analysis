@@ -18,7 +18,7 @@ start-minio:
 
 test-all: delete-data start-minio get-data test-rw test-trans test-stats test-pub kill-minio
 
-test-all-ci: delete-data get-data test-rw test-trans test-stats test-pub
+test-all-ci: get-data test-rw test-trans test-stats test-pub
 
 delete-data:
     rm -rf ./data
