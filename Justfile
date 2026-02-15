@@ -20,8 +20,6 @@ test-all: delete-data start-minio get-data test-rw test-trans test-stats test-pu
 
 test-all-ci: delete-data get-data test-rw test-trans test-stats test-pub
 
-test-all-ci: delete-data get-data
-
 delete-data:
     rm -rf ./data
 
