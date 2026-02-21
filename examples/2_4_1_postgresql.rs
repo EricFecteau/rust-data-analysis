@@ -6,17 +6,12 @@ use std::env;
 fn main() {
     // === block_1
 
-    // URL
-    let postgres_url = "postgresql://postgres:postgres@localhost:5432/postgres";
+    // Get standard URL or from env
+    let postgres_url = env::var("POSTGRES_URL")
+        .unwrap_or("postgresql://postgres:postgres@localhost:5432/postgres".to_string());
 
     // Connect to postgresql
-    let mut client = Client::connect(
-        env::var("POSTGRES_URL")
-            .unwrap_or(postgres_url.to_string())
-            .as_str(),
-        NoTls,
-    )
-    .unwrap();
+    let mut client = Client::connect(postgres_url.as_str(), NoTls).unwrap();
 
     // Query the database, returns a vector of rows
     let data = client

@@ -8,16 +8,12 @@ fn main() {
 
     // Connect to PostgreSQL through the ConnectorX
 
-    // URL
-    let postgres_url = "postgresql://postgres:postgres@localhost:5432/postgres";
+    // Get standard URL or from env
+    let postgres_url = env::var("POSTGRES_URL")
+        .unwrap_or("postgresql://postgres:postgres@localhost:5432/postgres".to_string());
 
     // Connect to postgresql
-    let source_conn = SourceConn::try_from(
-        env::var("POSTGRES_URL")
-            .unwrap_or(postgres_url.to_string())
-            .as_str(),
-    )
-    .unwrap();
+    let source_conn = SourceConn::try_from(postgres_url.as_str()).unwrap();
 
     // Prepare query (london, aged 15 years and under)
     let query = &[CXQuery::from(

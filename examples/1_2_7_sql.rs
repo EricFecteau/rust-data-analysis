@@ -8,16 +8,13 @@ use std::{
 // === main
 fn main() {
     // === program
-    let postgres_url = "postgresql://postgres:postgres@localhost:5432/postgres";
+
+    // Get standard URL or from env
+    let postgres_url = env::var("POSTGRES_URL")
+        .unwrap_or("postgresql://postgres:postgres@localhost:5432/postgres".to_string());
 
     // Connect to postgresql
-    let mut client = postgres::Client::connect(
-        env::var("POSTGRES_URL")
-            .unwrap_or(postgres_url.to_string())
-            .as_str(),
-        postgres::NoTls,
-    )
-    .unwrap();
+    let mut client = postgres::Client::connect(postgres_url.as_str(), postgres::NoTls).unwrap();
 
     // Drop table if exists
     let _ = client.batch_execute("drop TABLE census;");
