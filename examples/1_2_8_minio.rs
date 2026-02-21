@@ -94,25 +94,25 @@ async fn main() {
     )
     .await;
 
-    // // Copy large CSV
-    // upload_multipart(&client, "./data/large/census.csv", "census.csv", bucket).await;
+    // Copy large CSV
+    upload_multipart(&client, "./data/large/census.csv", "census.csv", bucket).await;
 
-    // // Get all the path of files in a folder (recursive)
-    // fn get_file_path(path: std::path::PathBuf) -> Vec<String> {
-    //     let mut path_vec = vec![];
-    //     let paths = std::fs::read_dir(path).unwrap();
-    //     for path in paths {
-    //         let p = path.unwrap();
-    //         let p_meta = p.metadata().unwrap();
-    //         if p_meta.is_dir() {
-    //             path_vec.append(&mut get_file_path(p.path()));
-    //         } else {
-    //             path_vec.push(p.path().to_str().unwrap().to_string());
-    //         }
-    //     }
+    // Get all the path of files in a folder (recursive)
+    fn get_file_path(path: std::path::PathBuf) -> Vec<String> {
+        let mut path_vec = vec![];
+        let paths = std::fs::read_dir(path).unwrap();
+        for path in paths {
+            let p = path.unwrap();
+            let p_meta = p.metadata().unwrap();
+            if p_meta.is_dir() {
+                path_vec.append(&mut get_file_path(p.path()));
+            } else {
+                path_vec.push(p.path().to_str().unwrap().to_string());
+            }
+        }
 
-    //     path_vec
-    // }
+        path_vec
+    }
 
     // // Upload files to bucket
     // for path in get_file_path(std::path::PathBuf::from("./data/large/partitioned")) {

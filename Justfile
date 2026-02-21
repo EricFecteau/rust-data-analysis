@@ -35,6 +35,8 @@ get-data:
     cargo run -r --example 1_2_6_large
     cargo run -r --example 1_2_7_sql
     cargo run -r --example 1_2_8_minio
+    ls /data
+    ls /data/census
 
 test-rw:
     cargo run -r --example 2_1_1_dataframe
