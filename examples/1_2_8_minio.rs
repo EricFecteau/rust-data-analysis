@@ -114,12 +114,12 @@ async fn main() {
         path_vec
     }
 
-    // // Upload files to bucket
-    // for path in get_file_path(std::path::PathBuf::from("./data/large/partitioned")) {
-    //     let key = path.strip_prefix("./data/large/").unwrap().to_string();
+    // Upload files to bucket
+    for path in get_file_path(std::path::PathBuf::from("./data/large/partitioned")) {
+        let key = path.strip_prefix("./data/large/").unwrap().to_string();
 
-    //     upload_multipart(&client, &path, &key, bucket).await;
-    // }
+        upload_multipart(&client, &path, &key, bucket).await;
+    }
 }
 
 async fn upload_multipart(client: &aws_sdk_s3::Client, file: &str, key: &str, bucket: &str) {
