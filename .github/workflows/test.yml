@@ -31,6 +31,7 @@ jobs:
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: 'latest'
+        id: setup-firefox
 
       - name: Install Minio
         run: |
@@ -55,3 +56,4 @@ jobs:
           just test-all-ci
         env:
           POSTGRES_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
+          BROWSER_PATH: "${{ steps.setup-firefox.outputs.firefox-path }}"
