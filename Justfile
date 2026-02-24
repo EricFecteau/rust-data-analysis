@@ -18,7 +18,9 @@ start-minio:
 
 test-all: delete-data start-minio get-data test-rw test-trans test-stats test-pub kill-minio
 
-test-all-ci: get-data test-rw test-trans test-stats test-pub
+test-all-ci: get-data test-rw test-trans test-stats
+    cargo run -r --example 5_1_1_excel
+    cargo run -r --example 5_2_1_plots
 
 delete-data:
     rm -rf ./data
