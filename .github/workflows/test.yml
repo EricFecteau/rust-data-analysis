@@ -24,6 +24,12 @@ jobs:
         run: |
           apt-get update
           apt-get install -y sudo curl jq build-essential libssl-dev openssl pkg-config xvfb libgtk-3-0 libasound2t64 wget
+
+      - name: Setup Firefox (for plotly)
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: 'latest'
+        id: setup-firefox
         
       - uses: actions/checkout@v4
 
