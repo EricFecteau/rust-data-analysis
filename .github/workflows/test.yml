@@ -27,12 +27,6 @@ jobs:
         
       - uses: actions/checkout@v4
 
-      - name: Setup Firefox (for plotly)
-        uses: browser-actions/setup-firefox@v1
-        with:
-          firefox-version: 'latest'
-        id: setup-firefox
-
       - name: Install Minio
         run: |
           wget --quiet -O /tmp/minio https://dl.min.io/server/minio/release/linux-amd64/minio
@@ -56,4 +50,3 @@ jobs:
           just test-all-ci
         env:
           POSTGRES_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
-          BROWSER_PATH: "${{ steps.setup-firefox.outputs.firefox-path }}"
